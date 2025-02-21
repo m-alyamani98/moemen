@@ -1,0 +1,2 @@
+E:/momen/android/app/.cxx/RelWithDebInfo/4s104n69/x86/CMakeFiles/edit_cache.dir
+E:/momen/android/app/.cxx/RelWithDebInfo/4s104n69/x86/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,98 @@
+import 'package:easy_localization/easy_localization.dart';
+
+import 'package:flutter/material.dart';
+import 'package:momen/app/resources/strings_manager.dart';
+import 'package:momen/core/splash.dart';
+import 'package:momen/domain/models/quran/khetma_model.dart';
+import 'package:momen/presentation/bottom_bar/screens/werd/view/daily_werd.dart';
+import 'package:momen/presentation/pillars/view/pillars_screen.dart';
+
+import '../../di/di.dart';
+import '../../presentation/custom_adhkar/view/custom_adhkar_view.dart';
+import '../../presentation/custom_adhkar/view/custom_dhikr_view.dart';
+import '../../presentation/dhikr_builder/view/dhikr_builder_view.dart';
+import '../../presentation/bottom_bar/view/home_view.dart';
+import '../../presentation/surah_builder/view/surah_builder_view.dart';
+
+
+class Routes {
+  static const String homeRoute = "/home";
+  static const String quranRoute = "/quran";
+  static const String hadithRoute = "/hadith";
+  static const String adhkarRoute = "/adhkar";
+  static const String newKhetmaRoute = "/new_khetma";
+  static const String customAdhkarRoute = "/customAdhkar";
+  static const String customDhikrRoute = "/customDhikr";
+  static const String pillarsRoute = "/pillars";
+  static const String browsenetRoute = "/browse";
+  static const String splashRoute = "/splash";
+  static const String qiblaRoute = "/qibla";
+  static const String khetmaRoute = "/khetma";
+  static const String dailyWerdRoute = "/dailyWerd";
+
+}
+
+class RoutesGenerator {
+  static Route<dynamic> getRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case Routes.homeRoute:
+        initQuranModule();
+        initAdhkarModule();
+        initPrayerTimingsModule();
+        return MaterialPageRoute(builder: (_) => HomeView());
+      case Routes.quranRoute:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+            builder: (_) => SurahBuilderView(
+                quranList: args["quranList"], pageNo: args["pageNo"]));
+      case Routes.adhkarRoute:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+            builder: (_) => DhikrBuilderView(
+                adhkarList: args["adhkarList"], category: args["category"]));
+      case Routes.customAdhkarRoute:
+        initCustomAdhkarModule();
+        return MaterialPageRoute(builder: (_) => CustomAdhkarView());
+      case Routes.customDhikrRoute:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+            builder: (_) => CustomDhikrView(
+              customDhikrText: args["customDhikrText"],
+              noOfRepetitions: args["noOfRepetitions"],
+            ));
+      case Routes.pillarsRoute:
+        return MaterialPageRoute(builder: (_) => PillarsScreen());
+      case Routes.splashRoute:
+        return MaterialPageRoute(builder: (_) => SplashPage());
+      case Routes.dailyWerdRoute:
+        final args = settings.arguments as Khetma; // Ensure this is non-null
+        return MaterialPageRoute(
+          builder: (_) => WerdScreen(initialKhetma: args),
+        );
+      /*case Routes.newKhetmaRoute:
+        return MaterialPageRoute(builder: (_) => NewKhetmaPage());*/
+      /*case Routes.khetmaPlanRoute:
+        var readingPlan = settings.arguments as List<Map<String, dynamic>>;
+        return MaterialPageRoute(builder: (_) => KhetmaPlanPage(startingJuz: '',));*/
+      default:
+        return unDefinedRoute();
+    }
+  }
+
+  static Route<dynamic> unDefinedRoute() {
+    return MaterialPageRoute(
+      builder: (_) => Scaffold(
+        appBar: AppBar(
+          title: Text(
+            AppStrings.noRouteFound.tr(),
+          ),
+        ),
+        body: Center(
+          child: Text(
+            AppStrings.noRouteFound.tr(),
+          ),
+        ),
+      ),
+    );
+  }
+}

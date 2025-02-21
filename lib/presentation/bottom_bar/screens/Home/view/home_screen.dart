@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:momen/data/notification/local_notifications/notification_service.dart';
+import 'package:momen/presentation/bottom_bar/screens/adhkar/view/adhkar_screen.dart';
+import 'package:momen/presentation/bottom_bar/screens/prayer_times/view/prayer_timings_widget.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return  Padding(
+      padding: const EdgeInsets.all(2),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ElevatedButton(
+                onPressed: (){
+                  NotiService().showNotification(
+                      title: "test",
+                      body: "testtetet"
+                  );
+                },
+                child : Text("Send Notification")
+            ),
+            PrayerTimingsScreen(),
+            SizedBox(height: 30,),
+            AdhkarScreen(),
+          ],
+        ),
+      ),
+    );
+  }
+}

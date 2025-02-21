@@ -1,0 +1,152 @@
+name: momen
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  adhan_dart: ^1.1.2
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  fluttertoast: ^8.2.2
+  font_awesome_flutter: ^10.5.0
+  fluentui_system_icons: ^1.1.270
+  geolocator: ^13.0.2
+  http: ^1.1.0
+  provider: ^6.0.5
+  url_launcher: ^6.1.14
+  youtube_player_flutter:
+  dots_indicator:
+  flutter_svg: ^2.0.16
+  build_runner: ^2.4.13
+  dartz: ^0.10.1
+  shared_preferences: ^2.3.3
+  get_it: ^8.0.2
+  easy_localization: ^3.0.7
+  flutter_phoenix: ^1.1.1
+  flutter_bloc: ^9.0.0
+  equatable: ^2.0.7
+  flutter_screenutil: ^5.9.3
+  conditional_builder_null_safety: ^0.0.6
+  json_serializable: ^6.9.0
+  json_annotation: ^4.9.0
+  floor: ^1.5.0
+  floor_generator: ^1.5.0
+  sqlite3_flutter_libs: ^0.5.27
+  retrofit: ^4.4.1
+  retrofit_generator: ^9.1.5
+  dio: ^5.7.0
+  pretty_dio_logger: ^1.4.0
+  internet_connection_checker:
+  internet_connection_checker_plus: ^2.5.2
+  location: ^8.0.0
+  geocoding: ^3.0.0
+  wakelock_plus: ^1.2.8
+  #wakelock:
+  google_fonts:
+  sqflite: ^2.4.1
+  pay: ^3.1.0
+  in_app_purchase: ^3.2.1
+  flutter_launcher_icons: ^0.14.2
+  flutter_popup: ^3.3.4
+  popover: ^0.3.1
+  flutter_qiblah: ^3.1.0+1
+  google_maps_flutter: ^2.10.0
+  firebase_core: ^3.11.0
+  firebase_messaging: ^15.2.2
+  firebase_auth: ^5.4.2
+  cloud_firestore: ^5.6.3
+  #awesome_notifications: ^0.10.0
+  purchases_flutter: ^8.4.6
+  flutter_local_notifications: ^18.0.1
+
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo_icon.png"
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^5.0.0
+flutter:
+
+
+  uses-material-design: true
+
+  assets:
+    - assets/fonts/
+    - assets/images/
+    - assets/images/quran/
+    - assets/json/
+    - assets/translations/
+    - assets/images/pillars/
+
+
+
+
+
+
+
+  fonts:
+    - family: ElMessiri
+      fonts:
+        - asset: assets/fonts/ElMessiri-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/ElMessiri-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/ElMessiri-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/ElMessiri-Regular.ttf
+          weight: 400
+    - family: UthmanTN
+      fonts:
+        - asset: assets/fonts/UthmanTNB.ttf
+          weight: 700
+        - asset: assets/fonts/UthmanTN.ttf
+          weight: 400
+    - family: me_quran
+      fonts:
+        - asset: assets/fonts/me_quran.ttf
+    - family: Hafs
+      fonts:
+        - asset: assets/fonts/Hafs.ttf
+    - family: momen
+      fonts:
+        - asset: assets/fonts/NotoKufiArabic-Black.ttf
+          weight: 100
+        - asset: assets/fonts/NotoKufiArabic-Bold.ttf
+          weight: 200
+        - asset: assets/fonts/NotoKufiArabic-ExtraBold.ttf
+          weight: 300
+        - asset: assets/fonts/NotoKufiArabic-ExtraLight.ttf
+          weight: 400
+        - asset: assets/fonts/NotoKufiArabic-Light.ttf
+          weight: 500
+        - asset: assets/fonts/NotoKufiArabic-Medium.ttf
+          weight: 600
+        - asset: assets/fonts/NotoKufiArabic-Regular.ttf
+          weight: 700
+        - asset: assets/fonts/NotoKufiArabic-SemiBold.ttf
+          weight: 800
+        - asset: assets/fonts/NotoKufiArabic-Thin.ttf
+          weight: 900
+    - family: Quran
+      fonts:
+        - asset: assets/fonts/NotoNaskhArabic-Bold.ttf
+          weight: 100
+        - asset: assets/fonts/NotoNaskhArabic-Medium.ttf
+          weight: 200
+        - asset: assets/fonts/NotoNaskhArabic-Regular.ttf
+          weight: 300
+        - asset: assets/fonts/NotoNaskhArabic-SemiBold.ttf
+          weight: 400
+
+
