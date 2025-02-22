@@ -5,11 +5,7 @@ import 'package:momen/app/resources/strings_manager.dart';
 import 'package:momen/core/splash.dart';
 import 'package:momen/domain/models/quran/khetma_model.dart';
 import 'package:momen/presentation/bottom_bar/screens/werd/view/daily_werd.dart';
-import 'package:momen/presentation/pillars/view/pillars_screen.dart';
-
 import '../../di/di.dart';
-import '../../presentation/custom_adhkar/view/custom_adhkar_view.dart';
-import '../../presentation/custom_adhkar/view/custom_dhikr_view.dart';
 import '../../presentation/dhikr_builder/view/dhikr_builder_view.dart';
 import '../../presentation/bottom_bar/view/home_view.dart';
 import '../../presentation/surah_builder/view/surah_builder_view.dart';
@@ -50,18 +46,6 @@ class RoutesGenerator {
         return MaterialPageRoute(
             builder: (_) => DhikrBuilderView(
                 adhkarList: args["adhkarList"], category: args["category"]));
-      case Routes.customAdhkarRoute:
-        initCustomAdhkarModule();
-        return MaterialPageRoute(builder: (_) => CustomAdhkarView());
-      case Routes.customDhikrRoute:
-        final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
-            builder: (_) => CustomDhikrView(
-              customDhikrText: args["customDhikrText"],
-              noOfRepetitions: args["noOfRepetitions"],
-            ));
-      case Routes.pillarsRoute:
-        return MaterialPageRoute(builder: (_) => PillarsScreen());
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => SplashPage());
       case Routes.dailyWerdRoute:

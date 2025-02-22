@@ -3,14 +3,16 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:in_app_purchase/in_app_purchase.dart'; // Import the in_app_purchase library
 import 'package:momen/app/resources/color_manager.dart';
 import 'package:momen/app/resources/routes_manager.dart';
-import 'package:momen/app/resources/strings_manager.dart';
 import 'package:momen/app/resources/values.dart';
-import 'package:momen/data/notification/local_notifications/notification_service.dart';
-import 'package:momen/presentation/components/separator.dart';
 import 'package:momen/presentation/components/widget.dart';
+
+import 'alarm1.dart';
+import 'alarm2.dart';
+import 'alarm3.dart';
+import 'alarm4.dart';
+import 'alarm5.dart';
 
 class DailyAlert extends StatefulWidget {
   @override
@@ -19,13 +21,14 @@ class DailyAlert extends StatefulWidget {
 
 class _DailyAlertState extends State<DailyAlert> {
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "دعم التطبيق ",
+          "المنبه اليومي ",
           style: Theme.of(context)
               .textTheme
               .titleLarge
@@ -47,26 +50,19 @@ class _DailyAlertState extends State<DailyAlert> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.only(top: AppPadding.p18.h),
-        child: ListView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
           children: [
-            SwitchTileWidget(
-              icon: FluentIcons.weather_sunny_48_regular,
-              settingName: AppStrings.adhkarMorningAlarm.tr(),
-              onTap: () {},
-              context: context,
-              color: ColorManager.iconPrimary,
-              angel: 0,
-              isSwitched: true,
-            ),
-            getSeparator(context),
-            ElevatedButton(
-                onPressed:() {
-                }, child: Text('Send'),
-                )
+            getTitle(settingName: "يمكنك تحديد وقت المنيه لتذكيرك بالورد اليومي", context: context),
+            SizedBox(height: 20),
+            Alarm1(),
+            Alarm2(),
+            Alarm3(),
+            Alarm4(),
+            Alarm5(),
           ],
         ),
-      )
+      ),
     );
   }
 

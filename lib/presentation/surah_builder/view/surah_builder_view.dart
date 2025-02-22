@@ -159,7 +159,7 @@ class _SurahBuilderViewState extends State<SurahBuilderView> {
                                                   ),
                                                 ),
                                                 GestureDetector(
-                                                  onTap: () => Navigator.pop(context, Colors.white),
+                                                  onTap: () => Navigator.pop(context, ColorManager.backgroundQuran),
                                                   child: Container(
                                                     width: 24,
                                                     height: 24,

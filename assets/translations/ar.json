@@ -4,6 +4,8 @@
   "support_us": "قم بدعم التطبيق",
   "current_khetma": "الختمة الحالية",
   "werd": "الورد اليومي",
+  "werdAlarm": "منبه الورد اليومي",
+  "werdAlarmDesc": "قم الآن باتمام وردك اليومي",
   "previous_werd" : "الورد السابق",
   "next_werd" : "الورد التالي",
   "quran_separator" : "الفاصل القرآني",

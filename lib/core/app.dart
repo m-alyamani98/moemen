@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
               //BlocProvider(create: (BuildContext context) => instance<QuranSliderProviderX>()),
               BlocProvider(create: (BuildContext context) => instance<PrayerTimingsCubit>()..getPrayerTimings()..isNetworkConnected()),
               BlocProvider(create: (BuildContext context) => instance<AdhkarCubit>()..getAdhkarData()),
-              BlocProvider(create: (BuildContext context) => instance<CustomAdhkarCubit>()..getAllCustomAdhkar()),
+              //BlocProvider(create: (BuildContext context) => instance<CustomAdhkarCubit>()..getAllCustomAdhkar()),
             ],
             child: BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) {

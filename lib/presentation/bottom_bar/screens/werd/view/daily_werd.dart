@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/app/resources/routes_manager.dart';
 import 'package:momen/app/resources/values.dart';
 import 'package:momen/domain/models/quran/khetma_model.dart';
 import 'package:momen/presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
 import 'package:momen/presentation/bottom_bar/screens/werd/cubit/werd_builder.dart';
 import 'package:momen/presentation/components/separator.dart';
 import 'package:momen/presentation/components/widget.dart';
-import 'package:momen/presentation/surah_builder/view/surah_builder_view.dart';
 
 class WerdScreen extends StatefulWidget {
   final Khetma? initialKhetma;
@@ -53,7 +51,21 @@ class _WerdScreenState extends State<WerdScreen> {
           } else if (state is KhetmaFinishedState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("تم إكمال الختمة بنجاح!"),
+                content: Text(
+                  "تم إكمال الختمة بنجاح!",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                behavior: SnackBarBehavior.floating,
+                margin: EdgeInsets.all(16),
                 duration: Duration(seconds: 2),
               ),
             );
@@ -102,10 +114,7 @@ class _WerdScreenState extends State<WerdScreen> {
       QuranCubit cubit,
       Khetma khetma,
       ) {
-    // Fetch fresh details from the cubit
     final freshDetails = cubit.getCurrentWerdDetails(khetma);
-    final start = freshDetails['start'] ?? {};
-    final end = freshDetails['end'] ?? {};
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -220,11 +229,24 @@ class _WerdScreenState extends State<WerdScreen> {
 
                       // Explicitly refresh UI
                       if (mounted) setState(() {});
-
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text("تم تحديث التقدم بنجاح"),
-                          duration: Duration(seconds: 1),
+                          content: Text(
+                            "تم إكمال الورد",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          backgroundColor: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                          margin: EdgeInsets.all(16),
+                          duration: Duration(seconds: 2),
                         ),
                       );
                     } catch (e) {

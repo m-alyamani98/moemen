@@ -3,11 +3,17 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:momen/data/notification/local_notifications/notification_service.dart';
 import 'package:momen/domain/models/quran/quran_model.dart';
 import 'package:momen/presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
 import 'package:momen/presentation/bottom_bar/screens/settings/service/daily_alert.dart';
+import 'package:momen/presentation/bottom_bar/screens/settings/service/evening_alert.dart';
+import 'package:momen/presentation/bottom_bar/screens/settings/service/morning_alert.dart';
+import 'package:momen/presentation/bottom_bar/screens/settings/service/sorat_almolk_alert.dart';
 import 'package:momen/presentation/components/widget.dart';
 import 'package:momen/presentation/pay_builder/payment.dart';
+import 'package:momen/presentation/pay_builder/service/payment_configurations.dart';
+import 'package:momen/presentation/qibla/view/qiblah_screen.dart';
 import 'package:momen/presentation/surah_builder/view/surah_builder_view.dart';
 import 'package:momen/presentation/werd_builder/new_khetma.dart';
 import 'package:momen/presentation/werd_builder/previos_werd.dart';
@@ -16,6 +22,7 @@ import '../../../../components/separator.dart';
 import '../../../../../app/resources/resources.dart';
 
 import '../../../cubit/bottom_bar_cubit.dart';
+import '../service/sorat_albaqara_alert.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -42,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SupportAppPage(), // Replace with the page you want to navigate to
+                      builder: (context) => SupportAppPage(),
                     ),
                   );
                 },
@@ -57,25 +64,40 @@ class SettingsScreen extends StatelessWidget {
                 svgPath: null,
                 icon: FluentIcons.chevron_circle_right_48_regular,
                 settingName: AppStrings.previousWerd.tr(),
-                trailing: Container(
-                  width: 30,
-                  height: 30,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: ColorManager.primary,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      '20',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                trailing: BlocBuilder<QuranCubit, QuranState>(
+                  builder: (context, state) {
+                    final cubit = context.read<QuranCubit>();
+                    if (cubit.khetmaPlans.isEmpty) {
+                      return Container(
+                        width: 30,
+                        height: 30,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: ColorManager.primary,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Text('0'),
+                      );
+                    }
+                    final khetma = cubit.khetmaPlans.first;
+                    return Container(
+                      width: 30,
+                      height: 30,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: ColorManager.primary,
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                      child: Text(
+                        '${khetma.currentDayIndex}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 onTap: () {},
                 context: context,
@@ -86,25 +108,41 @@ class SettingsScreen extends StatelessWidget {
                 svgPath: null,
                 icon: FluentIcons.chevron_circle_left_48_regular,
                 settingName: AppStrings.nextWerd.tr(),
-                trailing: Container(
-                  width: 30,
-                  height: 30,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: ColorManager.primary,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      '20',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                trailing: BlocBuilder<QuranCubit, QuranState>(
+                  builder: (context, state) {
+                    final cubit = context.read<QuranCubit>();
+                    if (cubit.khetmaPlans.isEmpty) {
+                      return Container(
+                        width: 30,
+                        height: 30,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: ColorManager.primary,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Text('0'),
+                      );
+                    }
+                    final khetma = cubit.khetmaPlans.first;
+                    final nextWerd = khetma.durationDays-khetma.currentDayIndex ;
+                    return Container(
+                      width: 30,
+                      height: 30,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: ColorManager.primary,
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                      child: Text(
+                        '${nextWerd}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 onTap: () {},
                 context: context,
@@ -261,7 +299,14 @@ class SettingsScreen extends StatelessWidget {
                 icon: null,
                 settingName: AppStrings.qiblaDirection.tr(),
                 trailing: const SizedBox(),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QiblahScreen(), // Replace with the page you want to navigate to
+                    ),
+                  );
+                },
                 context: context,
                 color: ColorManager.iconPrimary,
                 angel: 0,
@@ -269,39 +314,33 @@ class SettingsScreen extends StatelessWidget {
               getSeparator(context),
               getTitle(
                   settingName: AppStrings.adhkarAlarm.tr(), context: context),
-              SwitchTileWidget(
-                icon: FluentIcons.weather_sunny_48_regular,
-                settingName: AppStrings.adhkarMorningAlarm.tr(),
-                onTap: () {},
-                context: context,
-                color: ColorManager.iconPrimary,
-                angel: 0,
-                isSwitched: true,
-              ),
+              MorningAlert(),
               settingIndexItem(
                 svgPath: null,
                 icon: FluentIcons.clock_48_regular,
                 settingName: AppStrings.adhkarMorningTime.tr(),
-                trailing: const SizedBox(),
+                trailing: Text("07:00 AM",style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: AppSize.s14.sp,
+                  wordSpacing: AppSize.s3.w,
+                  letterSpacing: AppSize.s0_5.w,
+                ),
+                ),
                 onTap: () {},
                 context: context,
                 color: ColorManager.iconPrimary,
                 angel: 0,
               ),
-              SwitchTileWidget(
-                icon: FluentIcons.weather_moon_48_regular,
-                settingName: AppStrings.adhkarEveningAlarm.tr(),
-                onTap: () {},
-                context: context,
-                color: ColorManager.iconPrimary,
-                angel: 360,
-                isSwitched: true,
-              ),
+              EveningAlert(),
               settingIndexItem(
                 svgPath: null,
                 icon: FluentIcons.clock_48_regular,
                 settingName: AppStrings.adhkarEveningTime.tr(),
-                trailing: const SizedBox(),
+                trailing: Text("05:30 PM",style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: AppSize.s14.sp,
+                  wordSpacing: AppSize.s3.w,
+                  letterSpacing: AppSize.s0_5.w,
+                ),
+                ),
                 onTap: () {},
                 context: context,
                 color: ColorManager.iconPrimary,
@@ -310,39 +349,33 @@ class SettingsScreen extends StatelessWidget {
               getSeparator(context),
               getTitle(
                   settingName: AppStrings.sonanAlarm.tr(), context: context),
-              SwitchTileWidget(
-                icon: FluentIcons.alert_48_filled,
-                settingName: AppStrings.soratAlMolkAlarm.tr(),
-                onTap: () {},
-                context: context,
-                color: ColorManager.iconPrimary,
-                angel: 0,
-                isSwitched: true,
-              ),
+              SoratAlmolkAlert(),
               settingIndexItem(
                 svgPath: null,
                 icon: FluentIcons.clock_48_regular,
                 settingName: AppStrings.soratAlMolkTime.tr(),
-                trailing: const SizedBox(),
+                trailing: Text("09:00 PM",style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: AppSize.s14.sp,
+                  wordSpacing: AppSize.s3.w,
+                  letterSpacing: AppSize.s0_5.w,
+                ),
+                ),
                 onTap: () {},
                 context: context,
                 color: ColorManager.iconPrimary,
                 angel: 0,
               ),
-              SwitchTileWidget(
-                icon: FluentIcons.alert_48_filled,
-                settingName: AppStrings.soratAlBaqarahAlarm.tr(),
-                onTap: () {},
-                context: context,
-                color: ColorManager.iconPrimary,
-                angel: 0,
-                isSwitched: true,
-              ),
+              SoratAlbaqarahAlert(),
               settingIndexItem(
                 svgPath: null,
                 icon: FluentIcons.clock_48_regular,
                 settingName: AppStrings.soratAlBaqarahTime.tr(),
-                trailing: const SizedBox(),
+                trailing: Text("08:30 PM",style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: AppSize.s14.sp,
+                  wordSpacing: AppSize.s3.w,
+                  letterSpacing: AppSize.s0_5.w,
+                ),
+                ),
                 onTap: () {},
                 context: context,
                 color: ColorManager.iconPrimary,

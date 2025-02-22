@@ -6,6 +6,8 @@ class AppStrings {
   static const String werd = "werd";
   static const String previousWerd = "previous_werd";
   static const String nextWerd = "next_werd";
+  static const String werdAlarm = "werd_alarm";
+  static const String werdAlarmDesc = "werd_alarm_desc";
   static const String quranSeparator = "quran_separator";
   static const String quranSonan = "quran_sonan";
   static const String soratAlkahf = "soratAlkahf";
@@ -47,7 +49,6 @@ class AppStrings {
   static const String cancelButton = "cancel";
   static const String quran = "quran";
   static const String fahras = "fahras";
-  //static const String searchInQuran = "search_in_quran";
   static const String surahName = "surah_name";
   static const String pageNumber = "page_number";
   static const String juz = "juz";
@@ -55,8 +56,6 @@ class AppStrings {
   static const String firstOfSurahBasmalah =
       "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
   static const String basmalah = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيم";
-  static const String hadith = "hadith";
-  static const String nawawi = "40_nawawi";
   static const String prayerTimes = "prayer_times";
   static const String enableLocation = "enable_location";
   static const String gettingLocation = "getting_location";
@@ -80,56 +79,8 @@ class AppStrings {
   static const String settings = "settings";
   static const String changeAppLanguage = "change_app_language";
   static const String changeAppLanguageIcon = "change_app_language_icon";
-  //static const String changeAppTheme = "change_app_theme";
-  //static const String profile = "profile";
-  //static const String pillars = "pillars";
   static const String browse = "browse";
   static const String allAdhkar = "all_adhkar";
-
-  static const List<String> hadithsTitles = [
-    "hadith_1",
-    "hadith_2",
-    "hadith_3",
-    "hadith_4",
-    "hadith_5",
-    "hadith_6",
-    "hadith_7",
-    "hadith_8",
-    "hadith_9",
-    "hadith_10",
-    "hadith_11",
-    "hadith_12",
-    "hadith_13",
-    "hadith_14",
-    "hadith_15",
-    "hadith_16",
-    "hadith_17",
-    "hadith_18",
-    "hadith_19",
-    "hadith_20",
-    "hadith_21",
-    "hadith_22",
-    "hadith_23",
-    "hadith_24",
-    "hadith_25",
-    "hadith_26",
-    "hadith_27",
-    "hadith_28",
-    "hadith_29",
-    "hadith_30",
-    "hadith_31",
-    "hadith_32",
-    "hadith_33",
-    "hadith_34",
-    "hadith_35",
-    "hadith_36",
-    "hadith_37",
-    "hadith_38",
-    "hadith_39",
-    "hadith_40",
-    "hadith_41",
-    "hadith_42"
-  ];
 
   //Prayers names
   static const List<String> englishPrayerNames = [
@@ -172,30 +123,4 @@ class AppStrings {
   static const String noInternetConnection = "no_internet_error";
   static const String unknown = "default_error";
 
-  static String pillar1 =
-      "الشهادتان هما الإعلان عن الإيمان من دون شك، وتصريح بأن ليس هناك إله في الوجود إلا الله، وأن محمداً رسول مرسل للناس من الله"
-      "نص الشهادة هي: أشهد أن لا إله إلا الله وأشهد أن محمداً رسول الله."
-      "وهذا النص يُقال يومياً في صلاة المسلمين، وهو أيضاً المفتاح الرئيسي لدخول شخص غير مسلم في الإسلام.";
-  static String pillar2 =
-      "الصلاة هي الركن الثاني من أركان الإسلام، لقول النبي محمد-ﷺ -: «بني الإسلام على خمس: شهادة أن لا إله إلا الله وأن محمداً رسول الله، وإقام الصلاة، وإيتاء الزكاة، وصوم رمضان، وحج البيت من استطاع إليه سبيلاً»،"
-      "وقوله أيضاً: «رأس الأمر الإسلام، وعموده الصلاة، وذروة سنامه الجهاد في سبيل الله»، والصلاة واجبة على كل مسلم، بالغ، عاقل، ذكر كان أو أنثى،"
-      "قد فرضت الصلاة في مكة قبل هجرة النبي محمد إلى يثرب في السنة الثالثة من البعثة النبوية، وذلك أثناء رحلة الإسراء والمعراج بحسب المعتقد الإسلامي.";
-  static String pillar3 =
-      "وإيتاء الزكاة هو عبادة مالية فرضها الله على عباده، طهرة لنفوسهم من البخل، ولصحائفهم من الخطايا، وقد ذكر الله في كتابه: ﴿خُذْ مِنْ أَمْوَالِهِمْ صَدَقَةً تُطَهِّرُهُمْ وَتُزَكِّيهِمْ بِهَا﴾ [التوبة:103]."
-      "وقد فرض الله على المسلمين زكاتين، زكاة الفطر وهي التي تؤدى بعد شهر رمضان، وزكاة المال في أجناس مخصوصة."
-      "وتُدفع الزكاة في مصارفها الثمانية للفقراء والمساكين.. ويسقط هذا الفرض عن الناس المعدمين الذين لا يملكون شيئاً.";
-  static String pillar4 =
-      "أما الصيام المفروض فهو:: صيام شهر رمضان. ويعتبر رمضان موسماً عظيماً تكثر فيه الطاعات وهو شهر مبارك تتنزل فيه الرحمة ويجدد فيه العبد عهده مع الله."
-      "ويتقرب اليه بالطاعات. ولصيام رمضان فضائل عدّة، فقد تكفل الله لمن صامه إيمانا واحتسابا بغفران ما مضى من ذنوبه وغيرها من الفضائل والأجر لمن صامه إيماناً بالله واحتساباً للأجر.";
-  static String pillar5 =
-      "الحج هو زيارة المسجد الحرام في مكة المكرمة وأداء فريضة الحج. فرض الله هذا الفرض على كل مسلم بالغ، قادر على تحمّل تكاليف الحج. في القرآن: ﴿وَلِلَّهِ عَلَى النَّاسِ حِجُّ الْبَيْتِ مَنِ اسْتَطَاعَ إِلَيْهِ سَبِيلًا﴾ [آل عمران:97]."
-      "وقد فرض الله الحج تزكيةً للنفوسِ، وتربيةً لها على معاني العبودية والطاعة والصبر، فضلاً على أنه فرصة عظيمة لتكفير الذنوب، فقد جاء في الحديث عن أبي هريرة: «من حج هذا البيت فلم يرفث ولم يفسق رجع كيوم ولدته أمه» البخاري ومسلم.";
-
-static List<String> pillarsstring=[
-  pillar1,
-  pillar2,
-  pillar3,
-  pillar4,
-  pillar5
-];
 }

@@ -13,15 +13,6 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ElevatedButton(
-                onPressed: (){
-                  NotiService().showNotification(
-                      title: "test",
-                      body: "testtetet"
-                  );
-                },
-                child : Text("Send Notification")
-            ),
             PrayerTimingsScreen(),
             SizedBox(height: 30,),
             AdhkarScreen(),

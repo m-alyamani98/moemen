@@ -19,8 +19,6 @@ dependencies:
   http: ^1.1.0
   provider: ^6.0.5
   url_launcher: ^6.1.14
-  youtube_player_flutter:
-  dots_indicator:
   flutter_svg: ^2.0.16
   build_runner: ^2.4.13
   dartz: ^0.10.1
@@ -45,8 +43,6 @@ dependencies:
   internet_connection_checker_plus: ^2.5.2
   location: ^8.0.0
   geocoding: ^3.0.0
-  wakelock_plus: ^1.2.8
-  #wakelock:
   google_fonts:
   sqflite: ^2.4.1
   pay: ^3.1.0
@@ -63,6 +59,9 @@ dependencies:
   #awesome_notifications: ^0.10.0
   purchases_flutter: ^8.4.6
   flutter_local_notifications: ^18.0.1
+  flutter_timezone: ^4.1.0
+  timezone: ^0.10.0
+  permission_handler: ^11.4.0
 
 
 flutter_icons:

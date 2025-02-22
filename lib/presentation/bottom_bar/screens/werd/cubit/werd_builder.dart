@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/app/resources/routes_manager.dart';
+import 'package:momen/app/resources/values.dart';
 import 'package:momen/domain/models/quran/khetma_model.dart';
 import 'package:momen/presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
 import 'package:momen/presentation/surah_builder/view/surah_builder_view.dart';
+import 'package:momen/presentation/werd_builder/new_khetma.dart';
 
 
 Widget buildErrorState(String error) {
@@ -36,6 +38,7 @@ Widget buildProgressSection(Khetma khetma) {
   final progress = khetma.days.isNotEmpty
       ? (safeIndex / khetma.durationDays).clamp(0.0, 1.0)
       : 0.0;
+  final nextWerd = khetma.durationDays - khetma.currentDayIndex;
 
   return Column(
     children: [
@@ -43,7 +46,7 @@ Widget buildProgressSection(Khetma khetma) {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           buildProgressItem("الأوراد السابقة :", khetma.currentDayIndex),
-          buildProgressItem("المتبقية  :", khetma.days.length),
+          buildProgressItem("المتبقية  :", nextWerd),
         ],
       ),
       const SizedBox(height: 8),
@@ -74,42 +77,48 @@ Widget buildProgressItem(String title, int value) {
 
 
 Widget buildNoKhetmaUI(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(title: Text("الورد اليومي")),
-    body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.auto_stories, size: 80.w, color: Colors.grey),
-          SizedBox(height: 20.h),
-          Text(
-            "لا يوجد ختمة حالية",
-            style: TextStyle(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey,
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.auto_stories, size: 80.w, color: Colors.grey),
+        SizedBox(height: 20.h),
+        Text(
+          "لا يوجد ختمة حالية",
+          style: TextStyle(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey,
+          ),
+        ),
+        SizedBox(height: 20.h),
+        Center(
+          child: SizedBox(
+            width: AppSize.s250,
+            height: 50,
+            child: ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewKhetmaPage(),
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: ColorManager.primary,
+                textStyle: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text("إنشاء ختمة جديدة"),
             ),
           ),
-          SizedBox(height: 20.h),
-          ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, Routes.newKhetmaRoute),
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 15.h),
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-            ),
-            child: Text(
-              "إنشاء ختمة جديدة",
-              style: TextStyle(
-                fontSize: 18.sp,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }

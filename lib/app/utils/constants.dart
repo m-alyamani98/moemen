@@ -16,16 +16,6 @@ sealed class Constants {
   static const Duration timeOut = Duration(seconds: 60);
   static const String token = "SEND TOKEN HERE";
 
-  static const List<String> videoIds = [
-    '2-foreSBTGU',
-    'uGV7LXTYp8E',
-    'BvEVRuIo_kA',
-    'QSKxs61aZ6w',
-    'qZrP0becumc',
-    'kFn64z09MWA',
-    'yEAmNisPOzk',
-    'OtAWQ03xUJQ',
-  ];
 }
 
 (String, String) recordLocation = ("", "");

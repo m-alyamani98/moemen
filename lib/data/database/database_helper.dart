@@ -24,22 +24,23 @@ class DatabaseHelper {
       path,
       onCreate: (db, version) {
         return db.execute('''
-          CREATE TABLE khetmas(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
-            start_date TEXT,
-            duration_days INTEGER,
-            portion_type INTEGER,
-            daily_amount INTEGER,
-            start_value INTEGER,
-            days TEXT,  // Store as JSON string
-            current_day_index INTEGER
-          )
-        ''');
+        CREATE TABLE khetmas(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT,
+          start_date TEXT,
+          duration_days INTEGER,
+          portion_type INTEGER,
+          daily_amount INTEGER,
+          start_value INTEGER,
+          days TEXT, 
+          current_day_index INTEGER
+        )
+      ''');
       },
-      version: 3, // Increment version number
+      version: 3,
     );
   }
+
 
 
   Future<int> insertKhetma(Khetma khetma) async {

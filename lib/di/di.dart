@@ -4,21 +4,15 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/data_source/local/local_data_source.dart';
 import '../data/data_source/remote/remote_data_source.dart';
-import '../data/database/database.dart';
 import '../data/network/dio_factroy.dart';
 import '../data/network/network_info.dart';
 import '../data/network/prayer_timings_api.dart';
 import '../data/repository/repository_impl.dart';
 import '../domain/repository/repository.dart';
 import '../domain/usecase/adhkar_usecase.dart';
-import '../domain/usecase/del_custom_dhikr_by_id_usecase.dart';
-import '../domain/usecase/get_all_custom_adhkar_usecase.dart';
-import '../domain/usecase/get_custom_dhikr_by_id_usecase.dart';
 import '../domain/usecase/get_prayer_timings_usecase.dart';
-import '../domain/usecase/insert_new_dhikr_usecase.dart';
 import '../domain/usecase/quran_search_usecase.dart';
 import '../domain/usecase/quran_usecase.dart';
-import '../presentation/custom_adhkar/cubit/custom_adhkar_cubit.dart';
 import '../presentation/bottom_bar/cubit/bottom_bar_cubit.dart';
 import '../presentation/bottom_bar/screens/adhkar/cubit/adhkar_cubit.dart';
 import '../presentation/bottom_bar/screens/prayer_times/cubit/prayer_timings_cubit.dart';
@@ -47,14 +41,11 @@ Future initAppModule() async {
 
   instance.registerLazySingleton<LocalDataSource>(() => LocalDataSourceImpl());
 
-  final database =
-  await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-  instance.registerLazySingleton<AppDatabase>(() => database);
+
 
   instance.registerFactory<HomeCubit>(() => HomeCubit());
   instance.registerFactory<PrayerTimingsCubit>(() => PrayerTimingsCubit());
   instance.registerFactory<AdhkarCubit>(() => AdhkarCubit());
-  instance.registerFactory<CustomAdhkarCubit>(() => CustomAdhkarCubit());
 
   instance.registerLazySingleton<Repository>(() => RepositoryImpl());
 
@@ -100,17 +91,4 @@ void initPrayerTimingsModule() {
   }
 }
 
-void initCustomAdhkarModule() {
-  if (!GetIt.I.isRegistered<GetAllCustomAdhkarUseCase>()) {
-    instance.registerFactory<GetAllCustomAdhkarUseCase>(
-            () => GetAllCustomAdhkarUseCase());
-  }
-  if (!GetIt.I.isRegistered<GetCustomDhikrByIdUseCase>()) {
-    instance.registerFactory<GetCustomDhikrByIdUseCase>(
-            () => GetCustomDhikrByIdUseCase());
-  }
-  if (!GetIt.I.isRegistered<InsertNewDhikrUseCase>()) {
-    instance
-        .registerFactory<InsertNewDhikrUseCase>(() => InsertNewDhikrUseCase());
-  }
-}
+

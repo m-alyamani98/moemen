@@ -11,7 +11,6 @@ import '../../domain/models/prayer_timings/prayer_timings_model.dart';
 import '../../domain/models/quran/quran_model.dart';
 import '../../domain/models/quran/quran_search_model.dart';
 import '../responses/adhkar/adhkar_response.dart';
-import '../responses/hadith/hadith_response.dart';
 import '../responses/prayer_timings/prayer_timings_response.dart';
 import '../responses/quran/quran_response.dart';
 import '../responses/quran/quran_search_response.dart';

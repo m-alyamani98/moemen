@@ -1,17 +1,34 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:flutter_timezone/flutter_timezone.dart';
 
 class NotiService {
+  static final NotiService _instance = NotiService._internal();
+  factory NotiService() => _instance;
+  NotiService._internal();
+
   final notificationsPlugin = FlutterLocalNotificationsPlugin();
 
   bool _isInitialized = false;
 
-  bool get isInitialized => _isInitialized ;
+  bool get isInitialized => _isInitialized;
 
-  Future<void>initNotification() async {
+  Future<void> initNotification() async {
+
+    tz.initializeTimeZones();
+    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    var initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+
+    await notificationsPlugin.initialize(initializationSettings);
+
     if (_isInitialized) return;
 
-    const initSettingAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+    final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(currentTimeZone));
+
+    const initSettingAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
 
     const initSettingIos = DarwinInitializationSettings(
       requestAlertPermission: true,
@@ -20,16 +37,20 @@ class NotiService {
     );
 
     const initSettings = InitializationSettings(
-        android: initSettingAndroid,
-        iOS: initSettingIos
+      android: initSettingAndroid,
+      iOS: initSettingIos,
     );
 
     await notificationsPlugin.initialize(initSettings);
+
+    // Request notification permissions (for Android 13+)
+    final androidPlugin = notificationsPlugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+    await androidPlugin?.requestNotificationsPermission();
+
+    _isInitialized = true;
   }
 
-  // In your NotiService class, update these methods:
-
-// Add explicit configuration for Android
   AndroidNotificationDetails _androidDetails() {
     return const AndroidNotificationDetails(
       'daily_channel_id',
@@ -45,17 +66,24 @@ class NotiService {
 
   NotificationDetails notificationDetails() {
     return NotificationDetails(
-      android: _androidDetails(),
-      iOS: DarwinNotificationDetails(
-        // Add iOS-specific non-null parameters
-        presentAlert: true,
-        presentBadge: true,
-        presentSound: true,
-      ),
-    );
+        android: _androidDetails(),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ));
   }
 
-// Update showNotification to use proper details
+  Future<void> testImmediateNotification() async {
+    await notificationsPlugin.show(
+      0,
+      'Test Notification',
+      'This is a test notification',
+      await notificationDetails(),
+    );
+    print("Test notification shown");
+  }
+
   Future<void> showNotification({
     int id = 0,
     String? title,
@@ -67,5 +95,41 @@ class NotiService {
       body,
       await notificationDetails(),
     );
+  }
+
+  Future<void> scheduleNotification({
+    int id = 1,
+    required String title,
+    required String body,
+    required int hour,
+    required int minute,
+  }) async {
+    final now = tz.TZDateTime.now(tz.local);
+    print("Current time: $now");
+
+    var scheduledDate = tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
+
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+
+    print("Scheduled time: $scheduledDate");
+
+    await notificationsPlugin.zonedSchedule(
+      id,
+      title,
+      body,
+      scheduledDate,
+      await notificationDetails(),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle, // Change this
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
+    print("Notification Scheduled for $scheduledDate");
+  }
+
+  Future<void> cancelAllNotifications() async {
+    await notificationsPlugin.cancelAll();
+    print("All notifications canceled");
   }
 }

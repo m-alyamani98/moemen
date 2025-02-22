@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -22,15 +25,16 @@ final GetIt sl = GetIt.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase FIRST
+
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
       name : 'quran',
-      options: DefaultFirebaseOptions.currentPlatform, // If using flutterfire_cli
+      options: DefaultFirebaseOptions.currentPlatform,
     );
   }
-  await Firebase.initializeApp();
-
+  FirebaseApi firebaseApi = FirebaseApi();
+  await firebaseApi.initNotifications();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   try {
@@ -40,16 +44,14 @@ void main() async {
     print("Error fetching FCM token: $e");
   }
 
-  NotiService().initNotification();
-
+  await NotiService().initNotification();
+  
 
 
   // Initialize other dependencies AFTER Firebase
   await EasyLocalization.ensureInitialized();
   await initAppModule();
   await setupServiceLocator();
-  //await NotificationController.initializeLocalNotifications();
-  //await NotificationController.initializeIsolateReceivePort();
 
   // Wakelock.enable();
   Bloc.observer = MyBlocObserver();
@@ -74,4 +76,9 @@ Future<void> setupServiceLocator() async {
 
   // HomeViewModel is safe here as a lazy singleton (only created when first used)
   sl.registerLazySingleton<HomeViewModel>(() => HomeViewModel());
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling background notification: ${message.notification?.title}");
 }

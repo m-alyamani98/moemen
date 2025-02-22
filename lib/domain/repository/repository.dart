@@ -21,15 +21,4 @@ abstract class Repository {
       String country,
       );
 
-
-  //Database
-  Future<Either<Failure, List<CustomAdhkarEntity>>> getAllCustomAdhkar();
-
-  Future<Either<Failure, CustomAdhkarEntity?>> getDhikrByDhikrText(
-      String dhikr);
-
-  Future<Either<Failure, void>> insertDhikr(CustomAdhkarEntity dhikr);
-
-
-
 }

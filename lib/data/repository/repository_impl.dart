@@ -1,22 +1,15 @@
 import 'package:dartz/dartz.dart';
-import 'package:momen/data/database/database_helper.dart';
 import 'package:momen/data/mapper/mapper.dart';
-import 'package:momen/domain/models/quran/juz_model.dart';
-
-
 import '../../app/error/exception.dart';
 import '../../app/error/failure.dart';
 import '../../di/di.dart';
 import '../../domain/models/adhkar/adhkar_model.dart';
-import '../../domain/models/adhkar/custom_adhkar_model.dart';
 import '../../domain/models/prayer_timings/prayer_timings_model.dart';
 import '../../domain/models/quran/quran_model.dart';
 import '../../domain/models/quran/quran_search_model.dart';
 import '../../domain/repository/repository.dart';
 import '../data_source/local/local_data_source.dart';
 import '../data_source/remote/remote_data_source.dart';
-import '../database/dao.dart';
-import '../database/database.dart';
 import '../network/error_handler.dart';
 import '../network/network_info.dart';
 
@@ -24,7 +17,6 @@ class RepositoryImpl implements Repository {
   final LocalDataSource _localDataSource = instance<LocalDataSource>();
   final RemoteDataSource _remoteDataSource = instance<RemoteDataSource>();
   final NetworkInfo _networkInfo = instance<NetworkInfo>();
-  final AppDao _customAdhkarDao = instance<AppDatabase>().appDao;
 
   RepositoryImpl();
 
@@ -84,81 +76,7 @@ class RepositoryImpl implements Repository {
     }
   }
 
-  @override
-  Future<Either<Failure, void>> delDhikrByDhikrText(String dhikr) async {
-    await _customAdhkarDao.delDhikrByDhikrText(dhikr);
-    try {
-      return const Right(null);
-    } on LocalException catch (failure) {
-      return Left(LocalFailure(null, failure.message));
-    }
-  }
 
-  @override
-  Future<Either<Failure, List<CustomAdhkarEntity>>> getAllCustomAdhkar() async {
-    final data = await _customAdhkarDao.getAllCustomAdhkar();
-    try {
-      return Right(data);
-    } on LocalException catch (failure) {
-      return Left(LocalFailure(null, failure.message));
-    }
-  }
-
-  @override
-  Future<Either<Failure, CustomAdhkarEntity?>> getDhikrByDhikrText(
-      String dhikr) async {
-    CustomAdhkarEntity? resultDhikr =
-    await _customAdhkarDao.getDhikrByDhikrText(dhikr);
-    try {
-      return Right(resultDhikr);
-    } on LocalException catch (failure) {
-      return Left(LocalFailure(null, failure.message));
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> insertDhikr(CustomAdhkarEntity dhikr) async {
-    await _customAdhkarDao.insertDhikr(dhikr);
-    try {
-      return const Right(null);
-    } on LocalException catch (failure) {
-      return Left(LocalFailure(null, failure.message));
-    }
-  }
-
-
-
-  /*@override
-  Future<void> saveJuzData(List<QuranModel> quranData) async {
-    final DatabaseHelper _dbHelper = DatabaseHelper();
-
-    // Group Ayahs by Juz
-    Map<int, List<AyahModel>> juzAyahs = {};
-    for (var surah in quranData) {
-      for (var ayah in surah.ayahs) {
-        if (!juzAyahs.containsKey(ayah.juz)) {
-          juzAyahs[ayah.juz] = [];
-        }
-        juzAyahs[ayah.juz]!.add(ayah);
-      }
-    }
-
-    // Save Juz data to the database
-    for (var juzNumber in juzAyahs.keys) {
-      var ayahs = juzAyahs[juzNumber]!;
-      var startingPage = ayahs.first.page;
-      var endingPage = ayahs.last.page;
-
-      JuzModel juz = JuzModel(
-        juzNumber: juzNumber,
-        startingPage: startingPage,
-        endingPage: endingPage,
-        ayahs: ayahs,
-      );
-
-      await _dbHelper.insertJuz(juz);
-    }
-  }*/
 
 
 }
