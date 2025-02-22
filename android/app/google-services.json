@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "872313168403",
+    "firebase_url": "https://moemen-87f62-default-rtdb.firebaseio.com",
+    "project_id": "moemen-87f62",
+    "storage_bucket": "moemen-87f62.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:872313168403:android:1f8adbd416dbf13170d5e6",
+        "android_client_info": {
+          "package_name": "com.example.momen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "872313168403-v2f5o0ed9pnqdm6ujhnemfj74a4p5b2f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.momen",
+            "certificate_hash": "7f3ad1db8a7fbadd548baa82188ac1a6ab54e426"
+          }
+        },
+        {
+          "client_id": "872313168403-ke8p3v4emv9104k2i165a1kf12h4ccju.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw-N2YTdXwVEf8NZ7tRwTfBK0nkbh2OIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "872313168403-ke8p3v4emv9104k2i165a1kf12h4ccju.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "872313168403-4eqb2lls92dq768il9gbru4fguomad2p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.momen"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
