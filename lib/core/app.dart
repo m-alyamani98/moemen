@@ -6,10 +6,8 @@ import 'package:momen/app/utils/app_prefs.dart';
 import 'package:momen/di/di.dart';
 import 'package:momen/domain/models/quran/khetma_model.dart';
 import 'package:momen/presentation/bottom_bar/screens/werd/view/daily_werd.dart';
-import 'package:momen/presentation/werd_builder/khetma_plan_page.dart';
 
 import '../app/resources/resources.dart';
-import '../presentation/custom_adhkar/cubit/custom_adhkar_cubit.dart';
 import '../presentation/bottom_bar/cubit/bottom_bar_cubit.dart';
 import '../presentation/bottom_bar/screens/adhkar/cubit/adhkar_cubit.dart';
 import '../presentation/bottom_bar/screens/prayer_times/cubit/prayer_timings_cubit.dart';

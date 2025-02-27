@@ -6,6 +6,35 @@ class AppStrings {
   static const String werd = "werd";
   static const String previousWerd = "previous_werd";
   static const String nextWerd = "next_werd";
+  static const String completeWerd = "complete_werd";
+  static const String completeWerdSuccessful = "complete_werd_successful";
+  static const String completeKhetmaSuccessful = "complete_khetma_successful";
+  static const String readWerd = "read_werd";
+  static const String fromAyah = "from_ayah";
+  static const String ayah = "ayah";
+
+  //New Khetma
+  static const String juzS = "juz_s";
+  static const String juzM = "juz_M";
+  static const String titleNewKhetma = "title_new_khetma";
+  static const String startFrom = "start_from";
+  static const String titleDurationSelection = "title_duration_selection";
+  static const String durationSelection = "duration_selection";
+  static const String dailyWerd = "daily_werd";
+  static const String days = "days";
+  static const String werdSelection = "werd_selection";
+  static const String or = "or";
+  static const String continueButton = "continue_button";
+  static const String newKhetmaCreation = "new_khetma_creation";
+  static const String hizbQuarter = "hizb_quarter";
+  static const String hizbQuarterS = "hizb_quarter_s";
+  static const String hizbQuarterM = "hizb_quarter_m";
+  static const String onePage = "one_page";
+  static const String errorKhetma = "error_khetma";
+  static const String page = "page";
+  static const String noKhetma = "no_khetma";
+  static const String startNow = "start_now";
+
   static const String werdAlarm = "werd_alarm";
   static const String werdAlarmDesc = "werd_alarm_desc";
   static const String quranSeparator = "quran_separator";

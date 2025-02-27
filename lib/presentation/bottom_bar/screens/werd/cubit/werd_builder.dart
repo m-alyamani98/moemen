@@ -1,7 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:momen/app/resources/color_manager.dart';
+import 'package:momen/app/resources/strings_manager.dart';
 import 'package:momen/app/resources/values.dart';
 import 'package:momen/domain/models/quran/khetma_model.dart';
 import 'package:momen/presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
@@ -45,8 +46,8 @@ Widget buildProgressSection(Khetma khetma) {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          buildProgressItem("الأوراد السابقة :", khetma.currentDayIndex),
-          buildProgressItem("المتبقية  :", nextWerd),
+          buildProgressItem('${AppStrings.previousWerd.tr()} : ', khetma.currentDayIndex),
+          buildProgressItem('${AppStrings.nextWerd.tr()} : ', nextWerd),
         ],
       ),
       const SizedBox(height: 8),
@@ -59,7 +60,7 @@ Widget buildProgressSection(Khetma khetma) {
       ),
       SizedBox(height: 12.h),
       Text(
-        'الختمة الحالية',
+        AppStrings.currentKhetma.tr(),
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
     ],
@@ -84,7 +85,7 @@ Widget buildNoKhetmaUI(BuildContext context) {
         Icon(Icons.auto_stories, size: 80.w, color: Colors.grey),
         SizedBox(height: 20.h),
         Text(
-          "لا يوجد ختمة حالية",
+          AppStrings.noKhetma.tr(),
           style: TextStyle(
             fontSize: 20.sp,
             fontWeight: FontWeight.bold,
@@ -114,7 +115,7 @@ Widget buildNoKhetmaUI(BuildContext context) {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: Text("إنشاء ختمة جديدة"),
+              child: Text(AppStrings.newKhetma.tr(),),
             ),
           ),
         ),

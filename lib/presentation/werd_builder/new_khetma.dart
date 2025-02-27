@@ -1,13 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:momen/app/resources/color_manager.dart';
 import 'package:momen/app/resources/routes_manager.dart';
+import 'package:momen/app/resources/strings_manager.dart';
 import 'package:momen/app/resources/values.dart';
 import 'package:momen/domain/models/quran/khetma_model.dart';
 import 'package:momen/presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
 import 'package:momen/presentation/components/widget.dart';
-import 'package:momen/presentation/werd_builder/khetma_plan_page.dart';
 
 class NewKhetmaPage extends StatefulWidget {
   @override
@@ -24,29 +25,29 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
   Khetma? newKhetma;
 
   final Map<String, int> juzPortionMap = {
-    "جزء": 1,
-    "جزءان": 2,
-    "3 أجزاء": 3,
-    "4 أجزاء": 4,
-    "5 أجزاء": 5,
-    "6 أجزاء": 6,
-    "7 أجزاء": 7,
-    "8 أجزاء": 8,
-    "9 أجزاء": 9,
-    "10 أجزاء": 10,
+    "1 ${AppStrings.juz.tr()}": 1,
+    "2 ${AppStrings.juzS.tr()}": 2,
+    "3 ${AppStrings.juzM.tr()}": 3,
+    "4 ${AppStrings.juzM.tr()}": 4,
+    "5 ${AppStrings.juzM.tr()}": 5,
+    "6 ${AppStrings.juzM.tr()}": 6,
+    "7 ${AppStrings.juzM.tr()}": 7,
+    "8 ${AppStrings.juzM.tr()}": 8,
+    "9 ${AppStrings.juzM.tr()}": 9,
+    "10 ${AppStrings.juzM.tr()}": 10,
   };
 
   final Map<String, int> hizbQuarterMap = {
-    "ربع": 1,
-    "ربعان": 2,
-    "3 أرباع": 3,
-    "حزب": 4, // 1 حزب = 4 أرباع
-    "5 أرباع": 5,
-    "6 أرباع": 6,
-    "7 أرباع": 7,
+    AppStrings.hizbQuarter.tr(): 1,
+    AppStrings.hizbQuarterS.tr(): 2,
+    "3 ${AppStrings.hizbQuarterM.tr()}": 3,
+    AppStrings.hizb.tr(): 4, // 1 حزب = 4 أرباع
+    "5 ${AppStrings.hizbQuarterM.tr()}": 5,
+    "6 ${AppStrings.hizbQuarterM.tr()}": 6,
+    "7 ${AppStrings.hizbQuarterM.tr()}": 7,
   };
   final Map<String, int> pagePortionMap = {
-    "صفحة واحدة": 1,
+    AppStrings.onePage.tr(): 1,
   };
 
   List<DayPlan> _generateDays(
@@ -94,12 +95,12 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text("خطأ"),
-          content: Text("الرجاء اختيار كمية الورد اليومي"),
+          title: Text(AppStrings.error.tr()),
+          content: Text(AppStrings.errorKhetma.tr()),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text("موافق"),
+              child: Text("OK",style: TextStyle(color: ColorManager.primary),),
             ),
           ],
         ),
@@ -192,8 +193,8 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text("تم الإنشاء"),
-        content: Text("تم إنشاء الختمة بنجاح 🎉"),
+        title: Text(AppStrings.newKhetma.tr()),
+        content: Text("${AppStrings.newKhetmaCreation.tr()} 🎉"),
         actions: [
           TextButton(
             onPressed: () {
@@ -215,7 +216,7 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "ختمة جديدة",
+          AppStrings.newKhetma.tr(),
           style: Theme.of(context).textTheme.titleSmall?.copyWith(color: ColorManager.primary),
         ),
         actions: [
@@ -234,9 +235,9 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            getTitle(settingName: "الرجاء تحديد الجزء الذي تريد أن تبدأ منه الختمة", context: context),
+            getTitle(settingName: AppStrings.titleNewKhetma.tr(), context: context),
             SizedBox(height: AppSize.s16.r),
-            getTitle(settingName: "البدء من : ", context: context),
+            getTitle(settingName: AppStrings.startFrom.tr(), context: context),
             Padding(
               padding: const EdgeInsets.only(right: 10.0),
               child: Dropdown<String>(
@@ -256,9 +257,9 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
               ),
             ),
             SizedBox(height: AppSize.s16.r),
-            getTitle(settingName: "الرجاء تحديد المدة التي تريد أن تختم فيها أو كمية الورد اليومي الذي تود قراءته", context: context),
+            getTitle(settingName: AppStrings.titleDurationSelection.tr(), context: context),
             SizedBox(height: AppSize.s16.r),
-            getTitle(settingName: "مدة الختمة", context: context),
+            getTitle(settingName: AppStrings.durationSelection.tr(), context: context),
             Container(
               decoration: BoxDecoration(
                 color: ColorManager.accentGrey,
@@ -273,7 +274,7 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
                 children: [
                   SizedBox(width: AppSize.s50.r),
                   Text(
-                    "$duration يوما",
+                    "$duration  ${AppStrings.days.tr()}",
                     style: TextStyle(
                       fontSize: AppSize.s14.r,
                       color: ColorManager.textPrimary,
@@ -305,7 +306,7 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
               ),
             ),
             SizedBox(height: AppSize.s16.r),
-            getTitle(settingName: "كمية الورد", context: context),
+            getTitle(settingName: AppStrings.werdSelection.tr(), context: context),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -322,13 +323,13 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
                   onChanged: (String? newValue) {
                     setState(() {
                       dailyPortion2 = newValue!;
-                      dailyPortion = ""; // Reset other portion
-                      dailyPortion3 = ""; // Reset other portion
+                      dailyPortion = "";
+                      dailyPortion3 = "";
                     });
                   },
                   width: AppSize.s100.r,
                 ),
-                getTitle(settingName: "أو", context: context),
+                getTitle(settingName: AppStrings.or.tr(), context: context),
                 Dropdown<String>(
                   value: dailyPortion,
                   items: ["", ...hizbQuarterMap.keys]
@@ -341,8 +342,8 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
                   onChanged: (String? newValue) {
                     setState(() {
                       dailyPortion = newValue!;
-                      dailyPortion2 = ""; // Reset other portion
-                      dailyPortion3 = ""; // Reset other portion
+                      dailyPortion2 = "";
+                      dailyPortion3 = "";
                     });
                   },
                   width: AppSize.s100.r,
@@ -354,7 +355,7 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                getTitle(settingName: "أو", context: context),
+                getTitle(settingName: AppStrings.or.tr(), context: context),
                 ToggleButtons(
                   isSelected: pagePortionMap.keys.map((e) => e == dailyPortion3).toList(),
                   onPressed: (int index) {
@@ -409,7 +410,7 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Text("الاستمرار"),
+                  child: Text(AppStrings.newKhetma.tr()),
                 ),
               ),
             ),

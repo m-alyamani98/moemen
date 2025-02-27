@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:momen/app/resources/color_manager.dart';
+import 'package:momen/app/resources/strings_manager.dart';
 import 'package:momen/app/resources/values.dart';
 import 'package:momen/domain/models/quran/khetma_model.dart';
 import 'package:momen/presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
@@ -52,7 +54,7 @@ class _WerdScreenState extends State<WerdScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  "تم إكمال الختمة بنجاح!",
+                    AppStrings.completeKhetmaSuccessful.tr(),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -141,7 +143,7 @@ class _WerdScreenState extends State<WerdScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      getTitle(settingName: "من قوله تعالى", context: context),
+                      getTitle(settingName: AppStrings.fromAyah.tr(), context: context),
                       getTitle(settingName: "${details['start']['juz']}", context: context),
                     ],
                   ),
@@ -161,11 +163,11 @@ class _WerdScreenState extends State<WerdScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${details['start']['surahs']}   آية : ${details['start']['first_ayah'].numberInSurah}",
+                        "${details['start']['surahs']}   ${AppStrings.ayah.tr()} : ${details['start']['first_ayah'].numberInSurah}",
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                       Text(
-                        'صفحة : ${details['start']['page']}',
+                        '${AppStrings.pageNumber.tr()} : ${details['start']['page']}',
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
@@ -176,11 +178,11 @@ class _WerdScreenState extends State<WerdScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${details['end']['surahs']} آية :   ${details['end']['final_ayah'].numberInSurah}",
+                        "${details['end']['surahs']} ${AppStrings.ayah.tr()} :   ${details['end']['final_ayah'].numberInSurah}",
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                       Text(
-                        ' صفحة : ${details['end']['page']} ',
+                        ' ${AppStrings.pageNumber.tr()} : ${details['end']['page']} ',
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
@@ -212,7 +214,7 @@ class _WerdScreenState extends State<WerdScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Text("قراءة الورد"),
+                  child: Text(AppStrings.readWerd.tr()),
                 ),
               ),
             ),
@@ -232,7 +234,7 @@ class _WerdScreenState extends State<WerdScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            "تم إكمال الورد",
+                            AppStrings.completeWerd.tr(),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -269,7 +271,7 @@ class _WerdScreenState extends State<WerdScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Text("أتممت القراءة"),
+                  child: Text(AppStrings.completeWerd.tr()),
                 ),
               ),
             ),

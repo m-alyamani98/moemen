@@ -5,6 +5,7 @@ import 'package:momen/app/resources/strings_manager.dart';
 import 'package:momen/core/splash.dart';
 import 'package:momen/domain/models/quran/khetma_model.dart';
 import 'package:momen/presentation/bottom_bar/screens/werd/view/daily_werd.dart';
+import 'package:momen/presentation/werd_builder/new_khetma.dart';
 import '../../di/di.dart';
 import '../../presentation/dhikr_builder/view/dhikr_builder_view.dart';
 import '../../presentation/bottom_bar/view/home_view.dart';
@@ -48,16 +49,13 @@ class RoutesGenerator {
                 adhkarList: args["adhkarList"], category: args["category"]));
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => SplashPage());
+      case Routes.newKhetmaRoute:
+        return MaterialPageRoute(builder: (_) => NewKhetmaPage());
       case Routes.dailyWerdRoute:
         final args = settings.arguments as Khetma; // Ensure this is non-null
         return MaterialPageRoute(
           builder: (_) => WerdScreen(initialKhetma: args),
         );
-      /*case Routes.newKhetmaRoute:
-        return MaterialPageRoute(builder: (_) => NewKhetmaPage());*/
-      /*case Routes.khetmaPlanRoute:
-        var readingPlan = settings.arguments as List<Map<String, dynamic>>;
-        return MaterialPageRoute(builder: (_) => KhetmaPlanPage(startingJuz: '',));*/
       default:
         return unDefinedRoute();
     }

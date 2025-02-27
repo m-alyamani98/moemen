@@ -9,6 +9,8 @@ import '../../../../../domain/models/adhkar/adhkar_model.dart';
 import '../cubit/adhkar_cubit.dart';
 import 'dart:ui' as ui;
 
+import 'all_adhkar_screen.dart';
+
 class AdhkarScreen extends StatelessWidget {
   const AdhkarScreen({super.key});
 
@@ -24,22 +26,36 @@ class AdhkarScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: ColorManager.white,
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 1,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AllAdhkarScreen()), // Replace with your actual page widget
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: ColorManager.white,
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0), // Optional: Add rounded corners
                   ),
-                  borderRadius: BorderRadius.circular(8.0), // Optional: Add rounded corners
-                ),
-                height: 50,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(AppStrings.allAdhkar.tr(),style: Theme.of(context).textTheme.titleLarge?.copyWith(color: ColorManager.textPrimary,))
-                    ],
+                  height: 50,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          AppStrings.allAdhkar.tr(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(color: ColorManager.textPrimary),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

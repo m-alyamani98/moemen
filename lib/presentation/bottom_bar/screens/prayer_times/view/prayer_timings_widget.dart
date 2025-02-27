@@ -86,7 +86,8 @@ class PrayerTimingsScreen extends StatelessWidget {
                             timings: timings,
                             prayerTimingsModel: prayerTimingsModel,
                             index: index,
-                            currentPrayer: currentPrayer ?? '', // Pass the current prayer name
+                            currentPrayer: currentPrayer ?? '',
+                            svg: _getPrayerSvgPath(index)
                           )
 
                       ],
@@ -177,13 +178,21 @@ class PrayerTimingsScreen extends StatelessWidget {
                 ));
           } else {
             return Center(
-                child: Text(
-                  AppStrings.noLocationFound.tr(),
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(height: AppSize.s1_3.h),
+                child: Column(
+                  children: [
+                    Text(
+                      AppStrings.noLocationFound.tr(),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(height: AppSize.s1_3.h),
+                    ),
+                    ElevatedButton(
+                        onPressed: (){},
+                        child: Text("data")
+                    )
+                  ],
                 ));
           }
         }
@@ -198,6 +207,7 @@ class PrayerTimingsScreen extends StatelessWidget {
     required bool isEnglish,
     required BuildContext context,
     required String currentPrayer,
+    required String svg
   }) {
     // Determine the prayer name based on the current language
     final prayerName = isEnglish
@@ -217,11 +227,16 @@ class PrayerTimingsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SvgPicture.asset(
+              svg,
+            ),
             Text(
               prayerName,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 fontFamily: FontConstants.elMessiriFontFamily,
+                fontSize: 12,
                 color: isCurrentPrayer
                     ? ColorManager.white
                     : ColorManager.primary,

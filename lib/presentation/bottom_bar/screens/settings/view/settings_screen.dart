@@ -3,7 +3,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:momen/data/notification/local_notifications/notification_service.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:momen/domain/models/quran/quran_model.dart';
 import 'package:momen/presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
 import 'package:momen/presentation/bottom_bar/screens/settings/service/daily_alert.dart';
@@ -12,20 +12,20 @@ import 'package:momen/presentation/bottom_bar/screens/settings/service/morning_a
 import 'package:momen/presentation/bottom_bar/screens/settings/service/sorat_almolk_alert.dart';
 import 'package:momen/presentation/components/widget.dart';
 import 'package:momen/presentation/pay_builder/payment.dart';
-import 'package:momen/presentation/pay_builder/service/payment_configurations.dart';
 import 'package:momen/presentation/qibla/view/qiblah_screen.dart';
 import 'package:momen/presentation/surah_builder/view/surah_builder_view.dart';
 import 'package:momen/presentation/werd_builder/new_khetma.dart';
-import 'package:momen/presentation/werd_builder/previos_werd.dart';
-
+import 'package:share_plus/share_plus.dart' show Share;
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../components/separator.dart';
 import '../../../../../app/resources/resources.dart';
-
 import '../../../cubit/bottom_bar_cubit.dart';
 import '../service/sorat_albaqara_alert.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  SettingsScreen({Key? key}) : super(key: key);
+  final InAppReview inAppReview = InAppReview.instance;
+
 
 
 
@@ -273,7 +273,7 @@ class SettingsScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => NewKhetmaPage(), // Replace with the page you want to navigate to
+                      builder: (context) => NewKhetmaPage(),
                     ),
                   );
                 },
@@ -283,8 +283,8 @@ class SettingsScreen extends StatelessWidget {
               ),
               getSeparator(context),
               getTitle(
-                  settingName: AppStrings.prayerTime.tr(), context: context),
-              settingIndexItem(
+                  settingName: AppStrings.qiblaDirection.tr(), context: context),
+              /*settingIndexItem(
                 svgPath: null,
                 icon: FluentIcons.alert_48_filled,
                 settingName: AppStrings.settingPrayerTime.tr(),
@@ -293,7 +293,7 @@ class SettingsScreen extends StatelessWidget {
                 context: context,
                 color: ColorManager.iconPrimary,
                 angel: 0,
-              ),
+              ),*/
               settingIndexItem(
                 svgPath: 'assets/images/kaaba.svg',
                 icon: null,
@@ -402,22 +402,37 @@ class SettingsScreen extends StatelessWidget {
                 color: ColorManager.iconPrimary,
                 angel: 0,
               ),
-              settingIndexItem(
+              /*settingIndexItem(
                 svgPath: null,
                 icon: FluentIcons.call_48_filled,
                 settingName: AppStrings.callUs.tr(),
                 trailing: const SizedBox(),
-                onTap: () {},
+                onTap: () async {
+                  final Uri phoneUri = Uri(scheme: 'tel', path: '+962 7 9665 4530');
+                  if (await canLaunchUrl(phoneUri)) {
+                    await launchUrl(phoneUri);
+                  } else {
+                    throw 'Could not launch $phoneUri';
+                  }
+                },
                 context: context,
                 color: ColorManager.iconPrimary,
                 angel: 0,
-              ),
+              ),*/
               settingIndexItem(
                 svgPath: 'assets/images/threads.svg',
                 icon: null,
                 settingName: AppStrings.threads.tr(),
                 trailing: const SizedBox(),
-                onTap: () {},
+                onTap: () async {
+                  final Uri threadsUri = Uri.parse('https://www.threads.net/');
+
+                  if (await canLaunchUrl(threadsUri)) {
+                    await launchUrl(threadsUri, mode: LaunchMode.externalApplication);
+                  } else {
+                    throw 'Could not launch Threads';
+                  }
+                },
                 context: context,
                 color: ColorManager.iconPrimary,
                 angel: 0,
@@ -427,7 +442,17 @@ class SettingsScreen extends StatelessWidget {
                 icon: null,
                 settingName: AppStrings.instagram.tr(),
                 trailing: const SizedBox(),
-                onTap: () {},
+                onTap: () async {
+                  const String username = 'your_username'; // Replace with your Instagram username
+                  final Uri instaAppUri = Uri.parse('instagram://user?username=$username');
+                  final Uri instaWebUri = Uri.parse('https://www.instagram.com/$username');
+
+                  if (await canLaunchUrl(instaAppUri)) {
+                    await launchUrl(instaAppUri);
+                  } else {
+                    await launchUrl(instaWebUri, mode: LaunchMode.externalApplication);
+                  }
+                },
                 context: context,
                 color: ColorManager.iconPrimary,
                 angel: 0,
@@ -437,7 +462,10 @@ class SettingsScreen extends StatelessWidget {
                 icon: FluentIcons.share_48_regular,
                 settingName: AppStrings.share.tr(),
                 trailing: const SizedBox(),
-                onTap: () {},
+                onTap: () async {
+                  const String appLink = 'https://play.google.com/store/apps/details?id=com.yourapp.package'; // Replace with your actual app link
+                  await Share.share('Check out this amazing app: $appLink');
+                },
                 context: context,
                 color: ColorManager.iconPrimary,
                 angel: 0,
@@ -447,7 +475,15 @@ class SettingsScreen extends StatelessWidget {
                 icon: FluentIcons.thumb_like_48_filled,
                 settingName: AppStrings.appRating.tr(),
                 trailing: const SizedBox(),
-                onTap: () {},
+                onTap: () async {
+                  if (await inAppReview.isAvailable()) {
+                    await inAppReview.requestReview();
+                  } else {
+                    // Fallback to store listing if in-app review is not available
+                    final String appStoreUrl = 'https://play.google.com/store/apps/details?id=com.yourapp.package'; // Replace with your actual app package name
+                    await launchUrl(Uri.parse(appStoreUrl), mode: LaunchMode.externalApplication);
+                  }
+                },
                 context: context,
                 color: ColorManager.iconPrimary,
                 angel: 0,
