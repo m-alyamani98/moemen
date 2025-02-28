@@ -22,11 +22,7 @@ class PrayerTimingsScreen extends StatelessWidget {
         PrayerTimingsModel prayerTimingsModel = cubit.prayerTimingsModel;
         bool isConnected = cubit.isConnected;
 
-
-        //Get Current App Locale
         final currentLocale = context.locale;
-
-        //Check if current app language is English
         bool isEnglish =
             currentLocale.languageCode == LanguageType.english.getValue();
 
@@ -226,24 +222,33 @@ class PrayerTimingsScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
               svg,
+              width: 20,
+              height:20,
+              fit: BoxFit.contain,
+              color: isCurrentPrayer
+                  ? ColorManager.white
+                  : ColorManager.primary,
+            ),
+            SizedBox(
+              height: AppSize.s3.h,
             ),
             Text(
               prayerName,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              style: TextStyle(
                 fontFamily: FontConstants.elMessiriFontFamily,
-                fontSize: 12,
+                fontSize: 14,
                 color: isCurrentPrayer
                     ? ColorManager.white
                     : ColorManager.primary,
               ),
             ),
             SizedBox(
-              height: AppSize.s5.h,
+              height: AppSize.s0_1.h,
             ),
             Text(
               timings[index],

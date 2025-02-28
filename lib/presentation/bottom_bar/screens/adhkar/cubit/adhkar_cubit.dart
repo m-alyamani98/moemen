@@ -35,7 +35,21 @@ class AdhkarCubit extends Cubit<AdhkarState> {
     return adhkar;
   }
 
-  List<String> getAdhkarCategories(
+  List<AdhkarCategory> getUniqueCategories(List<AdhkarModel> adhkarList) {
+    Map<String, IconData> categoryMap = {};
+    for (var adhkar in adhkarList) {
+      if (!categoryMap.containsKey(adhkar.category)) {
+        categoryMap[adhkar.category] = adhkar.icon;
+      }
+    }
+    return categoryMap.entries
+        .map((e) => AdhkarCategory(name: e.key, icon: e.value))
+        .toList();
+  }
+
+
+
+List<String> getAdhkarCategories(
       {required List<AdhkarModel> adhkarList,}) {
     List<String> adhkarCategories =
     List.from(adhkarList.map((e) => e.category).toSet());
@@ -72,4 +86,11 @@ class AdhkarCubit extends Cubit<AdhkarState> {
     count = 0;
     emit(AdhkarCounterResetState());
   }
+}
+
+class AdhkarCategory {
+  final String name;
+  final IconData icon;
+
+  AdhkarCategory({required this.name, required this.icon});
 }

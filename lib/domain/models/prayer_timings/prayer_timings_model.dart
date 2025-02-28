@@ -175,3 +175,18 @@ class PrayerTimingsModel extends Equatable {
         data,
       ];
 }
+class LocationModel extends Equatable {
+  final String en;
+  final String ar;
+
+  const LocationModel({required this.en, required this.ar});
+
+  String getLocalized(String locale) => locale == 'ar' ? ar : en;
+
+  @override
+  List<Object> get props => [en, ar];
+}
+class LocationService {
+  LocationModel city = const LocationModel(en: 'Amman', ar: 'عمان');
+  LocationModel country = const LocationModel(en: 'Jordan', ar: 'الأردن');
+}

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:momen/core/service_locator.dart';
 import 'package:momen/presentation/qibla/view/qiblah_screen.dart';
 import '../../../di/di.dart';
@@ -14,35 +15,49 @@ import '../viewmodel/home_viewmodel.dart';
 class HomeView extends StatelessWidget {
   final HomeViewModel _viewModel = instance<HomeViewModel>();
   final homeViewModel = sl<HomeViewModel>();
-
+  final HomeViewModel viewModel = Get.put(HomeViewModel());
 
   HomeView({Key? key}) : super(key: key);
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
+
   @override
   Widget build(BuildContext context) {
+
+
     return BlocProvider(
       create: (context) => instance<HomeCubit>()..isThereABookMarked(),
       child: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           var cubit = HomeCubit.get(context);
           int currentIndex = cubit.currentIndex;
+          final currentLocale = context.locale;
+          bool isEnglish =
+              currentLocale.languageCode == LanguageType.english.getValue();
           return Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
               backgroundColor: Theme.of(context).primaryColor,
-              title: Text(
-                _viewModel.titles[currentIndex],
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(color: ColorManager.primary),
-              ),
-              leading: IconButton(
+                title: Obx(() {
+                  if (currentIndex == 0) {
+                    return Text(viewModel.locationTitle.value.isEmpty
+                        ? _viewModel.titles[currentIndex]
+                        : isEnglish ?  viewModel.locationTitle.value : viewModel.arabicLocationTitle.value);
+                  } else if (currentIndex == 1) {
+                    return Text(StringTranslateExtension(AppStrings.werd).tr());
+                  } else if (currentIndex == 2){
+                    return Text(StringTranslateExtension(AppStrings.fahras).tr());
+                  }else {
+                    return Text(StringTranslateExtension(AppStrings.settings).tr());
+                  }
+                }),
+                leading: IconButton(
                 onPressed: () => (Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => QiblahScreen(), // Replace with the page you want to navigate to
+                    builder: (context) => QiblahScreen(),
                   ),
                 ),),
                 icon: SvgPicture.asset(
@@ -83,7 +98,7 @@ class HomeView extends StatelessWidget {
                 BottomNavigationBarItem(
                   icon: const Icon(FluentIcons.home_48_regular),
                   activeIcon: const Icon(FluentIcons.home_48_filled),
-                  label: AppStrings.home.tr(),
+                  label: StringTranslateExtension(AppStrings.home).tr(),
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
@@ -96,7 +111,7 @@ class HomeView extends StatelessWidget {
                     width: AppSize.s20.r,
                     height: AppSize.s20.r,
                   ),
-                  label: AppStrings.werd.tr(),
+                  label: StringTranslateExtension(AppStrings.werd).tr(),
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
@@ -109,12 +124,12 @@ class HomeView extends StatelessWidget {
                     width: AppSize.s20.r,
                     height: AppSize.s20.r,
                   ),
-                  label: AppStrings.fahras.tr(),
+                  label: StringTranslateExtension(AppStrings.fahras).tr(),
                 ),
                 BottomNavigationBarItem(
                   icon: const Icon(FluentIcons.settings_48_regular),
                   activeIcon: const Icon(FluentIcons.settings_48_filled),
-                  label: AppStrings.settings.tr(),
+                  label: StringTranslateExtension(AppStrings.settings).tr(),
                 ),
               ],
             ),

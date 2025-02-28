@@ -65,25 +65,38 @@ class AdhkarScreen extends StatelessWidget {
               ConditionalBuilder(
                 condition: adhkarList.isNotEmpty,
                 builder: (BuildContext context) {
+                  // Get unique categories with their icons
+                  final categories = adhkarList
+                      .fold<Map<String, IconData>>({}, (map, adhkar) {
+                    if (!map.containsKey(adhkar.category)) {
+                      map[adhkar.category] = adhkar.icon;
+                    }
+                    return map;
+                  })
+                      .entries
+                      .toList();
+
                   return SizedBox(
                     height: 400,
                     child: GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
+                        crossAxisSpacing: 30,
+                        mainAxisSpacing: 15,
                         childAspectRatio: 1.0,
                       ),
                       itemBuilder: (context, index) {
-                        final adhkar = adhkarList[index];
+                        final category = categories[index];
                         return _adhkarIndexItem(
                           adhkarId: (index + 1).toString().tr(),
-                          adhkarCategory: cubit.getAdhkarCategories(adhkarList: adhkarList)[index].orEmpty(),
-                          adhkarList: adhkarList,
-                          index: index,
+                          adhkarCategory: category.key,
+                          adhkarList: cubit.getAdhkarFromCategory(
+                            adhkarList: adhkarList,
+                            category: category.key,
+                          ),
                           context: context,
-                          icon: adhkar.icon, // Pass the icon from the AdhkarModel
+                          icon: category.value, index:index,
                         );
                       },
                       itemCount: 9,
@@ -110,7 +123,6 @@ class AdhkarScreen extends StatelessWidget {
         required String adhkarCategory,
         required List<AdhkarModel> adhkarList,
         required int index,
-        // required String pageNo,
         required BuildContext context}) {
     return Padding(
       padding: EdgeInsets.only(bottom: AppPadding.p5.h),
@@ -143,25 +155,28 @@ class AdhkarScreen extends StatelessWidget {
             ],
           ),
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  icon,
-                  size: 40,
-                  color: ColorManager.accentPrimary,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  adhkarCategory,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontFamily: FontConstants.elMessiriFontFamily,
-                    fontSize: 14,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    icon,
+                    size: 40,
+                    color: ColorManager.accentPrimary,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  Text(
+                    adhkarCategory,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontFamily: FontConstants.elMessiriFontFamily,
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

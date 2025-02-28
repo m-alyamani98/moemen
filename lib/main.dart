@@ -70,6 +70,7 @@ void main() async {
 }
 
 Future<void> setupServiceLocator() async {
+
   sl.registerLazySingleton<InternetConnectionChecker>(
         () => InternetConnectionChecker.createInstance(),
   );

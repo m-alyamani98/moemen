@@ -1,13 +1,10 @@
-// khetma_model.dart
-
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 
 enum PortionType { Juz, Page, HizbQuarter }
 
 class Khetma {
-  int? id; // Add id for database
+  int? id;
   final String name;
   final DateTime startDate;
   final int durationDays;
@@ -15,7 +12,7 @@ class Khetma {
   final int dailyAmount;
   final int startValue;
   final List<DayPlan> days;
-  int currentDayIndex; // Add this field
+  int currentDayIndex;
 
   Khetma({
     this.id,

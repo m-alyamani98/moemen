@@ -8,7 +8,7 @@ class AdhkarModel extends Equatable {
   final String description;
   final String reference;
   final String dhikr;
-  final IconData icon; // New property for the icon
+  final IconData icon;
 
   const AdhkarModel({
     required this.category,
@@ -16,7 +16,7 @@ class AdhkarModel extends Equatable {
     required this.description,
     required this.reference,
     required this.dhikr,
-    required this.icon, // Initialize the icon
+    required this.icon,
   });
 
   @override

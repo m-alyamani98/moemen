@@ -37,7 +37,7 @@ class AllAdhkarScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () => Navigator.pushNamed(context, Routes.homeRoute),
-            icon: Icon(FluentIcons.chevron_left_48_regular,color: ColorManager.iconPrimary,),
+            icon: Icon(FluentIcons.chevron_left_48_regular, color: ColorManager.iconPrimary),
           )
         ],
       ),
@@ -47,47 +47,49 @@ class AllAdhkarScreen extends StatelessWidget {
           List<AdhkarModel> adhkarList = cubit.adhkarList;
 
           return Padding(
-            padding: const EdgeInsets.all(2),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: AppSize.s20.h,
-                ),
-                ConditionalBuilder(
-                  condition: adhkarList.isNotEmpty,
-                  builder: (BuildContext context) {
-                    return SizedBox(
-                      height:800,
-                      child: GridView.builder(
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 8.0,
-                          mainAxisSpacing: 8.0,
-                          childAspectRatio: 1.0,
+            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+            child: ConditionalBuilder(
+              condition: adhkarList.isNotEmpty,
+              builder: (BuildContext context) {
+                // Get unique categories with their icons
+                final categories = adhkarList.fold<Map<String, IconData>>({}, (map, adhkar) {
+                  if (!map.containsKey(adhkar.category)) {
+                    map[adhkar.category] = adhkar.icon;
+                  }
+                  return map;
+                }).entries.toList();
+
+                return Expanded(
+                  child: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 30,
+                      mainAxisSpacing: 15,
+                      childAspectRatio: 1.0,
+                    ),
+                    itemBuilder: (context, index) {
+                      final category = categories[index];
+                      return _adhkarIndexItem(
+                        adhkarId: (index + 1).toString().tr(),
+                        adhkarCategory: category.key,
+                        adhkarList: cubit.getAdhkarFromCategory(
+                          adhkarList: adhkarList,
+                          category: category.key,
                         ),
-                        itemBuilder: (context, index) {
-                          final adhkar = adhkarList[index];
-                          return _adhkarIndexItem(
-                            adhkarId: (index + 1).toString().tr(),
-                            adhkarCategory: cubit.getAdhkarCategories(adhkarList: adhkarList)[index].orEmpty(),
-                            adhkarList: adhkarList,
-                            index: index,
-                            context: context,
-                            icon: adhkar.icon, // Pass the icon from the AdhkarModel
-                          );
-                        },
-                        itemCount: cubit.getAdhkarCategories(adhkarList: adhkarList).length,
-                      ),
-                    );
-                  },
-                  fallback: (BuildContext context) {
-                    return const Center(
-                      child: CircularProgressIndicator(color: ColorManager.primary),
-                    );
-                  },
-                ),
-              ],
+                        context: context,
+                        icon: category.value,
+                        index: index, // Use the stored icon
+                      );
+                    },
+                    itemCount: categories.length, // Dynamic count based on unique categories
+                  ),
+                );
+              },
+              fallback: (BuildContext context) {
+                return const Center(
+                  child: CircularProgressIndicator(color: ColorManager.primary),
+                );
+              },
             ),
           );
         },
