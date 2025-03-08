@@ -2,7 +2,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:in_app_purchase/in_app_purchase.dart'; // Import the in_app_purchase library
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:momen/app/resources/color_manager.dart';
 import 'package:momen/app/resources/routes_manager.dart';
 import 'package:momen/app/resources/values.dart';
@@ -14,13 +14,20 @@ class SupportAppPage extends StatefulWidget {
 
 class _SupportAppPageState extends State<SupportAppPage> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+  List<ProductDetails> _products = [];
   String selectedAmount = '';
   String selectedPaymentType = 'اشتراك شهري';
+
+  final Map<String, String> _productIdMap = {
+    "\$9.99": "donation_9_99",
+    "\$19.99": "donation_19_99",
+    "\$49.99": "donation_49_99",
+    "\$99.99": "donation_99_99",
+  };
 
   @override
   void initState() {
     super.initState();
-    // Initialize In-App Purchase
     _initializePurchase();
   }
 
@@ -28,6 +35,18 @@ class _SupportAppPageState extends State<SupportAppPage> {
     final available = await _inAppPurchase.isAvailable();
     if (!available) {
       print("In-app purchases not available");
+      return;
+    }
+
+    final productIds = _productIdMap.values.toSet();
+    final response = await _inAppPurchase.queryProductDetails(productIds);
+
+    if (response.error != null) {
+      print("Error fetching products: ${response.error}");
+    } else {
+      setState(() {
+        _products = response.productDetails;
+      });
     }
   }
 
@@ -36,25 +55,37 @@ class _SupportAppPageState extends State<SupportAppPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("يرجى اختيار مبلغ الدعم"),
-          backgroundColor: ColorManager.primary,),
-      );
-      return;
-    }
-
-    final productID = selectedAmount.replaceAll('\$', '');
-    final productDetailsResponse = await _inAppPurchase.queryProductDetails({productID});
-
-    if (productDetailsResponse.notFoundIDs.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text("لم يتم العثور على المنتج"),
           backgroundColor: ColorManager.primary,
         ),
       );
       return;
     }
 
-    final productDetails = productDetailsResponse.productDetails.first;
+    final productId = _productIdMap[selectedAmount] ?? "";
+    final productDetails =
+    _products.firstWhere(
+          (product) => product.id == productId,
+      orElse: () => ProductDetails(
+          id: '',
+          title: 'Unknown Product',
+          description: 'No description available',
+          price: '\$0.00',
+          rawPrice: 0.0,
+          currencyCode: 'USD'
+      ),
+    );
+
+
+    if (productDetails.id.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("لم يتم العثور على المنتج"),
+          backgroundColor: ColorManager.primary,
+        ),
+      );
+      return;
+    }
+
     final purchaseParam = PurchaseParam(productDetails: productDetails);
 
     _inAppPurchase.buyConsumable(
@@ -86,7 +117,7 @@ class _SupportAppPageState extends State<SupportAppPage> {
         actions: [
           IconButton(
             onPressed: () => Navigator.pushNamed(context, Routes.homeRoute),
-            icon: Icon(FluentIcons.chevron_left_48_regular,color: ColorManager.iconPrimary,),
+            icon: Icon(FluentIcons.chevron_left_48_regular, color: ColorManager.iconPrimary,),
           )
         ],
       ),
@@ -138,12 +169,7 @@ class _SupportAppPageState extends State<SupportAppPage> {
               spacing: 12,
               runSpacing: 12,
               alignment: WrapAlignment.center,
-              children: [
-                _buildDonationButton('\$99.99'),
-                _buildDonationButton('\$49.99'),
-                _buildDonationButton('\$19.99'),
-                _buildDonationButton('\$9.99'),
-              ],
+              children: _productIdMap.keys.map((price) => _buildDonationButton(price)).toList(),
             ),
             SizedBox(height: AppSize.s50.r),
             Center(
@@ -181,8 +207,7 @@ class _SupportAppPageState extends State<SupportAppPage> {
         });
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor:
-        selectedAmount == amount ? ColorManager.primary : Colors.white,
+        backgroundColor: selectedAmount == amount ? ColorManager.primary : Colors.white,
         side: BorderSide(color: ColorManager.primary, width: 1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
@@ -193,9 +218,7 @@ class _SupportAppPageState extends State<SupportAppPage> {
         amount,
         style: TextStyle(
           fontSize: 16,
-          color: selectedAmount == amount
-              ? Colors.white
-              : ColorManager.primary,
+          color: selectedAmount == amount ? Colors.white : ColorManager.primary,
         ),
       ),
     );

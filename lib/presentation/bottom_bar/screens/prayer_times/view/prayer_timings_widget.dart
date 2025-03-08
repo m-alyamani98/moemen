@@ -9,6 +9,7 @@ import '../../../../../app/utils/constants.dart';
 import '../../../../../domain/models/prayer_timings/prayer_timings_model.dart';
 import '../../../../../app/resources/resources.dart';
 import '../cubit/prayer_timings_cubit.dart';
+import 'set_up_prayer.dart';
 
 class PrayerTimingsScreen extends StatelessWidget {
   const PrayerTimingsScreen({Key? key}) : super(key: key);
@@ -185,8 +186,15 @@ class PrayerTimingsScreen extends StatelessWidget {
                           ?.copyWith(height: AppSize.s1_3.h),
                     ),
                     ElevatedButton(
-                        onPressed: (){},
-                        child: Text("data")
+                        onPressed: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SetUpPrayer(),
+                            ),
+                          );
+                        },
+                        child: Text("Set up prayer times")
                     )
                   ],
                 ));

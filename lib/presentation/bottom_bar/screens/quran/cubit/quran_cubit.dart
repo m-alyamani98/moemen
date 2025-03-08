@@ -398,4 +398,74 @@ class QuranCubit extends Cubit<QuranState> {
     throw ArgumentError('Invalid portion type');
   }
 
+  // Add these to QuranCubit
+  List<Map<String, dynamic>> getKhetmaHistory(Khetma khetma) {
+    return khetma.days
+        .sublist(0, khetma.currentDayIndex)
+        .map((day) => getWerdDetails(khetma, khetma.days.indexOf(day)))
+        .toList();
+  }
+
+  Map<String, dynamic> getWerdDetails(Khetma khetma, int dayIndex) {
+    if (khetma.days.isEmpty || quranData.isEmpty) {
+      return {
+        'start': {'page': 0, 'surahs': '', 'juz': ''},
+        'end': {'page': 0, 'surahs': '', 'juz': ''}
+      };
+    }
+
+    final clampedIndex = dayIndex.clamp(0, khetma.days.length - 1);
+    final currentDay = khetma.days[clampedIndex];
+
+    final startValue = currentDay.start.clamp(1, 604);
+    final endValue = currentDay.end.clamp(1, 604);
+
+    final startPage = _getStartingPageForPortion(startValue, khetma);
+    final endPage = _getStartingPageForPortion(endValue, khetma);
+
+    final startJuzNumber = (startPage >= 1 && startPage <= 604) ? pageToJuz[startPage - 1] : 1;
+    final endJuzNumber = (endPage >= 1 && endPage <= 604) ? pageToJuz[endPage - 1] : 1;
+
+    final startSurahs = getPageSurahs(quran: quranData, pageNo: startPage);
+    final endSurahs = getPageSurahs(quran: quranData, pageNo: endPage);
+
+    final startAyahs = getAyahsFromPageNo(quranList: quranData, pageNo: startPage);
+    final endAyahs = getAyahsFromPageNo(quranList: quranData, pageNo: endPage);
+
+    return {
+      'start': {
+        'page': startPage,
+        'surahs': startSurahs.map((s) => s.name).join(', '),
+        'juz': getJuzNames()[startJuzNumber - 1],
+        'num_ayahs': startAyahs.length,
+        'first_ayah': startAyahs.isNotEmpty ? startAyahs.first : null,
+      },
+      'end': {
+        'page': endPage,
+        'surahs': endSurahs.map((s) => s.name).join(', '),
+        'juz': getJuzNames()[endJuzNumber - 1],
+        'num_ayahs': endAyahs.length,
+        'final_ayah': endAyahs.isNotEmpty ? endAyahs.last : null,
+      },
+      'first_ayah': startAyahs.isNotEmpty ? startAyahs.first.text : null,
+    };
+  }
+
+  // In QuranCubit
+  Khetma getActiveKhetma() {
+    if (khetmaPlans.isEmpty) {
+      throw Exception("No active khetma plans");
+    }
+    return khetmaPlans.firstWhere(
+          (k) => k.currentDayIndex < k.days.length,
+      orElse: () => khetmaPlans.first,
+    );
+  }
+
+  List<Map<String, dynamic>> getUpcomingWerdsDetails(Khetma khetma) {
+    final upcoming = khetma.days.sublist(khetma.currentDayIndex + 1);
+    return upcoming.map((day) => getWerdDetails(khetma, khetma.days.indexOf(day))).toList();
+  }
+
+
 }

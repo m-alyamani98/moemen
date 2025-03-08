@@ -118,168 +118,171 @@ class _WerdScreenState extends State<WerdScreen> {
       ) {
     final freshDetails = cubit.getCurrentWerdDetails(khetma);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Column(
+    return Expanded(
+      child: SingleChildScrollView( // Optional padding
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: AppSize.s20.r),
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      getTitle(settingName: AppStrings.fromAyah.tr(), context: context),
-                      getTitle(settingName: "${details['start']['juz']}", context: context),
-                    ],
-                  ),
-                  SizedBox(height: AppSize.s90.r),
-                  if (details['first_ayah'] != null)
-                    Text(
-                      details['first_ayah'],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.green,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  SizedBox(height: AppSize.s90.r),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "${details['start']['surahs']}   ${AppStrings.ayah.tr()} : ${details['start']['first_ayah'].numberInSurah}",
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      Text(
-                        '${AppStrings.pageNumber.tr()} : ${details['start']['page']}',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
+            Column(
+              children: [
+                SizedBox(height: AppSize.s20.r),
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 8,
+                        offset: Offset(0, 4),
                       ),
                     ],
                   ),
-                  getSeparator(context),
-                  SizedBox(height: AppSize.s20.r),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        "${details['end']['surahs']} ${AppStrings.ayah.tr()} :   ${details['end']['final_ayah'].numberInSurah}",
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          getTitle(settingName: AppStrings.fromAyah.tr(), context: context),
+                          getTitle(settingName: "${details['start']['juz']}", context: context),
+                        ],
                       ),
-                      Text(
-                        ' ${AppStrings.pageNumber.tr()} : ${details['end']['page']} ',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      SizedBox(height: AppSize.s35.r),
+                      if (details['first_ayah'] != null)
+                        Text(
+                          details['first_ayah'],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.green,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      SizedBox(height: AppSize.s35.r),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${details['start']['surahs']}   ${AppStrings.ayah.tr()} : ${details['start']['first_ayah'].numberInSurah}",
+                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                          ),
+                          Text(
+                            '${AppStrings.pageNumber.tr()} : ${details['start']['page']}',
+                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      getSeparator(context),
+                      SizedBox(height: AppSize.s20.r),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${details['end']['surahs']} ${AppStrings.ayah.tr()} :   ${details['end']['final_ayah'].numberInSurah}",
+                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                          ),
+                          Text(
+                            ' ${AppStrings.pageNumber.tr()} : ${details['end']['page']} ',
+                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-            SizedBox(height: AppSize.s40.r),
-
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Center(
-              child: SizedBox(
-                width: AppSize.s140.r,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () => navigateToQuranPage(context, cubit, freshDetails),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: ColorManager.primary,
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(AppStrings.readWerd.tr()),
                 ),
-              ),
+                SizedBox(height: AppSize.s40.r),
+              ],
             ),
-            Center(
-              child: SizedBox(
-                width: AppSize.s140.r,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      final currentKhetma = getActiveKhetma(cubit);
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Center(
+                  child: SizedBox(
+                    width: AppSize.s140.r,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () => navigateToQuranPage(context, cubit, freshDetails),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: ColorManager.primary,
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Text(AppStrings.readWerd.tr()),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: SizedBox(
+                    width: AppSize.s140.r,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          final currentKhetma = getActiveKhetma(cubit);
 
-                      await cubit.completeCurrentWerd(currentKhetma);
+                          await cubit.completeCurrentWerd(currentKhetma);
 
-                      // Explicitly refresh UI
-                      if (mounted) setState(() {});
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            AppStrings.completeWerd.tr(),
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                          if (mounted) setState(() {});
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                AppStrings.completeWerd.tr(),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              backgroundColor: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                              margin: EdgeInsets.all(16),
+                              duration: Duration(seconds: 2),
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          backgroundColor: Colors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          behavior: SnackBarBehavior.floating,
-                          margin: EdgeInsets.all(16),
-                          duration: Duration(seconds: 2),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("حدث خطأ: ${e.toString()}"),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: ColorManager.secondPrimary,
+                        textStyle: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("حدث خطأ: ${e.toString()}"),
-                          duration: Duration(seconds: 2),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: ColorManager.secondPrimary,
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(AppStrings.completeWerd.tr()),
                     ),
                   ),
-                  child: Text(AppStrings.completeWerd.tr()),
                 ),
-              ),
+              ],
             ),
           ],
         ),
-      ],
+      ),
     );
   }
+
 
   Khetma getActiveKhetma(QuranCubit cubit) {
     if (widget.initialKhetma != null) {

@@ -1,5 +1,11 @@
 class AppStrings {
   static const String locationTitle = "location_title";
+  static const String locationSetup = "location_setup";
+  static const String setupLocation = "setup_location";
+  static const String skip = "skip";
+  static const String next = "next";
+  static const String setupLocationSuccessful = "setup_location_successful";
+  static const String setupLocationDesc = "setup_location_desc";
   static const String home = "home";
   static const String support = "support";
   static const String supportUs = "support_us";

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -56,6 +57,8 @@ void main() async {
   // Wakelock.enable();
   Bloc.observer = MyBlocObserver();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+  Get.put(HomeViewModel());
 
   runApp(
     EasyLocalization(

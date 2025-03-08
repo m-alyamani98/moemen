@@ -1,5 +1,11 @@
 {
   "location_title": "{city}, {country}",
+  "location_setup" : "إعدادات الموقع",
+  "setup_location": "تحديد الموقع",
+  "setup_location_desc": "الرجاء السماح بتحديد الموقع ليتم عرض مواقيت الصلاة في مدينتك",
+  "skip": "تخطي",
+  "next": "التالي",
+  "setup_location_successful": " تم تحديد الموقع بنجاح",
   "home": "الرئيسية",
   "start_now": "ابدأ الآن",
   "support": "الدعم",

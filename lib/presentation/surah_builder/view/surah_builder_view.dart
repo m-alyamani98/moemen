@@ -28,7 +28,7 @@ class SurahBuilderView extends StatefulWidget {
 class _SurahBuilderViewState extends State<SurahBuilderView> {
   bool isTitleVisible = true; // Initialize directly
   late PageController pageController;
-  Color _backgroundColor = Colors.white;
+  Color _backgroundColor = ColorManager.backgroundQuran;
   Color _imageColor = Colors.black;
 
 
@@ -90,7 +90,7 @@ class _SurahBuilderViewState extends State<SurahBuilderView> {
                           child: Image.asset(
                             "assets/images/quran/page${getQuranImageNumberFromPageNumber(quranPageNumber)}.png",
                             color: _imageColor,
-                            colorBlendMode: BlendMode.srcIn,
+                            colorBlendMode: BlendMode.dstIn,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -124,10 +124,10 @@ class _SurahBuilderViewState extends State<SurahBuilderView> {
                                         onSelected: (Color newColor) {
                                           setState(() {
                                             _backgroundColor = newColor;
-                                            if (newColor == Colors.black) {
+                                            if (newColor == ColorManager.backgroundQuranDark) {
                                               _imageColor = Colors.white;
                                             } else {
-                                              _imageColor = Colors.black;
+                                              _imageColor = ColorManager.backgroundQuran;
                                             }
                                           });
                                         },
@@ -137,24 +137,25 @@ class _SurahBuilderViewState extends State<SurahBuilderView> {
                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 GestureDetector(
-                                                  onTap: () => Navigator.pop(context, Colors.black),
+                                                  onTap: () => Navigator.pop(context, ColorManager.backgroundQuranDark),
                                                   child: Container(
                                                     width: 24,
                                                     height: 24,
                                                     decoration: BoxDecoration(
-                                                      color: Colors.black,
+                                                      color: ColorManager.backgroundQuranDark,
                                                       shape: BoxShape.circle,
                                                     ),
                                                   ),
                                                 ),
                                                 GestureDetector(
-                                                  onTap: () => Navigator.pop(context, ColorManager.accentPrimary),
+                                                  onTap: () => Navigator.pop(context, ColorManager.backgroundQuran2),
                                                   child: Container(
                                                     width: 24,
                                                     height: 24,
                                                     decoration: BoxDecoration(
-                                                      color: ColorManager.accentPrimary,
+                                                      color: ColorManager.backgroundQuran2,
                                                       shape: BoxShape.circle,
+                                                      border: Border.all(color: ColorManager.primary.withOpacity(0.3), width: 1),
                                                     ),
                                                   ),
                                                 ),
@@ -164,9 +165,9 @@ class _SurahBuilderViewState extends State<SurahBuilderView> {
                                                     width: 24,
                                                     height: 24,
                                                     decoration: BoxDecoration(
-                                                      color: Colors.white,
+                                                      color: ColorManager.backgroundQuran,
                                                       shape: BoxShape.circle,
-                                                      border: Border.all(color: Colors.black, width: 1),
+                                                      border: Border.all(color: ColorManager.primary.withOpacity(0.3), width: 1),
                                                     ),
                                                   ),
                                                 ),

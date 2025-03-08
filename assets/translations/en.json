@@ -1,5 +1,11 @@
 {
   "location_title": "{city}, {country}",
+  "location_setup" : "location Setup",
+  "setup_location": "Location Access",
+  "setup_location_desc": "Please allow location access to display prayer times in your city.",
+  "skip": "Skip",
+  "next" : "Next",
+  "setup_location_successful" : "setup Location Successfully",
   "home": "Home",
   "start_now": "Start Now",
   "support": "support",

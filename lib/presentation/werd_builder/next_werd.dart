@@ -1,26 +1,32 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:momen/app/resources/color_manager.dart';
 import 'package:momen/app/resources/routes_manager.dart';
+import 'package:momen/app/resources/strings_manager.dart';
 import 'package:momen/app/resources/values.dart';
+import 'package:momen/domain/models/quran/khetma_model.dart';
 
-class NextWerd extends StatefulWidget {
-  @override
-  _NextWerdState createState() => _NextWerdState();
-}
+import '../bottom_bar/screens/quran/cubit/quran_cubit.dart';
 
-class _NextWerdState extends State<NextWerd> {
+class NextWerd extends StatelessWidget {
 
+  final Khetma khetma;
+
+  const NextWerd({super.key, required this.khetma});
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<QuranCubit>();
+    final upcoming = cubit.getUpcomingWerdsDetails(khetma);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "دعم التطبيق ",
+          AppStrings.nextWerd.tr(),
           style: Theme.of(context)
               .textTheme
               .titleLarge
@@ -41,13 +47,113 @@ class _NextWerdState extends State<NextWerd> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-          ],
-        ),
+      body: upcoming.isEmpty
+          ? Center(
+          child: Text(
+            "noUpcomingWerds",
+            style: TextStyle(fontSize: 18.sp),
+          ))
+          : ListView.separated(
+        padding: EdgeInsets.all(16.w),
+        itemCount: upcoming.length,
+        separatorBuilder: (_, __) => SizedBox(height: 12.h),
+        itemBuilder: (context, index) {
+          final details = upcoming[index];
+          final originalIndex = khetma.currentDayIndex + index + 1;
+
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: ColorManager.iconPrimary,
+                width: 0.1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: ColorManager.accentGrey,
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ListTile(
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16.w,
+                vertical: 12.h,
+              ),
+              leading: CircleAvatar(
+                backgroundColor: ColorManager.accentPrimary,
+                child: Text(
+                  '${originalIndex + 1}',
+                  style: TextStyle(
+                    color: ColorManager.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              title: RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: Colors.blueGrey[900],
+                  ),
+                  children: [
+                    TextSpan(
+                      text: '${details['start']['surahs']} ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.blueGrey[800],
+                      ),
+                    ),
+                    TextSpan(
+                      text: '(${AppStrings.page.tr()} ',
+                      style: TextStyle(
+                        color: Colors.blueGrey[600],
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '${details['start']['page']}',
+                      style: TextStyle(
+                        color: Colors.blueGrey[800],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' - ',
+                      style: TextStyle(
+                        color: Colors.blueGrey[600],
+                      ),
+                    ),
+                    TextSpan(
+                      text: '${details['end']['page']})',
+                      style: TextStyle(
+                        color: Colors.blueGrey[800],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: Padding(
+                padding: EdgeInsets.only(top: 4.h),
+                child: Text(
+                  '${details['start']['juz']} ',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.blueGrey[600],
+                  ),
+                ),
+              ),
+              trailing: Icon(
+                Icons.lock_clock,
+                color: Colors.blueGrey[400],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

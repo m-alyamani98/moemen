@@ -58,13 +58,6 @@ class HomeViewModel extends GetxController {
     const QuranScreen(),
     SettingsScreen(),
   ];
-
-  List<String> titles = [
-    StringTranslateExtension(AppStrings.home).tr(),
-    StringTranslateExtension(AppStrings.werd).tr(),
-    StringTranslateExtension(AppStrings.fahras).tr(),
-    StringTranslateExtension(AppStrings.settings).tr(),
-  ];
 }
 
 class LanguageController extends GetxController {

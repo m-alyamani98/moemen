@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:momen/domain/models/quran/quran_model.dart';
+import 'package:momen/presentation/bottom_bar/screens/prayer_times/view/set_up_prayer.dart';
 import 'package:momen/presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
 import 'package:momen/presentation/bottom_bar/screens/settings/service/daily_alert.dart';
 import 'package:momen/presentation/bottom_bar/screens/settings/service/evening_alert.dart';
@@ -15,6 +16,8 @@ import 'package:momen/presentation/pay_builder/payment.dart';
 import 'package:momen/presentation/qibla/view/qiblah_screen.dart';
 import 'package:momen/presentation/surah_builder/view/surah_builder_view.dart';
 import 'package:momen/presentation/werd_builder/new_khetma.dart';
+import 'package:momen/presentation/werd_builder/next_werd.dart';
+import 'package:momen/presentation/werd_builder/previous_werd.dart';
 import 'package:share_plus/share_plus.dart' show Share;
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../components/separator.dart';
@@ -99,7 +102,23 @@ class SettingsScreen extends StatelessWidget {
                     );
                   },
                 ),
-                onTap: () {},
+                onTap: () {
+                  final cubit = context.read<QuranCubit>();
+                  if (cubit.khetmaPlans.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("noKhetmaAvailable"),
+                    ));
+                    return;
+                  }
+                  final activeKhetma = cubit.khetmaPlans.first;
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PreviousWerdsScreen(khetma: activeKhetma),
+                    ),
+                  );
+                },
                 context: context,
                 color: ColorManager.iconPrimary,
                 angel: 0,
@@ -144,7 +163,15 @@ class SettingsScreen extends StatelessWidget {
                     );
                   },
                 ),
-                onTap: () {},
+                onTap: () {
+                  final activeKhetma = context.read<QuranCubit>().getActiveKhetma();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NextWerd(khetma: activeKhetma),
+                    ),
+                  );
+                },
                 context: context,
                 color: ColorManager.iconPrimary,
                 angel: 0,
@@ -284,16 +311,23 @@ class SettingsScreen extends StatelessWidget {
               getSeparator(context),
               getTitle(
                   settingName: AppStrings.qiblaDirection.tr(), context: context),
-              /*settingIndexItem(
+              settingIndexItem(
                 svgPath: null,
                 icon: FluentIcons.alert_48_filled,
                 settingName: AppStrings.settingPrayerTime.tr(),
                 trailing: const SizedBox(),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SetUpPrayer(),
+                    ),
+                  );
+                },
                 context: context,
                 color: ColorManager.iconPrimary,
                 angel: 0,
-              ),*/
+              ),
               settingIndexItem(
                 svgPath: 'assets/images/kaaba.svg',
                 icon: null,

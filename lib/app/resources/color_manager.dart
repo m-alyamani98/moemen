@@ -15,7 +15,9 @@ class ColorManager {
   static const Color grey = Color(0xffa1a1a1);
   static const Color separator = Color(0xffe7eaee);
   static const Color error = Color(0xffe61f34);
-  static const Color backgroundQuran = Color(0xfffcf6ea);
+  static const Color backgroundQuran = Color(0xfffffef9);
+  static const Color backgroundQuran2 = Color(0xfffcf6ea);
+  static const Color backgroundQuranDark = Color(0xff22252c);
 
   //Light Theme Colors
   static const Color lightBackground = Color(0xfff9f9f9);

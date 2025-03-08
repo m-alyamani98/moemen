@@ -15,7 +15,8 @@ import '../viewmodel/home_viewmodel.dart';
 class HomeView extends StatelessWidget {
   final HomeViewModel _viewModel = instance<HomeViewModel>();
   final homeViewModel = sl<HomeViewModel>();
-  final HomeViewModel viewModel = Get.put(HomeViewModel());
+  final HomeViewModel viewModel = Get.find<HomeViewModel>();
+
 
   HomeView({Key? key}) : super(key: key);
 
@@ -43,7 +44,7 @@ class HomeView extends StatelessWidget {
                 title: Obx(() {
                   if (currentIndex == 0) {
                     return Text(viewModel.locationTitle.value.isEmpty
-                        ? _viewModel.titles[currentIndex]
+                        ? StringTranslateExtension(AppStrings.home).tr()
                         : isEnglish ?  viewModel.locationTitle.value : viewModel.arabicLocationTitle.value);
                   } else if (currentIndex == 1) {
                     return Text(StringTranslateExtension(AppStrings.werd).tr());

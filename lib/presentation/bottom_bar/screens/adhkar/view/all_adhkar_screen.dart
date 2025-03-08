@@ -81,7 +81,7 @@ class AllAdhkarScreen extends StatelessWidget {
                         index: index, // Use the stored icon
                       );
                     },
-                    itemCount: categories.length, // Dynamic count based on unique categories
+                    itemCount: cubit.getAdhkarCategories(adhkarList: adhkarList).length,
                   ),
                 );
               },
