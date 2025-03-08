@@ -47,11 +47,10 @@ class AllAdhkarScreen extends StatelessWidget {
           List<AdhkarModel> adhkarList = cubit.adhkarList;
 
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             child: ConditionalBuilder(
               condition: adhkarList.isNotEmpty,
               builder: (BuildContext context) {
-                // Get unique categories with their icons
                 final categories = adhkarList.fold<Map<String, IconData>>({}, (map, adhkar) {
                   if (!map.containsKey(adhkar.category)) {
                     map[adhkar.category] = adhkar.icon;
@@ -59,30 +58,28 @@ class AllAdhkarScreen extends StatelessWidget {
                   return map;
                 }).entries.toList();
 
-                return Expanded(
-                  child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 30,
-                      mainAxisSpacing: 15,
-                      childAspectRatio: 1.0,
-                    ),
-                    itemBuilder: (context, index) {
-                      final category = categories[index];
-                      return _adhkarIndexItem(
-                        adhkarId: (index + 1).toString().tr(),
-                        adhkarCategory: category.key,
-                        adhkarList: cubit.getAdhkarFromCategory(
-                          adhkarList: adhkarList,
-                          category: category.key,
-                        ),
-                        context: context,
-                        icon: category.value,
-                        index: index, // Use the stored icon
-                      );
-                    },
-                    itemCount: cubit.getAdhkarCategories(adhkarList: adhkarList).length,
+                return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 30,
+                    mainAxisSpacing: 15,
+                    childAspectRatio: 1.0,
                   ),
+                  itemBuilder: (context, index) {
+                    final category = categories[index];
+                    return _adhkarIndexItem(
+                      adhkarId: (index + 1).toString().tr(),
+                      adhkarCategory: category.key,
+                      adhkarList: cubit.getAdhkarFromCategory(
+                        adhkarList: adhkarList,
+                        category: category.key,
+                      ),
+                      context: context,
+                      icon: category.value,
+                      index: index,
+                    );
+                  },
+                  itemCount: cubit.getAdhkarCategories(adhkarList: adhkarList).length,
                 );
               },
               fallback: (BuildContext context) {
