@@ -16,7 +16,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBw-N2YTdXwVEf8NZ7tRwTfBK0nkbh2OIw',
-    appId: '1:872313168403:android:1f8adbd416dbf13170d5e6',
+    appId: '1:872313168403:android:755e8bfe017a975770d5e6',
     messagingSenderId: '872313168403',
     projectId: 'moemen-87f62',
     databaseURL: 'https://moemen-87f62.firebaseio.com',
@@ -25,13 +25,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyADALlcxDkjiTdh3gr1cOi_jiBo0i7HPHE',
-    appId: '1:872313168403:ios:761b7dfbc7d3be9070d5e6',
+    appId: '1:872313168403:ios:3e67a9195454e7ef70d5e6',
     messagingSenderId: '872313168403',
     projectId: 'moemen-87f62',
     databaseURL: 'https://moemen-87f62-default-rtdb.firebaseio.com',
     storageBucket: 'moemen-87f62.firebasestorage.app',
-    androidClientId: '872313168403-v2f5o0ed9pnqdm6ujhnemfj74a4p5b2f.apps.googleusercontent.com',
-    iosClientId: '872313168403-4eqb2lls92dq768il9gbru4fguomad2p.apps.googleusercontent.com',
-    iosBundleId: 'com.example.momen',
+    androidClientId: '872313168403-taufkrvrp01u0ld7j4mp88570vg868lb.apps.googleusercontent.com',
+    iosClientId: '872313168403-dk0h7bg7bj4vg7hbppe65k1gcbv21pal.apps.googleusercontent.com',
+    iosBundleId: 'com.moemen.momen',
   );
 }

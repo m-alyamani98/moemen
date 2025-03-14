@@ -232,189 +232,205 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            getTitle(settingName: AppStrings.titleNewKhetma.tr(), context: context),
-            SizedBox(height: AppSize.s16.r),
-            getTitle(settingName: AppStrings.startFrom.tr(), context: context),
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: Dropdown<String>(
-                value: startingPoint,
-                items: juzNames.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    startingPoint = newValue!;
-                  });
-                },
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              getTitle(settingName: AppStrings.titleNewKhetma.tr(), context: context),
+              SizedBox(height: AppSize.s16.r),
+              getTitle(settingName: AppStrings.startFrom.tr(), context: context),
+              Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: Dropdown<String>(
+                  value: startingPoint,
+                  items: juzNames.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      startingPoint = newValue!;
+                    });
+                  },
+                  width: AppSize.s300.r,
+                ),
+              ),
+              SizedBox(height: AppSize.s16.r),
+              getTitle(settingName: AppStrings.titleDurationSelection.tr(), context: context),
+              SizedBox(height: AppSize.s16.r),
+              getTitle(settingName: AppStrings.durationSelection.tr(), context: context),
+              Container(
+                decoration: BoxDecoration(
+                  color: ColorManager.accentGrey,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                height: AppSize.s40.r,
                 width: AppSize.s300.r,
+                padding: EdgeInsets.symmetric(horizontal: AppPadding.p20.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(width: AppSize.s50.r),
+                    Text(
+                      "$duration  ${AppStrings.days.tr()}",
+                      style: TextStyle(
+                        fontSize: AppSize.s14.r,
+                        color: ColorManager.textPrimary,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        IconButtonWidget(
+                          icon: Icons.remove,
+                          onTap: () {
+                            if (duration > 1) {
+                              setState(() {
+                                duration--;
+                              });
+                            }
+                          },
+                        ),
+                        IconButtonWidget(
+                          icon: Icons.add,
+                          onTap: () {
+                            setState(() {
+                              duration++;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: AppSize.s16.r),
-            getTitle(settingName: AppStrings.titleDurationSelection.tr(), context: context),
-            SizedBox(height: AppSize.s16.r),
-            getTitle(settingName: AppStrings.durationSelection.tr(), context: context),
-            Container(
-              decoration: BoxDecoration(
-                color: ColorManager.accentGrey,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              height: AppSize.s40.r,
-              width: AppSize.s300.r,
-              padding: EdgeInsets.symmetric(horizontal: AppPadding.p20.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              SizedBox(height: AppSize.s16.r),
+              getTitle(settingName: AppStrings.werdSelection.tr(), context: context),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(width: AppSize.s50.r),
-                  Text(
-                    "$duration  ${AppStrings.days.tr()}",
-                    style: TextStyle(
-                      fontSize: AppSize.s14.r,
-                      color: ColorManager.textPrimary,
-                    ),
+                  Dropdown<String>(
+                    value: dailyPortion2,
+                    items: ["", ...juzPortionMap.keys]
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dailyPortion2 = newValue!;
+                        dailyPortion = "";
+                        dailyPortion3 = "";
+                      });
+                    },
+                    width: AppSize.s100.r,
                   ),
-                  Row(
-                    children: [
-                      IconButtonWidget(
-                        icon: Icons.remove,
-                        onTap: () {
-                          if (duration > 1) {
-                            setState(() {
-                              duration--;
-                            });
-                          }
-                        },
-                      ),
-                      IconButtonWidget(
-                        icon: Icons.add,
-                        onTap: () {
-                          setState(() {
-                            duration++;
-                          });
-                        },
-                      ),
-                    ],
+                  getTitle(settingName: AppStrings.or.tr(), context: context),
+                  Dropdown<String>(
+                    value: dailyPortion,
+                    items: ["", ...hizbQuarterMap.keys]
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dailyPortion = newValue!;
+                        dailyPortion2 = "";
+                        dailyPortion3 = "";
+                      });
+                    },
+                    width: AppSize.s100.r,
                   ),
                 ],
               ),
-            ),
-            SizedBox(height: AppSize.s16.r),
-            getTitle(settingName: AppStrings.werdSelection.tr(), context: context),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Dropdown<String>(
-                  value: dailyPortion2,
-                  items: ["", ...juzPortionMap.keys]
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dailyPortion2 = newValue!;
-                      dailyPortion = "";
-                      dailyPortion3 = "";
-                    });
-                  },
-                  width: AppSize.s100.r,
-                ),
-                getTitle(settingName: AppStrings.or.tr(), context: context),
-                Dropdown<String>(
-                  value: dailyPortion,
-                  items: ["", ...hizbQuarterMap.keys]
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dailyPortion = newValue!;
-                      dailyPortion2 = "";
-                      dailyPortion3 = "";
-                    });
-                  },
-                  width: AppSize.s100.r,
-                ),
-              ],
-            ),
-            SizedBox(height: AppSize.s16.r),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                getTitle(settingName: AppStrings.or.tr(), context: context),
-                ToggleButtons(
-                  isSelected: pagePortionMap.keys.map((e) => e == dailyPortion3).toList(),
-                  onPressed: (int index) {
-                    setState(() {
-                      dailyPortion = "";
-                      dailyPortion2 = "";
-                      dailyPortion3 = pagePortionMap.keys.elementAt(index);
-                    });
-                  },
-                  borderRadius: BorderRadius.circular(10),
-                  selectedColor: Colors.white,
-                  color: Colors.black,
-                  fillColor: ColorManager.primary, // Background when selected
-                  disabledColor: Colors.black,
-                  constraints: BoxConstraints(minWidth: 80, minHeight: 40), // Button size
-                  renderBorder: false, // Remove border to keep the design clean
-                  children: pagePortionMap.keys.map((portion) {
-                    bool isSelected = portion == dailyPortion3;
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: isSelected ? ColorManager.primary : ColorManager.accentGrey, // Background before selection
+              SizedBox(height: AppSize.s16.r),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  getTitle(settingName: AppStrings.or.tr(), context: context),
+                  ToggleButtons(
+                    isSelected: pagePortionMap.keys.map((e) => e == dailyPortion3).toList(),
+                    onPressed: (int index) {
+                      setState(() {
+                        dailyPortion = "";
+                        dailyPortion2 = "";
+                        dailyPortion3 = pagePortionMap.keys.elementAt(index);
+                      });
+                    },
+                    borderRadius: BorderRadius.circular(10),
+                    selectedColor: Colors.white,
+                    color: Colors.black,
+                    fillColor: ColorManager.primary, // Background when selected
+                    disabledColor: Colors.black,
+                    constraints: BoxConstraints(minWidth: 80, minHeight: 40), // Button size
+                    renderBorder: false, // Remove border to keep the design clean
+                    children: pagePortionMap.keys.map((portion) {
+                      bool isSelected = portion == dailyPortion3;
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: isSelected ? ColorManager.primary : ColorManager.accentGrey, // Background before selection
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+                        child: Text(
+                          portion,
+                          style: TextStyle(
+                            color:ColorManager.textPrimary,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+              SizedBox(height: AppSize.s100.r),
+              Center(
+                child: SizedBox(
+                  width: AppSize.s250.r,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: _createKhetmaPlan,
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: ColorManager.primary,
+                      textStyle: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
-                      child: Text(
-                        portion,
-                        style: TextStyle(
-                          color:ColorManager.textPrimary,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-            SizedBox(height: AppSize.s100.r),
-            Center(
-              child: SizedBox(
-                width: AppSize.s250.r,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _createKhetmaPlan,
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: ColorManager.primary,
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    child: Text(AppStrings.newKhetma.tr()),
                   ),
-                  child: Text(AppStrings.newKhetma.tr()),
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: AppSize.s20.r),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, Routes.homeRoute);
+                    },
+                    child: getTitle(settingName: AppStrings.skip.tr(), context: context),
+                  ),
+                ],
+              ),
+
+            ],
+          ),
         ),
       ),
     );

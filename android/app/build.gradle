@@ -23,7 +23,7 @@ if (keystorePropertiesFile.exists()) {
 
 
 android {
-    namespace = "com.example.momen"
+    namespace = "com.moemen.momen"
     compileSdk = 35
     ndkVersion = "27.2.12479018"
 
@@ -37,7 +37,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.momen"
+        applicationId = "com.moemen.momen"
         minSdk = 23
         targetSdk = 34
         versionCode = flutter.versionCode

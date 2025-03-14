@@ -1,16 +1,22 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:in_app_purchase/in_app_purchase.dart'; // Import the in_app_purchase library
 import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/app/resources/routes_manager.dart';
 import 'package:momen/app/resources/strings_manager.dart';
-import 'package:momen/app/resources/values.dart';
-import 'package:momen/data/notification/local_notifications/notification_service.dart';
-import 'package:momen/presentation/components/widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../../data/notification/local_notifications/notification_service.dart';
+
+void requestNotificationPermission() async {
+  if (!await AwesomeNotifications().isNotificationAllowed()) {
+    bool granted = await AwesomeNotifications().requestPermissionToSendNotifications();
+    print('Notification permission granted: $granted');
+  }
+}
+
 
 class MorningAlert extends StatefulWidget {
   @override
@@ -18,89 +24,38 @@ class MorningAlert extends StatefulWidget {
 }
 
 class _MorningAlertState extends State<MorningAlert> {
-
   bool _isMorningAlarmEnabled = false;
-  TimeOfDay _morningAlarmTime = TimeOfDay(hour: 15, minute: 40); // Default morning time
+  Timer? _timer;
+
 
   @override
   void initState() {
     super.initState();
     _loadSavedSettings();
+    requestNotificationPermission();
+  }
+
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   Future<void> _loadSavedSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    bool savedAlarm = prefs.getBool('morningAlarm') ?? false;
-    print('Loaded morningAlarm: $savedAlarm'); // Debug print
     setState(() {
-      _isMorningAlarmEnabled = savedAlarm;
-      _morningAlarmTime = TimeOfDay(
-        hour: prefs.getInt('morningAlarmHour') ?? 15,
-        minute: prefs.getInt('morningAlarmMinute') ?? 40,
-      );
+      _isMorningAlarmEnabled = prefs.getBool('morningAlarm') ?? false;
     });
   }
 
-
-  void _handleMorningAlarmToggle(bool value) async {
+  void _handlemorningAlarmToggle(bool value) async {
     final prefs = await SharedPreferences.getInstance();
-    final notiService = NotiService();
 
-    // Initialize notifications first
-    await notiService.initNotification();
 
     setState(() => _isMorningAlarmEnabled = value);
 
-    try {
-      if (value) {
-        await notiService.scheduleNotification(
-          id: 1,
-          title: "AppStrings.morningAdhkarReminder.tr()",
-          body: "AppStrings.morningAdhkarNotificationBody.tr()",
-          hour: _morningAlarmTime.hour,
-          minute: _morningAlarmTime.minute,
-        );
-      } else {
-        await notiService.cancelAllNotifications();
-      }
-
-      // Save to SharedPreferences
-      await prefs.setBool('morningAlarm', value);
-      print('Successfully saved morningAlarm: $value'); // Debug
-    } catch (e) {
-      print('Error saving/scheduling: $e'); // Handle errors
-    }
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: _morningAlarmTime,
-    );
-
-    if (picked != null) {
-      final prefs = await SharedPreferences.getInstance();
-      final notiService = NotiService();
-      await notiService.initNotification();
-
-      setState(() => _morningAlarmTime = picked);
-
-      // Save new time
-      await prefs.setInt('morningAlarmHour', picked.hour);
-      await prefs.setInt('morningAlarmMinute', picked.minute);
-
-      // Reschedule only if enabled
-      if (_isMorningAlarmEnabled) {
-        await notiService.cancelAllNotifications(); // Cancel old
-        await notiService.scheduleNotification( // Schedule new
-          id: 1,
-          title: "AppStrings.morningAdhkarReminder.tr()",
-          body: "AppStrings.morningAdhkarNotificationBody.tr()",
-          hour: picked.hour,
-          minute: picked.minute,
-        );
-      }
-    }
+    await prefs.setBool('morningAlarm', value);
   }
 
 
@@ -114,8 +69,110 @@ class _MorningAlertState extends State<MorningAlert> {
       angel: 0,
       isSwitched: _isMorningAlarmEnabled,
       onTap: () {
-        _handleMorningAlarmToggle(!_isMorningAlarmEnabled);
+        bool newValue = !_isMorningAlarmEnabled;
+        _handlemorningAlarmToggle(newValue);
+
+        if (newValue) {
+
+          NotificationController.scheduleNewNotification(
+            targetHour: 6,
+            targetMinute: 00,
+            title: AppStrings.adhkarAlarm.tr(),
+            message: AppStrings.adhkarMorningAlarm.tr(), );
+        } else {
+          NotificationController.cancelNotifications();
+        }
       },
     );
+  }
+}
+
+
+// ignore: must_be_immutable
+class SwitchTileWidget extends StatelessWidget {
+  IconData? icon;
+  Color color;
+  double angel;
+  String settingName;
+  Function onTap;
+  BuildContext context;
+  bool isSwitched;
+
+  SwitchTileWidget({
+    Key? key,
+    this.icon = Icons.settings,
+    this.color = Colors.black,
+    this.angel = 0.0,
+    required this.settingName,
+    required this.onTap,
+    required this.context,
+    required this.isSwitched,
+  }) : super(key: key);
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.0),
+      child: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 0),
+            child: Transform.rotate(
+              angle: angel, // Rotation angle for SVG or icon
+              child: Icon(
+                icon,
+                size: 22,
+                color: color,
+              ),
+            ),
+          ),
+          const Spacer(flex: 1),
+          Text(
+            settingName,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontSize: 14,
+              wordSpacing: 3,
+              letterSpacing: 0.5,
+            ),
+          ),
+          const Spacer(flex: 5),
+          InkWell(
+            onTap: () {
+              onTap();
+            },
+            child: Row(
+              children: [
+                Transform.scale(
+                  scale: 0.8,
+                  child: Switch.adaptive(
+                    activeColor: ColorManager.primary,
+                    activeTrackColor: ColorManager.inactiveColor,
+                    inactiveThumbColor: ColorManager.iconPrimary,
+                    inactiveTrackColor: ColorManager.inactiveColor,
+                    value: isSwitched,
+                    onChanged: (value) {
+                      onTap(); // Handle switch change
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MyNavigatorObserver extends NavigatorObserver {
+  final VoidCallback onPopNext;
+
+  MyNavigatorObserver({required this.onPopNext});
+
+  @override
+  void didPopNext() {
+    onPopNext(); // Call the callback when returning to the page
   }
 }

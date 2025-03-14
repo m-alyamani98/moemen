@@ -29,28 +29,34 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              'assets/images/logoico.svg',
-              width: AppSize.s200.r,
-              height: AppSize.s200.r,
+              'assets/images/splash.svg',
+              width: AppSize.s300.r,
+              height: AppSize.s300.r,
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, Routes.newKhetmaRoute);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: ColorManager.lightBackground, // Button color
-                foregroundColor: ColorManager.primary,
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12), // Button padding
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50), // Rounded corners
+            SizedBox(height: AppSize.s100.r),
+            Center(
+              child: SizedBox(
+                width: AppSize.s250.r,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, Routes.newKhetmaRoute);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: ColorManager.primary,
+                    backgroundColor: ColorManager.white,
+                    textStyle: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: Text(AppStrings.startNow.tr()),
                 ),
-                elevation: 5, // Shadow effect
               ),
-              child: Text(
-                AppStrings.startNow.tr(),
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            )
+            ),
           ],
         ),
       ),

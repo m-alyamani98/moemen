@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>872313168403-4eqb2lls92dq768il9gbru4fguomad2p.apps.googleusercontent.com</string>
+	<string>872313168403-dk0h7bg7bj4vg7hbppe65k1gcbv21pal.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.872313168403-4eqb2lls92dq768il9gbru4fguomad2p</string>
+	<string>com.googleusercontent.apps.872313168403-dk0h7bg7bj4vg7hbppe65k1gcbv21pal</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>872313168403-taufkrvrp01u0ld7j4mp88570vg868lb.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyADALlcxDkjiTdh3gr1cOi_jiBo0i7HPHE</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.momen</string>
+	<string>com.moemen.momen</string>
 	<key>PROJECT_ID</key>
 	<string>moemen-87f62</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:872313168403:ios:761b7dfbc7d3be9070d5e6</string>
+	<string>1:872313168403:ios:3e67a9195454e7ef70d5e6</string>
 	<key>DATABASE_URL</key>
 	<string>https://moemen-87f62-default-rtdb.firebaseio.com</string>
 </dict>

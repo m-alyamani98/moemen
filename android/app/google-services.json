@@ -8,22 +8,22 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:872313168403:android:1f8adbd416dbf13170d5e6",
+        "mobilesdk_app_id": "1:872313168403:android:755e8bfe017a975770d5e6",
         "android_client_info": {
-          "package_name": "com.example.momen"
+          "package_name": "com.moemen.momen"
         }
       },
       "oauth_client": [
         {
-          "client_id": "872313168403-v2f5o0ed9pnqdm6ujhnemfj74a4p5b2f.apps.googleusercontent.com",
+          "client_id": "872313168403-taufkrvrp01u0ld7j4mp88570vg868lb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.momen",
+            "package_name": "com.moemen.momen",
             "certificate_hash": "7f3ad1db8a7fbadd548baa82188ac1a6ab54e426"
           }
         },
         {
-          "client_id": "872313168403-ke8p3v4emv9104k2i165a1kf12h4ccju.apps.googleusercontent.com",
+          "client_id": "872313168403-te8sa6kmf2t81m9qjjlcicj46lj6iav7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -40,10 +40,10 @@
               "client_type": 3
             },
             {
-              "client_id": "872313168403-4eqb2lls92dq768il9gbru4fguomad2p.apps.googleusercontent.com",
+              "client_id": "872313168403-dk0h7bg7bj4vg7hbppe65k1gcbv21pal.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.momen"
+                "bundle_id": "com.moemen.momen"
               }
             }
           ]

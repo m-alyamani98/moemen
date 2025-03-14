@@ -1,16 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:in_app_purchase/in_app_purchase.dart'; // Import the in_app_purchase library
 import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/app/resources/routes_manager.dart';
-import 'package:momen/app/resources/strings_manager.dart';
-import 'package:momen/app/resources/values.dart';
 import 'package:momen/data/notification/local_notifications/notification_service.dart';
-import 'package:momen/presentation/components/widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../../app/resources/strings_manager.dart';
 
 class Alarm2 extends StatefulWidget {
   @override
@@ -27,49 +22,29 @@ class _Alarm2State extends State<Alarm2> {
     _loadSavedSettings();
   }
 
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future<void> _loadSavedSettings() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _isAlarm2Enabled = prefs.getBool('morningAlarm') ?? false;
-      _alarm2Time = TimeOfDay(
-        hour: prefs.getInt('morningAlarmHour') ?? 7,
-        minute: prefs.getInt('morningAlarmMinute') ?? 0,
-      );
     });
-    print('Loaded: $_isAlarm2Enabled at ${_alarm2Time.format(context)}');
   }
 
-  void _handleMorningAlarmToggle(bool value) async {
+  void _handleAlarm2Toggle(bool value) async {
     final prefs = await SharedPreferences.getInstance();
-    final notiService = NotiService();
 
-    // Initialize notifications first
-    await notiService.initNotification();
 
     setState(() => _isAlarm2Enabled = value);
 
-    try {
-      if (value) {
-        await notiService.scheduleNotification(
-          id: 6,
-          title: AppStrings.werdAlarm.tr(),
-          body: AppStrings.werdAlarmDesc.tr(),
-          hour: _alarm2Time.hour,
-          minute: _alarm2Time.minute,
-        );
-      } else {
-        await notiService.cancelAllNotifications();
-      }
-
-      // Save to SharedPreferences
-      await prefs.setBool('morningAlarm', value);
-      print('Successfully saved morningAlarm: $value'); // Debug
-    } catch (e) {
-      print('Error saving/scheduling: $e'); // Handle errors
-    }
+    await prefs.setBool('morningAlarm', value);
   }
 
-  Future<void> _selectTime(BuildContext context) async {
+  Future<void> selectTime(BuildContext context) async {
     final picked = await showTimePicker(
       context: context,
       initialTime: _alarm2Time,
@@ -88,26 +63,11 @@ class _Alarm2State extends State<Alarm2> {
 
     if (picked != null) {
       final prefs = await SharedPreferences.getInstance();
-      final notiService = NotiService();
-      await notiService.initNotification();
+
 
       setState(() => _alarm2Time = picked);
 
-      // Save new time
-      await prefs.setInt('Alarm2Hour', picked.hour);
-      await prefs.setInt('Alarm2Minute', picked.minute);
 
-      // Reschedule only if enabled
-      if (_isAlarm2Enabled) {
-        await notiService.cancelAllNotifications(); // Cancel old
-        await notiService.scheduleNotification( // Schedule new
-          id: 6,
-          title: AppStrings.werdAlarm.tr(),
-          body: AppStrings.werdAlarmDesc.tr(),
-          hour: picked.hour,
-          minute: picked.minute,
-        );
-      }
     }
   }
 
@@ -117,34 +77,112 @@ class _Alarm2State extends State<Alarm2> {
       children: [
         Card(
           elevation: 2,
-          child: ListTile(
-            title: Row(
-              children: [
-                Text(
-                  "${_alarm2Time.hour}:${_alarm2Time.minute.toString().padLeft(2, '0')} م",
-                  style: TextStyle(fontSize: 16,color: ColorManager.textPrimary),
-                ),
-                IconButton(
-                  icon: Icon(Icons.settings,color: ColorManager.iconPrimary,size: 18,),
-                  onPressed: () => _selectTime(context),
-                ),
-              ],
-            ),
-            trailing: Switch(
-              value: _isAlarm2Enabled,
-              onChanged: (value) {
-                setState(() {
-                  _handleMorningAlarmToggle(!_isAlarm2Enabled);
-                });
-              },
-              activeColor: ColorManager.primary,
-              activeTrackColor: ColorManager.accentPrimary,
-              inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.black12,
-            ),
+          child: SwitchTileWidget(
+            settingName: "${_alarm2Time.hour}:${_alarm2Time.minute.toString().padLeft(2, '0')}",
+            context: context,
+            color: ColorManager.iconPrimary,
+            angel: 0,
+            isSwitched: _isAlarm2Enabled,
+            onTap: () {
+              bool newValue = !_isAlarm2Enabled;
+              _handleAlarm2Toggle(newValue);
+
+              if (newValue) {
+
+                NotificationController.scheduleNewNotification(
+                  targetHour: _alarm2Time.hour,
+                  targetMinute: _alarm2Time.minute,
+                  title: AppStrings.werdAlarm.tr(),
+                  message: AppStrings.werdAlarmDesc.tr(), );
+              } else {
+                NotificationController.cancelNotifications();
+              }
+            }, onPress:(){ selectTime(context);},
           ),
         ),
       ],
     );
   }
 }
+// ignore: must_be_immutable
+class SwitchTileWidget extends StatelessWidget {
+  IconData? icon;
+  Color color;
+  double angel;
+  String settingName;
+  Function onPress;
+  Function onTap;
+  BuildContext context;
+  bool isSwitched;
+
+  SwitchTileWidget({
+    Key? key,
+    this.icon = Icons.settings,
+    this.color = Colors.black,
+    this.angel = 0.0,
+    required this.settingName,
+    required this.onPress,
+    required this.onTap,
+    required this.context,
+    required this.isSwitched,
+  }) : super(key: key);
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.0,vertical: 12),
+      child: Row(
+        children: [
+          const Spacer(flex: 1),
+          Text(
+            settingName,
+            style: TextStyle(fontSize: 22, color: ColorManager.textPrimary),
+          ),
+          IconButton(
+              icon: Icon(Icons.settings, color: ColorManager.iconPrimary, size: 22),
+              onPressed: () {
+                onPress();}
+          ),
+          const Spacer(flex: 10),
+          InkWell(
+            onTap: () {
+              onTap();
+            },
+            child: Row(
+              children: [
+                Transform.scale(
+                  scale: 0.8,
+                  child: Switch.adaptive(
+                    activeColor: ColorManager.primary,
+                    activeTrackColor: ColorManager.inactiveColor,
+                    inactiveThumbColor: ColorManager.iconPrimary,
+                    inactiveTrackColor: ColorManager.inactiveColor,
+                    value: isSwitched,
+                    onChanged: (value) {
+                      onTap();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MyNavigatorObserver extends NavigatorObserver {
+  final VoidCallback onPopNext;
+
+  MyNavigatorObserver({required this.onPopNext});
+
+  @override
+  void didPopNext() {
+    onPopNext(); // Call the callback when returning to the page
+  }
+}
+
+

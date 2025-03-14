@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:momen/app/resources/color_manager.dart';
 import 'package:momen/app/resources/strings_manager.dart';
 import 'package:momen/data/notification/local_notifications/notification_service.dart';
-import 'package:momen/presentation/components/widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EveningAlert extends StatefulWidget {
@@ -13,10 +12,7 @@ class EveningAlert extends StatefulWidget {
 }
 
 class _EveningAlertState extends State<EveningAlert> {
-
-  // In your stateful widget
   bool _isEveningAlarmEnabled = false;
-  TimeOfDay _eveningAlarmTime = TimeOfDay(hour: 17, minute: 30); // Default morning time
 
   @override
   void initState() {
@@ -27,76 +23,131 @@ class _EveningAlertState extends State<EveningAlert> {
   Future<void> _loadSavedSettings() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _isEveningAlarmEnabled = prefs.getBool('morningAlarm') ?? false;
-      _eveningAlarmTime = TimeOfDay(
-        hour: prefs.getInt('morningAlarmHour') ?? 17,
-        minute: prefs.getInt('morningAlarmMinute') ?? 30,
-      );
+      _isEveningAlarmEnabled = prefs.getBool('eveningAlarm') ?? false;
     });
   }
 
-  void _handleMorningAlarmToggle(bool value) async {
+  void _handleEveningAlarmToggle(bool value) async {
     final prefs = await SharedPreferences.getInstance();
-    final notiService = NotiService();
+
 
     setState(() => _isEveningAlarmEnabled = value);
 
-    if (value) {
-      // Schedule notification when enabled
-      await notiService.scheduleNotification(
-        id: 2, // Unique ID for morning notification
-        title: AppStrings.adhkarAlarm.tr(),
-        body: AppStrings.adhkarEveningAlarm.tr(),
-        hour: _eveningAlarmTime.hour,
-        minute: _eveningAlarmTime.minute,
-      );
-    } else {
-      // Cancel notification when disabled
-      await notiService.cancelAllNotifications();
-    }
 
-    await prefs.setBool('morningAlarm', value);
+    await prefs.setBool('eveningAlarm', value);
   }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: _eveningAlarmTime,
-    );
-
-    if (picked != null) {
-      final prefs = await SharedPreferences.getInstance();
-      setState(() => _eveningAlarmTime = picked);
-
-      await prefs.setInt('morningAlarmHour', picked.hour);
-      await prefs.setInt('morningAlarmMinute', picked.minute);
-
-      // Reschedule if enabled
-      if (_isEveningAlarmEnabled) {
-        await NotiService().scheduleNotification(
-          id: 2,
-          title: AppStrings.adhkarAlarm.tr(),
-          body: AppStrings.adhkarEveningAlarm.tr(),
-          hour: picked.hour,
-          minute: picked.minute,
-        );
-      }
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
     return SwitchTileWidget(
-      icon: FluentIcons.weather_sunny_48_regular,
+      icon: FluentIcons.weather_moon_48_regular,
       settingName: AppStrings.adhkarEveningAlarm.tr(),
       context: context,
       color: ColorManager.iconPrimary,
       angel: 0,
       isSwitched: _isEveningAlarmEnabled,
       onTap: () {
-        _handleMorningAlarmToggle(!_isEveningAlarmEnabled);
+        bool newValue = !_isEveningAlarmEnabled;
+        _handleEveningAlarmToggle(newValue);
+
+        if (newValue) {
+
+          NotificationController.scheduleNewNotification(
+            targetHour: 17,
+            targetMinute: 30,
+            title: AppStrings.adhkarAlarm.tr(),
+            message: AppStrings.adhkarEveningAlarm, );
+        } else {
+          NotificationController.cancelNotifications();
+        }
       },
     );
+  }
+}
+
+// ignore: must_be_immutable
+class SwitchTileWidget extends StatelessWidget {
+  IconData? icon;
+  Color color;
+  double angel;
+  String settingName;
+  Function onTap;
+  BuildContext context;
+  bool isSwitched;
+
+  SwitchTileWidget({
+    Key? key,
+    this.icon = Icons.settings,
+    this.color = Colors.black,
+    this.angel = 0.0,
+    required this.settingName,
+    required this.onTap,
+    required this.context,
+    required this.isSwitched,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.0),
+      child: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 0),
+            child: Transform.rotate(
+              angle: angel, // Rotation angle for SVG or icon
+              child: Icon(
+                icon,
+                size: 22,
+                color: color,
+              ),
+            ),
+          ),
+          const Spacer(flex: 1),
+          Text(
+            settingName,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontSize: 14,
+              wordSpacing: 3,
+              letterSpacing: 0.5,
+            ),
+          ),
+          const Spacer(flex: 5),
+          InkWell(
+            onTap: () {
+              onTap();
+            },
+            child: Row(
+              children: [
+                Transform.scale(
+                  scale: 0.8,
+                  child: Switch.adaptive(
+                    activeColor: ColorManager.primary,
+                    activeTrackColor: ColorManager.inactiveColor,
+                    inactiveThumbColor: ColorManager.iconPrimary, // Color of the thumb when inactive
+                    inactiveTrackColor: ColorManager.inactiveColor,
+                    value: isSwitched,
+                    onChanged: (value) {
+                      onTap(); // Handle switch change
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MyNavigatorObserver extends NavigatorObserver {
+  final VoidCallback onPopNext;
+
+  MyNavigatorObserver({required this.onPopNext});
+
+  @override
+  void didPopNext() {
+    onPopNext(); // Call the callback when returning to the page
   }
 }

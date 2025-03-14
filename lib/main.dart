@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -22,7 +18,6 @@ import 'di/di.dart';
 import 'presentation/bottom_bar/viewmodel/home_viewmodel.dart';
 
 final GetIt sl = GetIt.instance;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -45,7 +40,17 @@ void main() async {
     print("Error fetching FCM token: $e");
   }
 
+  /*initializeNotifications();
+
   await NotiService().initNotification();
+
+  await LocalNotifications.init();
+*/
+
+  await NotificationController.initializeLocalNotifications();
+  await NotificationController.initializeIsolateReceivePort();
+
+
   
 
 
@@ -86,3 +91,4 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print("Handling background notification: ${message.notification?.title}");
 }
+

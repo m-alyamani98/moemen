@@ -1,16 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:in_app_purchase/in_app_purchase.dart'; // Import the in_app_purchase library
 import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/app/resources/routes_manager.dart';
-import 'package:momen/app/resources/strings_manager.dart';
-import 'package:momen/app/resources/values.dart';
 import 'package:momen/data/notification/local_notifications/notification_service.dart';
-import 'package:momen/presentation/components/widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../../app/resources/strings_manager.dart';
 
 class Alarm3 extends StatefulWidget {
   @override
@@ -27,49 +22,29 @@ class _Alarm3State extends State<Alarm3> {
     _loadSavedSettings();
   }
 
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future<void> _loadSavedSettings() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _isAlarm3Enabled = prefs.getBool('morningAlarm') ?? false;
-      _alarm3Time = TimeOfDay(
-        hour: prefs.getInt('morningAlarmHour') ?? 7,
-        minute: prefs.getInt('morningAlarmMinute') ?? 0,
-      );
     });
-    print('Loaded: $_isAlarm3Enabled at ${_alarm3Time.format(context)}');
   }
 
-  void _handleMorningAlarmToggle(bool value) async {
+  void _handleAlarm3Toggle(bool value) async {
     final prefs = await SharedPreferences.getInstance();
-    final notiService = NotiService();
 
-    // Initialize notifications first
-    await notiService.initNotification();
 
     setState(() => _isAlarm3Enabled = value);
 
-    try {
-      if (value) {
-        await notiService.scheduleNotification(
-          id: 7,
-          title: AppStrings.werdAlarm.tr(),
-          body: AppStrings.werdAlarmDesc.tr(),
-          hour: _alarm3Time.hour,
-          minute: _alarm3Time.minute,
-        );
-      } else {
-        await notiService.cancelAllNotifications();
-      }
-
-      // Save to SharedPreferences
-      await prefs.setBool('morningAlarm', value);
-      print('Successfully saved morningAlarm: $value'); // Debug
-    } catch (e) {
-      print('Error saving/scheduling: $e'); // Handle errors
-    }
+    await prefs.setBool('morningAlarm', value);
   }
 
-  Future<void> _selectTime(BuildContext context) async {
+  Future<void> selectTime(BuildContext context) async {
     final picked = await showTimePicker(
       context: context,
       initialTime: _alarm3Time,
@@ -88,26 +63,11 @@ class _Alarm3State extends State<Alarm3> {
 
     if (picked != null) {
       final prefs = await SharedPreferences.getInstance();
-      final notiService = NotiService();
-      await notiService.initNotification();
+
 
       setState(() => _alarm3Time = picked);
 
-      // Save new time
-      await prefs.setInt('Alarm3Hour', picked.hour);
-      await prefs.setInt('Alarm3Minute', picked.minute);
 
-      // Reschedule only if enabled
-      if (_isAlarm3Enabled) {
-        await notiService.cancelAllNotifications(); // Cancel old
-        await notiService.scheduleNotification( // Schedule new
-          id: 7,
-          title: AppStrings.werdAlarm.tr(),
-          body: AppStrings.werdAlarmDesc.tr(),
-          hour: picked.hour,
-          minute: picked.minute,
-        );
-      }
     }
   }
 
@@ -116,35 +76,113 @@ class _Alarm3State extends State<Alarm3> {
     return Column(
       children: [
         Card(
-          elevation: 3,
-          child: ListTile(
-            title: Row(
-              children: [
-                Text(
-                  "${_alarm3Time.hour}:${_alarm3Time.minute.toString().padLeft(2, '0')} م",
-                  style: TextStyle(fontSize: 16,color: ColorManager.textPrimary),
-                ),
-                IconButton(
-                  icon: Icon(Icons.settings,color: ColorManager.iconPrimary,size: 18,),
-                  onPressed: () => _selectTime(context),
-                ),
-              ],
-            ),
-            trailing: Switch(
-              value: _isAlarm3Enabled,
-              onChanged: (value) {
-                setState(() {
-                  _handleMorningAlarmToggle(!_isAlarm3Enabled);
-                });
-              },
-              activeColor: ColorManager.primary,
-              activeTrackColor: ColorManager.accentPrimary,
-              inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.black12,
-            ),
+          elevation: 2,
+          child: SwitchTileWidget(
+            settingName: "${_alarm3Time.hour}:${_alarm3Time.minute.toString().padLeft(2, '0')}",
+            context: context,
+            color: ColorManager.iconPrimary,
+            angel: 0,
+            isSwitched: _isAlarm3Enabled,
+            onTap: () {
+              bool newValue = !_isAlarm3Enabled;
+              _handleAlarm3Toggle(newValue);
+
+              if (newValue) {
+
+                NotificationController.scheduleNewNotification(
+                  targetHour: _alarm3Time.hour,
+                  targetMinute: _alarm3Time.minute,
+                  title: AppStrings.werdAlarm.tr(),
+                  message: AppStrings.werdAlarmDesc.tr(), );
+              } else {
+                NotificationController.cancelNotifications();
+              }
+            }, onPress:(){ selectTime(context);},
           ),
         ),
       ],
     );
   }
 }
+// ignore: must_be_immutable
+class SwitchTileWidget extends StatelessWidget {
+  IconData? icon;
+  Color color;
+  double angel;
+  String settingName;
+  Function onPress;
+  Function onTap;
+  BuildContext context;
+  bool isSwitched;
+
+  SwitchTileWidget({
+    Key? key,
+    this.icon = Icons.settings,
+    this.color = Colors.black,
+    this.angel = 0.0,
+    required this.settingName,
+    required this.onPress,
+    required this.onTap,
+    required this.context,
+    required this.isSwitched,
+  }) : super(key: key);
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.0,vertical: 12),
+      child: Row(
+        children: [
+          const Spacer(flex: 1),
+          Text(
+            settingName,
+            style: TextStyle(fontSize: 22, color: ColorManager.textPrimary),
+          ),
+          IconButton(
+              icon: Icon(Icons.settings, color: ColorManager.iconPrimary, size: 22),
+              onPressed: () {
+                onPress();}
+          ),
+          const Spacer(flex: 10),
+          InkWell(
+            onTap: () {
+              onTap();
+            },
+            child: Row(
+              children: [
+                Transform.scale(
+                  scale: 0.8,
+                  child: Switch.adaptive(
+                    activeColor: ColorManager.primary,
+                    activeTrackColor: ColorManager.inactiveColor,
+                    inactiveThumbColor: ColorManager.iconPrimary,
+                    inactiveTrackColor: ColorManager.inactiveColor,
+                    value: isSwitched,
+                    onChanged: (value) {
+                      onTap();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MyNavigatorObserver extends NavigatorObserver {
+  final VoidCallback onPopNext;
+
+  MyNavigatorObserver({required this.onPopNext});
+
+  @override
+  void didPopNext() {
+    onPopNext(); // Call the callback when returning to the page
+  }
+}
+
+
