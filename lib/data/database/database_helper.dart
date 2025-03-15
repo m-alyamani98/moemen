@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:momen/domain/models/quran/khetma_model.dart';
+import 'package:moemen/domain/models/quran/khetma_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

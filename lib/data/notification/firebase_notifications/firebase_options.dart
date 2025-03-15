@@ -32,6 +32,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'moemen-87f62.firebasestorage.app',
     androidClientId: '872313168403-taufkrvrp01u0ld7j4mp88570vg868lb.apps.googleusercontent.com',
     iosClientId: '872313168403-dk0h7bg7bj4vg7hbppe65k1gcbv21pal.apps.googleusercontent.com',
-    iosBundleId: 'com.moemen.momen',
+    iosBundleId: 'com.moemen.moemen',
   );
 }

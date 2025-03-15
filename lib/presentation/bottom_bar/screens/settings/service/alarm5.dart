@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/data/notification/local_notifications/notification_service.dart';
+import 'package:moemen/app/resources/color_manager.dart';
+import 'package:moemen/data/notification/local_notifications/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../app/resources/strings_manager.dart';
 

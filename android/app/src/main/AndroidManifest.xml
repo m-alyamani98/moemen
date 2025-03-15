@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.moemen.momen">
+    package="com.moemen.moemen">
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="momen"
+        android:label="Moemen"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:resource="@drawable/app_icon">

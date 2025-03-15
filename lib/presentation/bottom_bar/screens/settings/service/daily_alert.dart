@@ -2,10 +2,10 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/app/resources/routes_manager.dart';
-import 'package:momen/app/resources/values.dart';
-import 'package:momen/presentation/components/widget.dart';
+import 'package:moemen/app/resources/color_manager.dart';
+import 'package:moemen/app/resources/routes_manager.dart';
+import 'package:moemen/app/resources/values.dart';
+import 'package:moemen/presentation/components/widget.dart';
 
 import 'alarm1.dart';
 import 'alarm2.dart';

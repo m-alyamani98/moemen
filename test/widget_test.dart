@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:momen/core/app.dart';
+import 'package:moemen/core/app.dart';
 
-import 'package:momen/main.dart';
+import 'package:moemen/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

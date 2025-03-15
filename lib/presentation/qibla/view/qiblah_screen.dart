@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/app/resources/routes_manager.dart';
-import 'package:momen/app/resources/values.dart';
+import 'package:moemen/app/resources/color_manager.dart';
+import 'package:moemen/app/resources/routes_manager.dart';
+import 'package:moemen/app/resources/values.dart';
 
 class QiblahScreen extends StatefulWidget {
   const QiblahScreen({super.key});

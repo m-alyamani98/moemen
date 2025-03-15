@@ -2,10 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:momen/app/utils/app_prefs.dart';
-import 'package:momen/di/di.dart';
-import 'package:momen/domain/models/quran/khetma_model.dart';
-import 'package:momen/presentation/bottom_bar/screens/werd/view/daily_werd.dart';
+import 'package:moemen/app/utils/app_prefs.dart';
+import 'package:moemen/di/di.dart';
+import 'package:moemen/domain/models/quran/khetma_model.dart';
+import 'package:moemen/presentation/bottom_bar/screens/werd/view/daily_werd.dart';
 
 import '../app/resources/resources.dart';
 import '../presentation/bottom_bar/cubit/bottom_bar_cubit.dart';

@@ -5,8 +5,8 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/app/resources/strings_manager.dart';
+import 'package:moemen/app/resources/color_manager.dart';
+import 'package:moemen/app/resources/strings_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../data/notification/local_notifications/notification_service.dart';
 

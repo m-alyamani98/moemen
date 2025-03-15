@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:momen/app/utils/extensions.dart';
+import 'package:moemen/app/utils/extensions.dart';
 import '../../../../../app/resources/resources.dart';
 import '../../../../../domain/models/adhkar/adhkar_model.dart';
 import '../cubit/adhkar_cubit.dart';

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:momen/domain/models/quran/juz_model.dart';
+import 'package:moemen/domain/models/quran/juz_model.dart';
 
 class AyahModel extends Equatable {
   final int number;

@@ -2,13 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/app/resources/routes_manager.dart';
-import 'package:momen/app/resources/strings_manager.dart';
-import 'package:momen/app/resources/values.dart';
-import 'package:momen/domain/models/quran/khetma_model.dart';
-import 'package:momen/presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
-import 'package:momen/presentation/components/widget.dart';
+import 'package:moemen/app/resources/color_manager.dart';
+import 'package:moemen/app/resources/routes_manager.dart';
+import 'package:moemen/app/resources/strings_manager.dart';
+import 'package:moemen/app/resources/values.dart';
+import 'package:moemen/domain/models/quran/khetma_model.dart';
+import 'package:moemen/presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
+import 'package:moemen/presentation/components/widget.dart';
 
 class NewKhetmaPage extends StatefulWidget {
   @override

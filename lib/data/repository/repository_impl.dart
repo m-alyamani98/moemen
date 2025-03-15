@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:momen/data/mapper/mapper.dart';
+import 'package:moemen/data/mapper/mapper.dart';
 import '../../app/error/exception.dart';
 import '../../app/error/failure.dart';
 import '../../di/di.dart';

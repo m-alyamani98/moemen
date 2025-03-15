@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:momen/data/database/database_helper.dart';
-import 'package:momen/domain/models/quran/khetma_model.dart';
+import 'package:moemen/data/database/database_helper.dart';
+import 'package:moemen/domain/models/quran/khetma_model.dart';
 import '../../../../../app/utils/constants.dart';
 import '../../../../../di/di.dart';
 import '../../../../../domain/models/quran/quran_model.dart';

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/app/resources/routes_manager.dart';
-import 'package:momen/app/resources/strings_manager.dart';
-import 'package:momen/app/resources/values.dart';
-import 'package:momen/domain/models/quran/khetma_model.dart';
+import 'package:moemen/app/resources/color_manager.dart';
+import 'package:moemen/app/resources/routes_manager.dart';
+import 'package:moemen/app/resources/strings_manager.dart';
+import 'package:moemen/app/resources/values.dart';
+import 'package:moemen/domain/models/quran/khetma_model.dart';
 
 import '../bottom_bar/screens/quran/cubit/quran_cubit.dart';
 

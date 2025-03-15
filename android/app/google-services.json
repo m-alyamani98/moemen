@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:872313168403:android:755e8bfe017a975770d5e6",
+        "mobilesdk_app_id": "1:872313168403:android:cebfcbd28124010070d5e6",
         "android_client_info": {
-          "package_name": "com.moemen.momen"
+          "package_name": "com.moemen.moemen"
         }
       },
       "oauth_client": [
         {
-          "client_id": "872313168403-taufkrvrp01u0ld7j4mp88570vg868lb.apps.googleusercontent.com",
+          "client_id": "872313168403-afb2174nrlkdqj6d7hm780us870147ig.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.moemen.momen",
+            "package_name": "com.moemen.moemen",
             "certificate_hash": "7f3ad1db8a7fbadd548baa82188ac1a6ab54e426"
           }
         },
@@ -40,10 +40,10 @@
               "client_type": 3
             },
             {
-              "client_id": "872313168403-dk0h7bg7bj4vg7hbppe65k1gcbv21pal.apps.googleusercontent.com",
+              "client_id": "872313168403-bqfr186tcq8o7kcvdjqogrjad33qa5pf.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.moemen.momen"
+                "bundle_id": "com.moemen.moemen"
               }
             }
           ]

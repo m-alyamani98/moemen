@@ -6,12 +6,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/app/resources/routes_manager.dart';
-import 'package:momen/app/resources/strings_manager.dart';
-import 'package:momen/app/resources/values.dart';
-import 'package:momen/presentation/bottom_bar/viewmodel/home_viewmodel.dart';
-import 'package:momen/presentation/components/separator.dart';
+import 'package:moemen/app/resources/color_manager.dart';
+import 'package:moemen/app/resources/routes_manager.dart';
+import 'package:moemen/app/resources/strings_manager.dart';
+import 'package:moemen/app/resources/values.dart';
+import 'package:moemen/presentation/bottom_bar/viewmodel/home_viewmodel.dart';
+import 'package:moemen/presentation/components/separator.dart';
 
 import '../../../../../app/resources/language_manager.dart';
 

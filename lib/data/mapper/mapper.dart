@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/icon_data.dart';
-import 'package:momen/app/utils/extensions.dart';
-import 'package:momen/domain/models/quran/juz_model.dart';
+import 'package:moemen/app/utils/extensions.dart';
+import 'package:moemen/domain/models/quran/juz_model.dart';
 
 import '../../app/utils/constants.dart';
 import '../../domain/models/adhkar/adhkar_model.dart';

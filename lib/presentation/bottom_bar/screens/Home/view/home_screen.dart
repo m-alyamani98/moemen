@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:momen/data/notification/local_notifications/notification_service.dart';
-import 'package:momen/presentation/bottom_bar/screens/adhkar/view/adhkar_screen.dart';
-import 'package:momen/presentation/bottom_bar/screens/prayer_times/view/prayer_timings_widget.dart';
+import 'package:moemen/data/notification/local_notifications/notification_service.dart';
+import 'package:moemen/presentation/bottom_bar/screens/adhkar/view/adhkar_screen.dart';
+import 'package:moemen/presentation/bottom_bar/screens/prayer_times/view/prayer_timings_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

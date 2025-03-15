@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:momen/app/resources/styles_manager.dart';
-import 'package:momen/app/resources/values.dart';
+import 'package:moemen/app/resources/styles_manager.dart';
+import 'package:moemen/app/resources/values.dart';
 
 import 'color_manager.dart';
 import 'font_manager.dart';

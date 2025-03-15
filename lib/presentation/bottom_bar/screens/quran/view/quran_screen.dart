@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:momen/presentation/bottom_bar/screens/quran/cubit/build_juz.dart';
-import 'package:momen/presentation/bottom_bar/screens/quran/cubit/build_surah.dart';
+import 'package:moemen/presentation/bottom_bar/screens/quran/cubit/build_juz.dart';
+import 'package:moemen/presentation/bottom_bar/screens/quran/cubit/build_surah.dart';
 import '../../../../../app/resources/resources.dart';
 
 class QuranScreen extends StatelessWidget {

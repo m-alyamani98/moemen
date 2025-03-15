@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:momen/app/resources/color_manager.dart';
-import 'package:momen/app/resources/strings_manager.dart';
-import 'package:momen/app/resources/values.dart';
-import 'package:momen/domain/models/quran/khetma_model.dart';
-import 'package:momen/presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
-import 'package:momen/presentation/surah_builder/view/surah_builder_view.dart';
-import 'package:momen/presentation/werd_builder/new_khetma.dart';
+import 'package:moemen/app/resources/color_manager.dart';
+import 'package:moemen/app/resources/strings_manager.dart';
+import 'package:moemen/app/resources/values.dart';
+import 'package:moemen/domain/models/quran/khetma_model.dart';
+import 'package:moemen/presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
+import 'package:moemen/presentation/surah_builder/view/surah_builder_view.dart';
+import 'package:moemen/presentation/werd_builder/new_khetma.dart';
 
 
 Widget buildErrorState(String error) {

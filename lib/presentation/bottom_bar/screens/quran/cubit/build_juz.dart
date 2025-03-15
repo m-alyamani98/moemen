@@ -2,7 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:momen/domain/models/quran/juz_model.dart';
+import 'package:moemen/domain/models/quran/juz_model.dart';
 import '../../../../../domain/models/quran/quran_model.dart';
 import '../../../../components/separator.dart';
 import '../../../../../app/resources/resources.dart';
