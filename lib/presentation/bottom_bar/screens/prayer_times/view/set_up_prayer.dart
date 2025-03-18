@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
 import 'package:moemen/app/resources/color_manager.dart';
 import 'package:moemen/app/resources/routes_manager.dart';
 import 'package:moemen/app/resources/strings_manager.dart';
@@ -14,6 +13,7 @@ import 'package:moemen/presentation/bottom_bar/viewmodel/home_viewmodel.dart';
 import 'package:moemen/presentation/components/separator.dart';
 
 import '../../../../../app/resources/language_manager.dart';
+import '../cubit/prayer_timings_cubit.dart';
 
 class SetUpPrayer extends StatefulWidget {
   @override
@@ -176,7 +176,6 @@ class _SetUpPrayerState extends State<SetUpPrayer> {
   }
 
   Widget setupLocationSuccessful(BuildContext context) {
-    final HomeViewModel viewModel = Get.find<HomeViewModel>();
     final currentLocale = context.locale;
     bool isEnglish = currentLocale.languageCode == LanguageType.english.getValue();
     return Column(
@@ -190,7 +189,42 @@ class _SetUpPrayerState extends State<SetUpPrayer> {
         ),
         Text(StringTranslateExtension(AppStrings.setupLocationSuccessful).tr()),
         SizedBox(height: 10),
-        Text(isEnglish ? viewModel.locationTitle.value : viewModel.arabicLocationTitle.value),
+        BlocBuilder<PrayerTimingsCubit, PrayerTimingsState>(
+          builder: (context, state) {
+            final prayerCubit = context.read<PrayerTimingsCubit>();
+
+            if (state is GetLocationLoadingState) {
+              return Text(
+                AppStrings.noLocationFound.tr(),
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            }
+
+            if (state is GetLocationErrorState) {
+              return Text(
+                state.error,
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                ),
+              );
+            }
+
+            return Text(
+              prayerCubit.recordLocation.$1.isNotEmpty
+                  ? "${prayerCubit.recordLocation.$1}, ${prayerCubit.recordLocation.$2}"
+                  : AppStrings.noLocationFound.tr(),
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
+        ),
         getSeparator(context),
         SizedBox(height: 50),
         SizedBox(

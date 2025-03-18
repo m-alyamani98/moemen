@@ -56,7 +56,7 @@ class _EveningAlertState extends State<EveningAlert> {
             targetHour: 17,
             targetMinute: 30,
             title: AppStrings.adhkarAlarm.tr(),
-            message: AppStrings.adhkarEveningAlarm, );
+            message: AppStrings.adhkarEveningAlarm.tr(), );
         } else {
           NotificationController.cancelNotifications();
         }

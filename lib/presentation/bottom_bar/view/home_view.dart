@@ -10,6 +10,7 @@ import 'package:moemen/presentation/qibla/view/qiblah_screen.dart';
 import '../../../di/di.dart';
 import '../../../../../app/resources/resources.dart';
 import '../cubit/bottom_bar_cubit.dart';
+import '../screens/prayer_times/cubit/prayer_timings_cubit.dart';
 import '../viewmodel/home_viewmodel.dart';
 
 class HomeView extends StatelessWidget {
@@ -41,19 +42,7 @@ class HomeView extends StatelessWidget {
             key: _scaffoldKey,
             appBar: AppBar(
               backgroundColor: Theme.of(context).primaryColor,
-                title: Obx(() {
-                  if (currentIndex == 0) {
-                    return Text(viewModel.locationTitle.value.isEmpty
-                        ? StringTranslateExtension(AppStrings.home).tr()
-                        : isEnglish ?  viewModel.locationTitle.value : viewModel.arabicLocationTitle.value);
-                  } else if (currentIndex == 1) {
-                    return Text(StringTranslateExtension(AppStrings.werd).tr());
-                  } else if (currentIndex == 2){
-                    return Text(StringTranslateExtension(AppStrings.fahras).tr());
-                  }else {
-                    return Text(StringTranslateExtension(AppStrings.settings).tr());
-                  }
-                }),
+                title: HomeViewModel().getTitle(currentIndex, context),
                 leading: IconButton(
                 onPressed: () => (Navigator.push(
                   context,

@@ -62,96 +62,35 @@ class NextWerd extends StatelessWidget {
           final originalIndex = khetma.currentDayIndex + index + 1;
 
           return Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: ColorManager.iconPrimary,
-                width: 0.1,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: ColorManager.accentGrey,
-                  spreadRadius: 2,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: ColorManager.iconPrimary,
+                  width: 0.1,
                 ),
-              ],
-            ),
-            child: ListTile(
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 16.w,
-                vertical: 12.h,
-              ),
-              leading: CircleAvatar(
-                backgroundColor: ColorManager.accentPrimary,
-                child: Text(
-                  '${originalIndex + 1}',
-                  style: TextStyle(
-                    color: ColorManager.primary,
-                    fontWeight: FontWeight.bold,
+                boxShadow: [
+                  BoxShadow(
+                    color: ColorManager.grey,
+                    spreadRadius: 2,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
                   ),
-                ),
+                ],
               ),
-              title: RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    color: Colors.blueGrey[900],
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextSpan(
-                      text: '${details['start']['surahs']} ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.blueGrey[800],
-                      ),
-                    ),
-                    TextSpan(
-                      text: '(${AppStrings.page.tr()} ',
-                      style: TextStyle(
-                        color: Colors.blueGrey[600],
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                    TextSpan(
-                      text: '${details['start']['page']}',
-                      style: TextStyle(
-                        color: Colors.blueGrey[800],
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' - ',
-                      style: TextStyle(
-                        color: Colors.blueGrey[600],
-                      ),
-                    ),
-                    TextSpan(
-                      text: '${details['end']['page']})',
-                      style: TextStyle(
-                        color: Colors.blueGrey[800],
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Text(' ${AppStrings.alwerd.tr()} ${originalIndex + 1}',style: TextStyle(color: ColorManager.primary),),
+                    Text('${AppStrings.from.tr()} ${details['start']['surahs']} - ${AppStrings.ayah.tr()} ${details['start']['first_ayah'].numberInSurah}',style: TextStyle(color: ColorManager.secondPrimary,),),
+                    Text('${AppStrings.to.tr()} ${details['start']['surahs']} - ${AppStrings.ayah.tr()} ${details['end']['final_ayah'].numberInSurah}',style: TextStyle(color: ColorManager.secondPrimary,),),
+                    Text('${AppStrings.page.tr()} ${details['start']['page']} ${AppStrings.to.tr()} ${details['end']['page']}',style: TextStyle(color: ColorManager.grey,),),
                   ],
                 ),
-              ),
-              subtitle: Padding(
-                padding: EdgeInsets.only(top: 4.h),
-                child: Text(
-                  '${details['start']['juz']} ',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Colors.blueGrey[600],
-                  ),
-                ),
-              ),
-              trailing: Icon(
-                Icons.lock_clock,
-                color: Colors.blueGrey[400],
-              ),
-            ),
+              )
           );
         },
       ),

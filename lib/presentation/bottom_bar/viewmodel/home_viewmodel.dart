@@ -1,56 +1,17 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../app/resources/resources.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:get/get.dart';
 import '../screens/Home/view/home_screen.dart';
+import '../screens/adhkar/view/adhkar_screen.dart';
+import '../screens/prayer_times/cubit/prayer_timings_cubit.dart';
 import '../screens/quran/view/quran_screen.dart';
 import '../screens/settings/view/settings_screen.dart';
 import '../screens/werd/view/daily_werd.dart';
-import 'package:easy_localization/easy_localization.dart';
 
-class HomeViewModel extends GetxController {
-  var locationTitle = ''.obs;
-  var arabicLocationTitle = ''.obs;
-
-  Future<void> getLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude,
-        position.longitude,
-      );
-
-      Placemark place = placemarks.first;
-      String city = place.locality ?? "Unknown City";
-      String country = place.country ?? "Unknown Country";
-
-      locationTitle.value = "$city, $country";
-
-      // Translation dictionary (you can expand it)
-      Map<String, String> arabicTranslations = {
-        "Amman": "عمان",
-        "Jordan": "الأردن",
-        "Unknown City": "مدينة غير معروفة",
-        "Unknown Country": "دولة غير معروفة"
-      };
-
-      arabicLocationTitle.value =
-      "${arabicTranslations[city] ?? city}, ${arabicTranslations[country] ?? country}";
-    } catch (e) {
-      locationTitle.value = "Location not available";
-      arabicLocationTitle.value = "الموقع غير متوفر";
-    }
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    getLocation();
-  }
+class HomeViewModel {
+  HomeViewModel();
 
   List<Widget> screens = [
     const HomeScreen(),
@@ -58,12 +19,55 @@ class HomeViewModel extends GetxController {
     const QuranScreen(),
     SettingsScreen(),
   ];
-}
 
-class LanguageController extends GetxController {
-  var isArabic = false.obs;
+  // Return appropriate title based on screen index
+  Widget getTitle(int index, BuildContext context) {
+    switch (index) {
+      case 0: // Home screen
+        return BlocBuilder<PrayerTimingsCubit, PrayerTimingsState>(
+          builder: (context, state) {
+            final prayerCubit = context.read<PrayerTimingsCubit>();
 
-  void updateLanguage(String locale) {
-    isArabic.value = locale == 'ar';
+            if (state is GetLocationLoadingState) {
+              return Text(
+                AppStrings.noLocationFound.tr(),
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            }
+
+            if (state is GetLocationErrorState) {
+              return Text(
+                state.error,
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                ),
+              );
+            }
+
+            return Text(
+              prayerCubit.recordLocation.$1.isNotEmpty
+                  ? "${prayerCubit.recordLocation.$1}, ${prayerCubit.recordLocation.$2}"
+                  : AppStrings.noLocationFound.tr(),
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
+        );
+      case 1:
+        return Text(AppStrings.werd.tr());
+      case 2:
+        return Text(AppStrings.fahras.tr());
+      case 3:
+        return Text(AppStrings.settings.tr());
+      default:
+        return const SizedBox.shrink();
+    }
   }
 }

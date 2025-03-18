@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:moemen/app/resources/color_manager.dart';
 import 'package:moemen/data/notification/local_notifications/notification_service.dart';
@@ -31,17 +30,34 @@ class _Alarm1State extends State<Alarm1> {
   Future<void> _loadSavedSettings() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _isAlarm1Enabled = prefs.getBool('morningAlarm') ?? false;
+      _isAlarm1Enabled = prefs.getBool('Alarm1') ?? false;
+
+      // Retrieve stored time or set default
+      int? hour = prefs.getInt('alarm5_hour');
+      int? minute = prefs.getInt('alarm5_minute');
+      if (hour != null && minute != null) {
+        _alarm1Time = TimeOfDay(hour: hour, minute: minute);
+      }
     });
   }
 
   void _handleAlarm1Toggle(bool value) async {
     final prefs = await SharedPreferences.getInstance();
 
-
     setState(() => _isAlarm1Enabled = value);
 
-    await prefs.setBool('morningAlarm', value);
+    await prefs.setBool('Alarm1', value);
+
+    if (value) {
+      NotificationController.scheduleNewNotification(
+        targetHour: _alarm1Time.hour,
+        targetMinute: _alarm1Time.minute,
+        title: AppStrings.werdAlarm.tr(),
+        message: AppStrings.werdAlarmDesc.tr(),
+      );
+    } else {
+      NotificationController.cancelNotifications();
+    }
   }
 
   Future<void> selectTime(BuildContext context) async {
@@ -64,12 +80,14 @@ class _Alarm1State extends State<Alarm1> {
     if (picked != null) {
       final prefs = await SharedPreferences.getInstance();
 
-
       setState(() => _alarm1Time = picked);
 
-
+      // Save the selected time
+      await prefs.setInt('alarm5_hour', picked.hour);
+      await prefs.setInt('alarm5_minute', picked.minute);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +199,7 @@ class MyNavigatorObserver extends NavigatorObserver {
 
   @override
   void didPopNext() {
-    onPopNext(); // Call the callback when returning to the page
+    onPopNext();
   }
 }
 

@@ -51,7 +51,7 @@ void main() async {
   await NotificationController.initializeIsolateReceivePort();
 
 
-  
+
 
 
   // Initialize other dependencies AFTER Firebase

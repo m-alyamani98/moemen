@@ -63,7 +63,7 @@ class _SoratAlbaqaraAlertState extends State<SoratAlbaqarahAlert> {
             targetHour: 20,
             targetMinute: 30,
             title: AppStrings.sonanAlarm.tr(),
-            message: AppStrings.soratAlBaqarahAlarm, );
+            message: AppStrings.soratAlBaqarahAlarm.tr(), );
         } else {
           NotificationController.cancelNotifications();
         }

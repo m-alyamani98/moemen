@@ -31,17 +31,34 @@ class _Alarm3State extends State<Alarm3> {
   Future<void> _loadSavedSettings() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _isAlarm3Enabled = prefs.getBool('morningAlarm') ?? false;
+      _isAlarm3Enabled = prefs.getBool('Alarm3') ?? false;
+
+      // Retrieve stored time or set default
+      int? hour = prefs.getInt('alarm5_hour');
+      int? minute = prefs.getInt('alarm5_minute');
+      if (hour != null && minute != null) {
+        _alarm3Time = TimeOfDay(hour: hour, minute: minute);
+      }
     });
   }
 
   void _handleAlarm3Toggle(bool value) async {
     final prefs = await SharedPreferences.getInstance();
 
-
     setState(() => _isAlarm3Enabled = value);
 
-    await prefs.setBool('morningAlarm', value);
+    await prefs.setBool('Alarm3', value);
+
+    if (value) {
+      NotificationController.scheduleNewNotification(
+        targetHour: _alarm3Time.hour,
+        targetMinute: _alarm3Time.minute,
+        title: AppStrings.werdAlarm.tr(),
+        message: AppStrings.werdAlarmDesc.tr(),
+      );
+    } else {
+      NotificationController.cancelNotifications();
+    }
   }
 
   Future<void> selectTime(BuildContext context) async {
@@ -64,12 +81,14 @@ class _Alarm3State extends State<Alarm3> {
     if (picked != null) {
       final prefs = await SharedPreferences.getInstance();
 
-
       setState(() => _alarm3Time = picked);
 
-
+      // Save the selected time
+      await prefs.setInt('alarm5_hour', picked.hour);
+      await prefs.setInt('alarm5_minute', picked.minute);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

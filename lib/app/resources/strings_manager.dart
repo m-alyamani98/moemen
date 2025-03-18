@@ -19,6 +19,9 @@ class AppStrings {
   static const String readWerd = "read_werd";
   static const String fromAyah = "from_ayah";
   static const String ayah = "ayah";
+  static const String alwerd = "alwerd";
+  static const String from = "from";
+  static const String to = "to";
 
   //New Khetma
   static const String juzS = "juz_s";

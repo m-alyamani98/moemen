@@ -18,6 +18,7 @@ class ColorManager {
   static const Color backgroundQuran = Color(0xfffffef9);
   static const Color backgroundQuran2 = Color(0xfffcf6ea);
   static const Color backgroundQuranDark = Color(0xff22252c);
+  static const Color red = Color(0xffd4473d);
 
   //Light Theme Colors
   static const Color lightBackground = Color(0xfff9f9f9);

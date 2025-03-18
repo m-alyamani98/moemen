@@ -39,55 +39,78 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
   PrayerTimingsModel prayerTimingsModel =
       const PrayerTimingsModel(code: 0, status: "", data: null);
 
-  // (String, String) recordLocation = ("", "");
+   (String, String) recordLocation = ("", "");
 
   Future<void> getLocation() async {
     emit(GetLocationLoadingState());
 
-    bool serviceEnabled;
-    location_package.PermissionStatus permissionGranted;
-    location_package.LocationData locationData;
-
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
+    try {
+      // Check if location service is enabled
+      bool serviceEnabled = await location.serviceEnabled();
       if (!serviceEnabled) {
-        recordLocation =
-            (AppStrings.enableLocation.tr(), AppStrings.enableLocation.tr());
-        emit(GetLocationErrorState(AppStrings.enableLocation.tr()));
-        // return (AppStrings.enableLocation.tr(), AppStrings.enableLocation.tr());
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) {
+          _handleError(AppStrings.enableLocation.tr());
+          return;
+        }
       }
-    }
 
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == location_package.PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != location_package.PermissionStatus.granted) {
-        emit(GetLocationErrorState(
-            AppStrings.giveLocationAccessPermission.tr()));
-        recordLocation = (
-          AppStrings.giveLocationAccessPermission.tr(),
-          AppStrings.giveLocationAccessPermission.tr()
-        );
+      // Check location permissions
+      var permissionStatus = await location.hasPermission();
+      if (permissionStatus == location_package.PermissionStatus.denied) {
+        permissionStatus = await location.requestPermission();
       }
-    }
 
-    locationData = await location.getLocation();
+      if (permissionStatus != location_package.PermissionStatus.granted) {
+        _handleError(AppStrings.giveLocationAccessPermission.tr());
+        return;
+      }
 
-    List<Placemark> placeMarks = await placemarkFromCoordinates(
-        locationData.latitude!, locationData.longitude!);
+      // Retrieve current location coordinates
+      final locationData = await location.getLocation();
+      if (locationData.latitude == null || locationData.longitude == null) {
+        _handleError(AppStrings.noLocationFound.tr());
+        return;
+      }
 
-    if (placeMarks.isNotEmpty) {
-      recordLocation = (
-        placeMarks[0].subAdministrativeArea.toString(),
-        placeMarks[0].country.toString()
+      // Ensure network connectivity for geocoding
+      if (!isConnected) {
+        await isNetworkConnected();
+        if (!isConnected) {
+          _handleError(AppStrings.noInternetConnection.tr());
+          return;
+        }
+      }
+
+      // Convert coordinates to placemarks
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        locationData.latitude!,
+        locationData.longitude!,
       );
+
+      if (placemarks.isEmpty) {
+        _handleError(AppStrings.noLocationFound.tr());
+        return;
+      }
+
+      // Extract city and country with fallbacks
+      final place = placemarks.first;
+      String city = place.subAdministrativeArea ??
+          place.locality ??
+          place.administrativeArea ??
+          AppStrings.noLocationFound.tr();
+      String country = place.country ?? AppStrings.noLocationFound.tr();
+
+      recordLocation = (city, country);
       emit(GetLocationSuccessState());
-    } else {
-      recordLocation =
-          (AppStrings.noLocationFound.tr(), AppStrings.noLocationFound.tr());
-      emit(GetLocationErrorState(AppStrings.noLocationFound.tr()));
+    } catch (e) {
+      _handleError(e.toString());
     }
+  }
+
+  void _handleError(String errorMessage) {
+    recordLocation = (errorMessage, errorMessage);
+    emit(GetLocationErrorState(errorMessage));
   }
 
   Future<void> getPrayerTimings() async {

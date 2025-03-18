@@ -50,8 +50,8 @@
             android:value="2" />
 
 
-        <receiver android:name="me.carda.awesome_notifications.core.broadcasters.receivers.ScheduledNotificationReceiver" android:exported="true" />
-        <receiver android:name="me.carda.awesome_notifications.core.broadcasters.receivers.RefreshSchedulesReceiver" android:exported="true">
+        <receiver android:name="me.carda.awesome_notifications.core.broadcasters.receivers.ScheduledNotificationReceiver" android:exported="false" />
+        <receiver android:name="me.carda.awesome_notifications.core.broadcasters.receivers.RefreshSchedulesReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
