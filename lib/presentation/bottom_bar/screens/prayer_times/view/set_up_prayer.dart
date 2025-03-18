@@ -125,52 +125,54 @@ class _SetUpPrayerState extends State<SetUpPrayer> {
   }
 
   Widget setupLocationFaild(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 500,
-            child: Image.asset(
-              'assets/images/location1.png',
-            ),
-          ),
-          Text(StringTranslateExtension(AppStrings.setupLocation).tr()),
-          SizedBox(height: 30),
-          Text(StringTranslateExtension(AppStrings.setupLocationDesc).tr()),
-          SizedBox(height: 30),
-          ElevatedButton(
-            onPressed: () {_requestLocationAccess();},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ColorManager.primary,
-              foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 18),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              elevation: 5,
-            ),
-            child: Text(
-              StringTranslateExtension(AppStrings.setupLocation).tr(),
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(height: 30),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, Routes.homeRoute);
-            },
-            child: Text(
-              StringTranslateExtension(AppStrings.skip).tr(),
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: ColorManager.primary,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 500,
+              child: Image.asset(
+                'assets/images/location1.png',
               ),
             ),
-          ),
-        ],
+            Text(StringTranslateExtension(AppStrings.setupLocation).tr()),
+            SizedBox(height: 30),
+            Text(StringTranslateExtension(AppStrings.setupLocationDesc).tr()),
+            SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {_requestLocationAccess();},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorManager.primary,
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 18),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                elevation: 5,
+              ),
+              child: Text(
+                StringTranslateExtension(AppStrings.setupLocation).tr(),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(height: 30),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, Routes.homeRoute);
+              },
+              child: Text(
+                StringTranslateExtension(AppStrings.skip).tr(),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: ColorManager.primary,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

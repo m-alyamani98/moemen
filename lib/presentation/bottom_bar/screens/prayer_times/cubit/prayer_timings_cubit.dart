@@ -1,16 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:location/location.dart' as location_package;
-
-import '../../../../../app/utils/constants.dart';
 import '../../../../../di/di.dart';
 import '../../../../../data/network/network_info.dart';
 import '../../../../../domain/models/prayer_timings/prayer_timings_model.dart';
 import '../../../../../domain/usecase/get_prayer_timings_usecase.dart';
 import '../../../../../app/resources/resources.dart';
-
 part 'prayer_timings_state.dart';
 
 class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
@@ -45,7 +42,16 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
     emit(GetLocationLoadingState());
 
     try {
-      // Check if location service is enabled
+      // Check network connectivity first
+      if (!isConnected) {
+        await isNetworkConnected();
+        if (!isConnected) {
+          _handleError(AppStrings.noInternetConnection.tr());
+          return;
+        }
+      }
+
+      // Check location service
       bool serviceEnabled = await location.serviceEnabled();
       if (!serviceEnabled) {
         serviceEnabled = await location.requestService();
@@ -55,58 +61,63 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
         }
       }
 
-      // Check location permissions
+      // Check permissions
       var permissionStatus = await location.hasPermission();
       if (permissionStatus == location_package.PermissionStatus.denied) {
         permissionStatus = await location.requestPermission();
+        if (permissionStatus != location_package.PermissionStatus.granted) {
+          _handleError(AppStrings.giveLocationAccessPermission.tr());
+          return;
+        }
       }
 
-      if (permissionStatus != location_package.PermissionStatus.granted) {
-        _handleError(AppStrings.giveLocationAccessPermission.tr());
-        return;
-      }
-
-      // Retrieve current location coordinates
+      // Get coordinates
       final locationData = await location.getLocation();
       if (locationData.latitude == null || locationData.longitude == null) {
         _handleError(AppStrings.noLocationFound.tr());
         return;
       }
 
-      // Ensure network connectivity for geocoding
-      if (!isConnected) {
-        await isNetworkConnected();
-        if (!isConnected) {
-          _handleError(AppStrings.noInternetConnection.tr());
-          return;
-        }
-      }
+      // Debugging: Print coordinates
+      debugPrint('''Obtained coordinates: 
+      Lat: ${locationData.latitude}, 
+      Lng: ${locationData.longitude}''');
 
-      // Convert coordinates to placemarks
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-        locationData.latitude!,
-        locationData.longitude!,
-      );
+      // Get placemarks with better error handling
+      List<Placemark> placemarks;
+      try {
+        placemarks = await placemarkFromCoordinates(
+          locationData.latitude!,
+          locationData.longitude!,
+        );
+      } catch (e) {
+        debugPrint('Geocoding error: $e');
+        _handleError("AppStrings.geocodingFailed.tr()");
+        return;
+      }
 
       if (placemarks.isEmpty) {
         _handleError(AppStrings.noLocationFound.tr());
         return;
       }
 
-      // Extract city and country with fallbacks
+      // Enhanced placemark parsing
       final place = placemarks.first;
-      String city = place.subAdministrativeArea ??
+      final city = place.subAdministrativeArea ??
           place.locality ??
           place.administrativeArea ??
-          AppStrings.noLocationFound.tr();
-      String country = place.country ?? AppStrings.noLocationFound.tr();
+          "AppStrings.unknownCity.tr()";
+
+      final country = place.country ?? "AppStrings.unknownCountry.tr()";
 
       recordLocation = (city, country);
       emit(GetLocationSuccessState());
     } catch (e) {
-      _handleError(e.toString());
+      debugPrint('Location error: $e');
+      _handleError("AppStrings.locationError.tr()");
     }
   }
+
 
   void _handleError(String errorMessage) {
     recordLocation = (errorMessage, errorMessage);
@@ -135,7 +146,6 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
       prayerTimingsModel = r;
       emit(GetPrayerTimesSuccessState(r));
     });
-    // return prayerTimingsModel;
   }
   Map<String, DateTime> _getParsedPrayerTimes(TimingsModel timings) {
     DateTime now = DateTime.now();

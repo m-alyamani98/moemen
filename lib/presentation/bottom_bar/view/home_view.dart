@@ -10,7 +10,6 @@ import 'package:moemen/presentation/qibla/view/qiblah_screen.dart';
 import '../../../di/di.dart';
 import '../../../../../app/resources/resources.dart';
 import '../cubit/bottom_bar_cubit.dart';
-import '../screens/prayer_times/cubit/prayer_timings_cubit.dart';
 import '../viewmodel/home_viewmodel.dart';
 
 class HomeView extends StatelessWidget {
@@ -41,36 +40,48 @@ class HomeView extends StatelessWidget {
           return Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
-              backgroundColor: Theme.of(context).primaryColor,
-                title: HomeViewModel().getTitle(currentIndex, context),
+                backgroundColor: Theme.of(context).primaryColor,
+                title: Obx(() {
+                  if (currentIndex == 0) {
+                    return Text(viewModel.locationTitle.value.isEmpty
+                        ? StringTranslateExtension(AppStrings.home).tr()
+                        : isEnglish ?  viewModel.locationTitle.value : viewModel.arabicLocationTitle.value);
+                  } else if (currentIndex == 1) {
+                    return Text(StringTranslateExtension(AppStrings.werd).tr());
+                  } else if (currentIndex == 2){
+                    return Text(StringTranslateExtension(AppStrings.fahras).tr());
+                  }else {
+                    return Text(StringTranslateExtension(AppStrings.settings).tr());
+                  }
+                }),
                 leading: IconButton(
-                onPressed: () => (Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QiblahScreen(),
-                  ),
-                ),),
-                icon: SvgPicture.asset(
-                  'assets/images/compass.svg',
-                  width: AppSize.s20.r,
-                  height: AppSize.s20.r,
-                ),
-              ),
-              actions:[
-                IconButton(
-                  onPressed: () {},
+                  onPressed: () => (Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QiblahScreen(),
+                    ),
+                  ),),
                   icon: SvgPicture.asset(
-                    'assets/images/logoico.svg',
+                    'assets/images/compass.svg',
                     width: AppSize.s20.r,
                     height: AppSize.s20.r,
                   ),
-                )
-              ]
+                ),
+                actions:[
+                  IconButton(
+                    onPressed: () {},
+                    icon: SvgPicture.asset(
+                      'assets/images/logoico.svg',
+                      width: AppSize.s20.r,
+                      height: AppSize.s20.r,
+                    ),
+                  )
+                ]
             ),
             bottomNavigationBar: BottomNavigationBar(
               selectedItemColor: ColorManager.primary,
               selectedIconTheme:
-                  IconThemeData(color: ColorManager.primary, size: AppSize.s20.r),
+              IconThemeData(color: ColorManager.primary, size: AppSize.s20.r),
               selectedLabelStyle: getSemiBoldStyle(color: ColorManager.primary,fontSize: FontSize.s14),
               unselectedLabelStyle: getRegularStyle(color: ColorManager.iconPrimary,fontSize: FontSize.s12),
               unselectedItemColor: ColorManager.bottombarUnSellected,
