@@ -24,15 +24,21 @@ class _SupportAppPageState extends State<SupportAppPage> {
   List<ProductDetails> _products = [];
   bool _purchasePending = false;
   String? _queryProductError;
-  String selectedProductId = "donation_999"; // Default to 9.99 product
-  String selectedPaymentType = 'مرة واحدة';
+  String selectedProductId = "donation_999";
+  String selectedPaymentType = 'اشتراك شهري';
 
   // Product IDs
   final List<String> _donationProductIds = [
+    // One-time donations
     "donation_999",
     "donation_1999",
     "donation_4999",
-    "donation_9999"
+    "donation_9999",
+    // Monthly subscriptions
+    "monthly_9_99",
+    "monthly_19_9",
+    "monthly_49_99",
+    "monthly_99_99"
   ];
 
   @override
@@ -105,6 +111,13 @@ class _SupportAppPageState extends State<SupportAppPage> {
 
   Future<void> _verifyPurchase(PurchaseDetails purchaseDetails) async {
     print("Purchase Verified: ${purchaseDetails.productID}");
+
+    // Handle subscription specific verification
+    if (purchaseDetails.productID.startsWith('monthly_')) {
+      print("Subscription purchase verified");
+      // Add any subscription-specific handling here
+    }
+
     setState(() {
       _purchasePending = false;
     });
@@ -118,9 +131,16 @@ class _SupportAppPageState extends State<SupportAppPage> {
       return;
     }
 
-    final PurchaseParam purchaseParam = PurchaseParam(productDetails: product);
+    final PurchaseParam purchaseParam = PurchaseParam(
+      productDetails: product,
+      // For subscriptions, you might want to add additional parameters
+      applicationUserName: null,
+    );
+
+    // Use buy method instead of buyConsumable for subscriptions
     _inAppPurchase.buyConsumable(purchaseParam: purchaseParam);
   }
+
 
   @override
   void dispose() {
@@ -179,7 +199,8 @@ class _SupportAppPageState extends State<SupportAppPage> {
               style: TextStyle(fontSize: 14, color: Colors.grey[700]),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: AppSize.s35.r),
+            // Add this after the description text in build()
+            SizedBox(height: 20),
             Text(
               'اختر المبلغ الذي تريده',
               style: TextStyle(fontSize: 16, color: Colors.grey[600]),
@@ -197,7 +218,11 @@ class _SupportAppPageState extends State<SupportAppPage> {
                   ),
                 Wrap(
                   spacing: 10,
-                  children: _products.map((product) {
+                  children: _products
+                      .where((product) => selectedPaymentType == 'اشتراك شهري'
+                      ? product.id.startsWith('monthly_')
+                      : product.id.startsWith('donation_'))
+                      .map((product) {
                     return ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -228,7 +253,30 @@ class _SupportAppPageState extends State<SupportAppPage> {
               ],
             )
                 : Center(child: Text('Store not available')),
-            SizedBox(height: AppSize.s50.r),
+            SizedBox(height: AppSize.s20.r),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildRadioButton('مرة واحدة', onChanged: () {
+                  setState(() {
+                    selectedPaymentType = 'مرة واحدة';
+                    selectedProductId = _products
+                        .firstWhere((p) => p.id.startsWith('donation_'))
+                        .id;
+                  });
+                }),
+                _buildRadioButton('اشتراك شهري', onChanged: () {
+                  setState(() {
+                    selectedPaymentType = 'اشتراك شهري';
+                    selectedProductId = _products
+                        .firstWhere((p) => p.id.startsWith('monthly_'))
+                        .id;
+                  });
+                }),
+              ],
+            ),
+            SizedBox(height: AppSize.s35.r),
             Center(
               child: SizedBox(
                 width: AppSize.s250.r,
@@ -252,4 +300,23 @@ class _SupportAppPageState extends State<SupportAppPage> {
       ),
     );
   }
+  Widget _buildRadioButton(String label, {required VoidCallback onChanged}) {
+    return Row(
+      children: [
+        Radio<String>(
+          value: label,
+          groupValue: selectedPaymentType,
+          onChanged: (value) {
+            onChanged();
+          },
+          activeColor: ColorManager.primary,
+        ),
+        Text(
+          label,
+          style: TextStyle(fontSize: 16, color: ColorManager.primary),
+        ),
+      ],
+    );
+  }
+
 }

@@ -46,11 +46,6 @@ ThemeData getApplicationLightTheme() {
       surface: ColorManager.lightPrimary,
       onSurface: ColorManager.lightSecondary,
     ),
-    cardTheme: CardTheme(
-      color: ColorManager.white,
-      shadowColor: ColorManager.lightSecondary,
-      elevation: AppSize.s4.r,
-    ),
     appBarTheme: AppBarTheme(
       color: ColorManager.lightPrimary,
       centerTitle: true,

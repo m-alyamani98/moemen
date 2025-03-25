@@ -60,6 +60,7 @@ class PrayerTimingsScreen extends StatelessWidget {
           Map<String, String> prayers = cubit.getCurrentAndNextPrayer(isEnglish);
           final currentPrayer = prayers["currentPrayer"];
           final nextPrayer = prayers["nextPrayer"];
+          final nextPrayerTime = prayers["nextPrayerTime"];
           return SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -112,8 +113,8 @@ class PrayerTimingsScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8.0), // Optional: same radius for rounded corners
                           ),
                           child: SvgPicture.asset(
-                            'assets/images/background.svg', // Replace with your SVG file path
-                            fit: BoxFit.cover, // Adjusts the SVG to cover the container
+                            'assets/images/background.svg',
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
@@ -148,14 +149,21 @@ class PrayerTimingsScreen extends StatelessWidget {
                                       : "الصلاة التالية: $nextPrayer",
                                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                           color: ColorManager.white)),
-
-
+                                  Text(
+                                    isEnglish
+                                        ? "Time Left: ${cubit.getTimeUntilNextPrayer()}"
+                                        : "الوقت المتبقي: ${cubit.getTimeUntilNextPrayer()}",
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: ColorManager.white
+                                    ),
+                                  ),
                                 ],
                               ),
                             )
                           ],
                         ),
                       ),
+
                     ],
                   ),
                 ),

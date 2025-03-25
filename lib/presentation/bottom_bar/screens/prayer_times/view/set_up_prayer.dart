@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:moemen/app/resources/color_manager.dart';
 import 'package:moemen/app/resources/routes_manager.dart';
 import 'package:moemen/app/resources/strings_manager.dart';
@@ -21,6 +23,8 @@ class SetUpPrayer extends StatefulWidget {
 }
 
 class _SetUpPrayerState extends State<SetUpPrayer> {
+
+  final HomeViewModel viewModel = Get.find<HomeViewModel>();
 
   bool isLocationEnabled = false;
   bool _isCheckingLocation = false;
@@ -184,7 +188,7 @@ class _SetUpPrayerState extends State<SetUpPrayer> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          height: 500,
+          height: 300,
           child: Image.asset(
             'assets/images/location2.png',
           ),
@@ -194,37 +198,9 @@ class _SetUpPrayerState extends State<SetUpPrayer> {
         BlocBuilder<PrayerTimingsCubit, PrayerTimingsState>(
           builder: (context, state) {
             final prayerCubit = context.read<PrayerTimingsCubit>();
-
-            if (state is GetLocationLoadingState) {
-              return Text(
-                AppStrings.noLocationFound.tr(),
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              );
-            }
-
-            if (state is GetLocationErrorState) {
-              return Text(
-                state.error,
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                ),
-              );
-            }
-
-            return Text(
-              prayerCubit.recordLocation.$1.isNotEmpty
-                  ? "${prayerCubit.recordLocation.$1}, ${prayerCubit.recordLocation.$2}"
-                  : AppStrings.noLocationFound.tr(),
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-              ),
-            );
+            return Text(viewModel.locationTitle.value.isEmpty
+                ? StringTranslateExtension(AppStrings.home).tr()
+                : isEnglish ?  viewModel.locationTitle.value : viewModel.arabicLocationTitle.value);;
           },
         ),
         getSeparator(context),

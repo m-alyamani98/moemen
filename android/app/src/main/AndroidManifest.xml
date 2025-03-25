@@ -52,13 +52,10 @@
             android:value="2" />
 
 
-        <receiver android:name="me.carda.awesome_notifications.core.broadcasters.receivers.ScheduledNotificationReceiver" android:exported="false" />
-        <receiver android:name="me.carda.awesome_notifications.core.broadcasters.receivers.RefreshSchedulesReceiver" android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-            </intent-filter>
-        </receiver>
+        <receiver android:name="me.carda.awesome_notifications.notifications.receivers.NotificationReceiver" android:exported="false"/>
+        <receiver android:name="me.carda.awesome_notifications.notifications.receivers.DismissedReceiver" android:exported="false"/>
+        <receiver android:name="me.carda.awesome_notifications.notifications.receivers.RefreshSchedulesReceiver" android:exported="false"/>
+
 
     </application>
     <!-- Required to query activities that can process text, see:

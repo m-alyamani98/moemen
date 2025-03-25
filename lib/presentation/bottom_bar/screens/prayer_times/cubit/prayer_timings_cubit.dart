@@ -171,29 +171,49 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
   }
 
   Map<String, String> getCurrentAndNextPrayer(bool isEnglish) {
-    if (prayerTimingsModel.data == null || prayerTimingsModel.data?.timings == null) {
-      return {
-        "currentPrayer": isEnglish ? "Prayer timings not available" : "مواقيت الصلاة غير متوفرة",
-        "nextPrayer": ""
-      };
+    if (prayerTimingsModel.data == null || prayerTimingsModel.data!.timings == null) {
+      return {"currentPrayer": "", "nextPrayer": "", "nextPrayerTime": ""};
     }
 
-    TimingsModel timings = prayerTimingsModel.data!.timings!;
-    Map<String, DateTime> prayerTimes = _getParsedPrayerTimes(timings);
+    final now = DateTime.now();
+    final timings = _getParsedPrayerTimes(prayerTimingsModel.data!.timings!);
 
-    DateTime now = DateTime.now();
+    final orderedPrayerKeys = [
+      "Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"
+    ];
 
-    // Prayer names in English and Arabic
-    Map<String, String> prayerNamesEn = {
-      "Fajr": "Fajr",
-      "Sunrise": "Sunrise",
-      "Dhuhr": "Dhuhr",
-      "Asr": "Asr",
-      "Maghrib": "Maghrib",
-      "Isha": "Isha",
+    String? currentPrayer;
+    String? nextPrayer;
+    String? nextPrayerTime;
+
+    for (int i = 0; i < orderedPrayerKeys.length; i++) {
+      String prayer = orderedPrayerKeys[i];
+      DateTime time = timings[prayer]!;
+
+      if (now.isBefore(time)) {
+        currentPrayer = i > 0 ? orderedPrayerKeys[i - 1] : orderedPrayerKeys.last;
+        nextPrayer = prayer;
+        nextPrayerTime = DateFormat.jm().format(time); // 12hr format
+        break;
+      }
+    }
+
+    // If all prayers passed today, next is Fajr tomorrow
+    nextPrayer ??= "Fajr";
+    nextPrayerTime ??= DateFormat.jm().format(
+        _parseTime(prayerTimingsModel.data!.timings!.fajr, now.add(Duration(days: 1))));
+
+    currentPrayer ??= orderedPrayerKeys.last;
+
+    return {
+      "currentPrayer": isEnglish ? currentPrayer : _translatePrayer(currentPrayer),
+      "nextPrayer": isEnglish ? nextPrayer : _translatePrayer(nextPrayer),
+      "nextPrayerTime": nextPrayerTime
     };
+  }
 
-    Map<String, String> prayerNamesAr = {
+  String _translatePrayer(String prayerName) {
+    Map<String, String> arabicMap = {
       "Fajr": "الفجر",
       "Sunrise": "الشروق",
       "Dhuhr": "الظهر",
@@ -201,39 +221,37 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
       "Maghrib": "المغرب",
       "Isha": "العشاء",
     };
+    return arabicMap[prayerName] ?? prayerName;
+  }
 
-    // Sort prayer times by their DateTime
-    List<MapEntry<String, DateTime>> sortedPrayerTimes = prayerTimes.entries.toList()
+  String getTimeUntilNextPrayer() {
+    if (prayerTimingsModel.data == null) return "--:--";
+
+    final timings = prayerTimingsModel.data!.timings!;
+    final now = DateTime.now();
+
+    final prayerTimes = _getParsedPrayerTimes(timings);
+    final sortedTimes = prayerTimes.entries.toList()
       ..sort((a, b) => a.value.compareTo(b.value));
 
-    String? currentPrayer;
-    String? nextPrayer;
-
-    for (int i = 0; i < sortedPrayerTimes.length; i++) {
-      if (sortedPrayerTimes[i].value.isBefore(now)) {
-        currentPrayer = sortedPrayerTimes[i].key;
-      } else {
-        nextPrayer = sortedPrayerTimes[i].key;
-        break;
+    for (var entry in sortedTimes) {
+      if (entry.value.isAfter(now)) {
+        final diff = entry.value.difference(now);
+        final hours = diff.inHours;
+        final minutes = diff.inMinutes % 60;
+        return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
       }
     }
 
-    // Handle the case when all prayers for the day have passed
-    nextPrayer ??= sortedPrayerTimes.first.key;
-
-    String currentPrayerName = currentPrayer != null
-        ? (isEnglish ? prayerNamesEn[currentPrayer]! : prayerNamesAr[currentPrayer]!)
-        : (isEnglish ? "None" : "لا يوجد");
-
-    String nextPrayerName = isEnglish
-        ? prayerNamesEn[nextPrayer]!
-        : prayerNamesAr[nextPrayer]!;
-
-    return {
-      "currentPrayer": currentPrayerName,
-      "nextPrayer": nextPrayerName,
-    };
+    // If all prayers have passed, return time until Fajr tomorrow
+    final fajrTomorrow = prayerTimes["Fajr"]!.add(Duration(days: 1));
+    final diff = fajrTomorrow.difference(now);
+    final hours = diff.inHours;
+    final minutes = diff.inMinutes % 60;
+    return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
   }
+
+
 
 
 
