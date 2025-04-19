@@ -115,7 +115,7 @@ class _SetUpPrayerState extends State<SetUpPrayer> {
           ),
           actions: [
             IconButton(
-              onPressed: () => Navigator.pushNamed(context, Routes.homeRoute),
+              onPressed: () => Navigator.pop(context),
               icon: Icon(FluentIcons.chevron_left_48_regular,color: ColorManager.iconPrimary),
             ),
           ],

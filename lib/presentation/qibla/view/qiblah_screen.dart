@@ -56,7 +56,7 @@ class _QiblahScreenState extends State<QiblahScreen> with SingleTickerProviderSt
             ),
             actions:[
               IconButton(
-                onPressed: () => Navigator.pushNamed(context, Routes.homeRoute),
+                onPressed: () => Navigator.pop(context),
                 icon: Icon(FluentIcons.chevron_left_48_regular,color: ColorManager.iconPrimary,),
 
               )

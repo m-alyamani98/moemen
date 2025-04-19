@@ -11,6 +11,7 @@ import '../../bottom_bar/screens/quran/cubit/quran_cubit.dart';
 import '../../../../../app/resources/resources.dart';
 
 
+
 class SurahBuilderView extends StatefulWidget {
   final List<QuranModel> quranList;
   final int pageNo;
@@ -85,14 +86,16 @@ class _SurahBuilderViewState extends State<SurahBuilderView> {
                           color: _backgroundColor,
                         ),
                       ),
-                      Positioned.fill(
-                        child: Center(
-                          child: Image.asset(
-                            "assets/images/quran/page${getQuranImageNumberFromPageNumber(quranPageNumber)}.png",
-                            color: _imageColor,
-                            colorBlendMode: BlendMode.dstIn,
-                            fit: BoxFit.cover,
-                          ),
+                      Positioned(
+                        top:90,
+                        left: 10,
+                        right: 10,
+                        bottom:90,
+                        child: SvgPicture.asset(
+                          "assets/images/quran/${getQuranImageNumberFromPageNumber(quranPageNumber)}.svg",
+                          colorFilter: ColorFilter.mode(_imageColor, BlendMode.dstIn),
+                          fit: BoxFit.fill,
+                          alignment: Alignment.center,
                         ),
                       ),
                       if (isTitleVisible)
@@ -125,7 +128,7 @@ class _SurahBuilderViewState extends State<SurahBuilderView> {
                                           setState(() {
                                             _backgroundColor = newColor;
                                             if (newColor == ColorManager.backgroundQuranDark) {
-                                              _imageColor = Colors.white;
+                                              _imageColor = ColorManager.primary;
                                             } else {
                                               _imageColor = ColorManager.backgroundQuran;
                                             }
@@ -210,7 +213,7 @@ class _SurahBuilderViewState extends State<SurahBuilderView> {
                                         ),
                                       ),
                                       IconButton(
-                                        onPressed: () => Navigator.pushNamed(context, Routes.homeRoute),
+                                        onPressed: () => Navigator.pop(context),
                                         icon: Icon(FluentIcons.chevron_left_48_regular, color: ColorManager.white),
                                       ),
                                     ],

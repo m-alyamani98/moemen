@@ -187,7 +187,7 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
       createdKhetma = newKhetma;
     }
 
-    Navigator.pushNamed(context, Routes.homeRoute);
+    Navigator.pop(context);
 
     // Show success dialog with "OK" button
     showDialog(
@@ -422,7 +422,7 @@ class _NewKhetmaPageState extends State<NewKhetmaPage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, Routes.homeRoute);
+                      Navigator.pop(context);
                     },
                     child: getTitle(settingName: AppStrings.skip.tr(), context: context),
                   ),

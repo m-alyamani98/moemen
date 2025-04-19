@@ -1,7 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
-
 import 'package:flutter/material.dart';
-import 'package:moemen/app/resources/strings_manager.dart';
 import 'package:moemen/core/splash.dart';
 import 'package:moemen/domain/models/quran/khetma_model.dart';
 import 'package:moemen/presentation/bottom_bar/screens/werd/view/daily_werd.dart';
@@ -10,7 +7,6 @@ import '../../di/di.dart';
 import '../../presentation/dhikr_builder/view/dhikr_builder_view.dart';
 import '../../presentation/bottom_bar/view/home_view.dart';
 import '../../presentation/surah_builder/view/surah_builder_view.dart';
-
 
 class Routes {
   static const String homeRoute = "/home";
@@ -26,11 +22,10 @@ class Routes {
   static const String qiblaRoute = "/qibla";
   static const String khetmaRoute = "/khetma";
   static const String dailyWerdRoute = "/dailyWerd";
-
 }
 
 class RoutesGenerator {
-  static Route<dynamic> getRoute(RouteSettings settings) {
+  static Route<dynamic>? getRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.homeRoute:
         initQuranModule();
@@ -40,41 +35,30 @@ class RoutesGenerator {
       case Routes.quranRoute:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-            builder: (_) => SurahBuilderView(
-                quranList: args["quranList"], pageNo: args["pageNo"]));
+          builder: (_) => SurahBuilderView(
+            quranList: args["quranList"],
+            pageNo: args["pageNo"],
+          ),
+        );
       case Routes.adhkarRoute:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-            builder: (_) => DhikrBuilderView(
-                adhkarList: args["adhkarList"], category: args["category"]));
+          builder: (_) => DhikrBuilderView(
+            adhkarList: args["adhkarList"],
+            category: args["category"],
+          ),
+        );
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => SplashPage());
       case Routes.newKhetmaRoute:
         return MaterialPageRoute(builder: (_) => NewKhetmaPage());
       case Routes.dailyWerdRoute:
-        final args = settings.arguments as Khetma; // Ensure this is non-null
+        final args = settings.arguments as Khetma;
         return MaterialPageRoute(
           builder: (_) => WerdScreen(initialKhetma: args),
         );
       default:
-        return unDefinedRoute();
+        return null;
     }
-  }
-
-  static Route<dynamic> unDefinedRoute() {
-    return MaterialPageRoute(
-      builder: (_) => Scaffold(
-        appBar: AppBar(
-          title: Text(
-            AppStrings.noRouteFound.tr(),
-          ),
-        ),
-        body: Center(
-          child: Text(
-            AppStrings.noRouteFound.tr(),
-          ),
-        ),
-      ),
-    );
   }
 }

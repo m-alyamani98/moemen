@@ -153,6 +153,8 @@ class _WerdScreenState extends State<WerdScreen> {
                       if (details['first_ayah'] != null)
                         Text(
                           details['first_ayah'],
+                          maxLines: 7,
+                          overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 20,
@@ -195,87 +197,89 @@ class _WerdScreenState extends State<WerdScreen> {
                 SizedBox(height: AppSize.s40.r),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Center(
-                  child: SizedBox(
-                    width: AppSize.s140.r,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () => navigateToQuranPage(context, cubit, freshDetails),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: ColorManager.primary,
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final screenWidth = MediaQuery.of(context).size.width;
+                final buttonWidth = screenWidth * 0.4; // Adjust the percentage as needed
+
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      width: AppSize.s140.r,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () => navigateToQuranPage(context, cubit, freshDetails),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: ColorManager.primary,
+                          textStyle: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        child: Text(AppStrings.readWerd.tr()),
                       ),
-                      child: Text(AppStrings.readWerd.tr()),
                     ),
-                  ),
-                ),
-                Center(
-                  child: SizedBox(
-                    width: AppSize.s140.r,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          final currentKhetma = getActiveKhetma(cubit);
+                    SizedBox(
+                      width: buttonWidth,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          try {
+                            final currentKhetma = getActiveKhetma(cubit);
+                            await cubit.completeCurrentWerd(currentKhetma);
 
-                          await cubit.completeCurrentWerd(currentKhetma);
-
-                          if (mounted) setState(() {});
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                AppStrings.completeWerd.tr(),
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                            if (mounted) setState(() {});
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  AppStrings.completeWerd.tr(),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
+                                backgroundColor: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                behavior: SnackBarBehavior.floating,
+                                margin: const EdgeInsets.all(16),
+                                duration: const Duration(seconds: 2),
                               ),
-                              backgroundColor: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("حدث خطأ: ${e.toString()}"),
+                                duration: const Duration(seconds: 2),
                               ),
-                              behavior: SnackBarBehavior.floating,
-                              margin: EdgeInsets.all(16),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("حدث خطأ: ${e.toString()}"),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: ColorManager.secondPrimary,
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: ColorManager.secondPrimary,
+                          textStyle: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        child: Text(AppStrings.completeWerd.tr()),
                       ),
-                      child: Text(AppStrings.completeWerd.tr()),
                     ),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
           ],
         ),
