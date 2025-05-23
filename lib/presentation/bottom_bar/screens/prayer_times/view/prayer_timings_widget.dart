@@ -112,9 +112,13 @@ class PrayerTimingsScreen extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(8.0), // Optional: same radius for rounded corners
                           ),
-                          child: SvgPicture.asset(
-                            'assets/images/background.svg',
-                            fit: BoxFit.cover,
+                          child: Transform(
+                            alignment: Alignment.center,
+                            transform: isEnglish ? Matrix4.rotationY(3.1416) : Matrix4.identity(),
+                            child: SvgPicture.asset(
+                              'assets/images/background.svg',
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),

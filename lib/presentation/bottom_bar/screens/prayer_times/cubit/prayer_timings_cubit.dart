@@ -83,6 +83,7 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
       Lat: ${locationData.latitude}, 
       Lng: ${locationData.longitude}''');
 
+
       // Get placemarks with better error handling
       List<Placemark> placemarks;
       try {
@@ -130,7 +131,7 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
       await getLocation();
     }
     DateTime dateNow = DateTime.now();
-    var formatter = DateFormat("dd-MM-yyy");
+    var formatter = DateFormat("dd-MM-yyyy");
     String formattedDate = formatter.format(dateNow);
     final result =
         await _getPrayerTimingsUseCase(GetPrayerTimingsUseCaseUseCaseInput(
@@ -149,26 +150,44 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
   }
   Map<String, DateTime> _getParsedPrayerTimes(TimingsModel timings) {
     DateTime now = DateTime.now();
-    return {
+    Map<String, DateTime> parsedTimes = {
       "Fajr": _parseTime(timings.fajr, now),
+      "Sunrise": _parseTime(timings.sunrise, now),
       "Dhuhr": _parseTime(timings.dhuhr, now),
       "Asr": _parseTime(timings.asr, now),
       "Maghrib": _parseTime(timings.maghrib, now),
       "Isha": _parseTime(timings.isha, now),
-      "Sunrise": _parseTime(timings.sunrise, now),
     };
+
+    // Adjust for Isha after midnight
+    List<String> prayers = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+    for (int i = 1; i < prayers.length; i++) {
+      String currentPrayer = prayers[i];
+      String previousPrayer = prayers[i - 1];
+      if (parsedTimes[currentPrayer]!.isBefore(parsedTimes[previousPrayer]!)) {
+        parsedTimes[currentPrayer] = parsedTimes[currentPrayer]!.add(Duration(days: 1));
+      }
+    }
+
+    return parsedTimes;
   }
 
   DateTime _parseTime(String time, DateTime currentDate) {
     List<String> parts = time.split(":");
+    int hour = int.parse(parts[0]);
+    int minute = int.parse(parts[1]);
+
+
     return DateTime(
       currentDate.year,
       currentDate.month,
       currentDate.day,
-      int.parse(parts[0]),
-      int.parse(parts[1]),
+      hour,
+      minute,
     );
   }
+
+
 
   Map<String, String> getCurrentAndNextPrayer(bool isEnglish) {
     if (prayerTimingsModel.data == null || prayerTimingsModel.data!.timings == null) {

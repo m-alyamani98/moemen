@@ -8,18 +8,14 @@ part of 'adhkar_response.dart';
 
 AdhkarResponse _$AdhkarResponseFromJson(Map<String, dynamic> json) =>
     AdhkarResponse(
-      json['category'] as String,
-      json['count'] as String,
-      json['description'] as String,
-      json['reference'] as String,
-      json['dhikr'] as String,
+          Map<String, String>.from(json['category'] as Map),
+          json['count'] as String,
+          Map<String, String>.from(json['dhikr'] as Map),
     );
 
 Map<String, dynamic> _$AdhkarResponseToJson(AdhkarResponse instance) =>
     <String, dynamic>{
-      'category': instance.category,
-      'count': instance.count,
-      'description': instance.description,
-      'reference': instance.reference,
-      'dhikr': instance.dhikr,
+          'category': instance.category,
+          'count': instance.count,
+          'dhikr': instance.dhikr,
     };

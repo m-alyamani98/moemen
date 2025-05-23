@@ -28,18 +28,22 @@ class AdhkarCubit extends Cubit<AdhkarState> {
         });
   }
 
-  List<AdhkarModel> getAdhkarFromCategory(
-      {required List<AdhkarModel> adhkarList, required String category}) {
-    List<AdhkarModel> adhkar =
-        List.from(adhkarList.where((e) => e.category == category));
-    return adhkar;
+  List<AdhkarModel> getAdhkarFromCategory({
+    required List<AdhkarModel> adhkarList,
+    required String categoryAr
+  }) {
+    final filtered = adhkarList.where((e) => e.category['ar'] == categoryAr).toList();
+    print('Filtering adhkar: ${filtered.length} items found for category $categoryAr');
+    return filtered;
   }
+
 
   List<AdhkarCategory> getUniqueCategories(List<AdhkarModel> adhkarList) {
     Map<String, IconData> categoryMap = {};
     for (var adhkar in adhkarList) {
-      if (!categoryMap.containsKey(adhkar.category)) {
-        categoryMap[adhkar.category] = adhkar.icon;
+      final arCategory = adhkar.category['ar'] ?? '';
+      if (!categoryMap.containsKey(arCategory)) {
+        categoryMap[arCategory] = adhkar.icon;
       }
     }
     return categoryMap.entries

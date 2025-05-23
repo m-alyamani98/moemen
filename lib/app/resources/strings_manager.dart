@@ -22,6 +22,9 @@ class AppStrings {
   static const String alwerd = "alwerd";
   static const String from = "from";
   static const String to = "to";
+  static const String noAdhkarFound = "noAdhkarFound";
+  static const String setupPrayerTimes = "setupPrayerTimes";
+  static const String noPrayerDataAvailable = "noPrayerDataAvailable";
 
   //New Khetma
   static const String juzS = "juz_s";

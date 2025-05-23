@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 
 import '../../app/error/failure.dart';
 import '../models/adhkar/adhkar_model.dart';
-import '../models/adhkar/custom_adhkar_model.dart';
 import '../models/prayer_timings/prayer_timings_model.dart';
 import '../models/quran/quran_model.dart';
 import '../models/quran/quran_search_model.dart';

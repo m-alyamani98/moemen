@@ -8,7 +8,6 @@ import '../../../../../app/resources/resources.dart';
 import '../../../../../domain/models/adhkar/adhkar_model.dart';
 import '../cubit/adhkar_cubit.dart';
 import 'dart:ui' as ui;
-
 import 'all_adhkar_screen.dart';
 
 class AdhkarScreen extends StatelessWidget {
@@ -16,6 +15,8 @@ class AdhkarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentLocale = context.locale; // Get current locale
+
     return BlocBuilder<AdhkarCubit, AdhkarState>(
       builder: (context, state) {
         AdhkarCubit cubit = AdhkarCubit.get(context);
@@ -30,7 +31,7 @@ class AdhkarScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AllAdhkarScreen()), // Replace with your actual page widget
+                    MaterialPageRoute(builder: (context) => AllAdhkarScreen()),
                   );
                 },
                 child: Container(
@@ -40,7 +41,7 @@ class AdhkarScreen extends StatelessWidget {
                       color: Colors.black,
                       width: 1,
                     ),
-                    borderRadius: BorderRadius.circular(8.0), // Optional: Add rounded corners
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                   height: 50,
                   child: Center(
@@ -68,13 +69,12 @@ class AdhkarScreen extends StatelessWidget {
                   // Get unique categories with their icons
                   final categories = adhkarList
                       .fold<Map<String, IconData>>({}, (map, adhkar) {
-                    if (!map.containsKey(adhkar.category)) {
-                      map[adhkar.category] = adhkar.icon;
+                    final categoryKey = adhkar.category[currentLocale.languageCode] ?? adhkar.category['ar']!;
+                    if (!map.containsKey(categoryKey)) {
+                      map[categoryKey] = adhkar.icon;
                     }
                     return map;
-                  })
-                      .entries
-                      .toList();
+                  }).entries.toList();
 
                   return SizedBox(
                     height: 400,
@@ -93,13 +93,16 @@ class AdhkarScreen extends StatelessWidget {
                           adhkarCategory: category.key,
                           adhkarList: cubit.getAdhkarFromCategory(
                             adhkarList: adhkarList,
-                            category: category.key,
+                            categoryAr: adhkarList
+                                .firstWhere((a) => a.category[currentLocale.languageCode] == category.key)
+                                .category['ar'] ?? '',
                           ),
                           context: context,
-                          icon: category.value, index:index,
+                          icon: category.value,
+                          index: index,
                         );
                       },
-                      itemCount: 9,
+                      itemCount: 9, // Dynamic item count
                     ),
                   );
                 },
@@ -116,14 +119,14 @@ class AdhkarScreen extends StatelessWidget {
     );
   }
 
-
-  Widget _adhkarIndexItem(
-      {required String adhkarId,
-        required IconData icon,
-        required String adhkarCategory,
-        required List<AdhkarModel> adhkarList,
-        required int index,
-        required BuildContext context}) {
+  Widget _adhkarIndexItem({
+    required String adhkarId,
+    required IconData icon,
+    required String adhkarCategory,
+    required List<AdhkarModel> adhkarList,
+    required int index,
+    required BuildContext context,
+  }) {
     return Padding(
       padding: EdgeInsets.only(bottom: AppPadding.p5.h),
       child: GestureDetector(
@@ -150,7 +153,7 @@ class AdhkarScreen extends StatelessWidget {
                 color: ColorManager.accentGrey,
                 spreadRadius: 2,
                 blurRadius: 4,
-                offset: Offset(0, 2),
+                offset: const Offset(0, 2),
               ),
             ],
           ),
@@ -158,7 +161,7 @@ class AdhkarScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(

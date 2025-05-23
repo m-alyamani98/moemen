@@ -82,12 +82,10 @@ extension QuranResponseMapper on QuranResponse {
 extension AdhkarResponseMapper on AdhkarResponse {
   AdhkarModel toDomain() {
     return AdhkarModel(
-      category: category.orEmpty(),
+      category: category ?? {'ar': '', 'en': ''},
       count: count.orEmpty(),
-      description: description.orEmpty(),
-      reference: reference.orEmpty(),
-      dhikr: dhikr.orEmpty(),
-      icon: getIconForCategory(category.orEmpty()),
+      dhikr: dhikr ?? {'ar': '', 'en': ''},
+      icon: getIconForCategory(category?['ar'] ?? ''),
     );
   }
 

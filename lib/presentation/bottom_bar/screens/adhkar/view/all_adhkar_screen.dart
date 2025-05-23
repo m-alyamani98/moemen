@@ -10,37 +10,15 @@ import '../../../../../app/resources/resources.dart';
 import '../../../../../domain/models/adhkar/adhkar_model.dart';
 import '../cubit/adhkar_cubit.dart';
 import 'dart:ui' as ui;
-
 class AllAdhkarScreen extends StatelessWidget {
   AllAdhkarScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final currentLocale = context.locale; // Get current locale from EasyLocalization
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text(
-          AppStrings.allAdhkar.tr(),
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(color: ColorManager.primary),
-        ),
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: SvgPicture.asset(
-            'assets/images/logoico.svg',
-            width: AppSize.s20.r,
-            height: AppSize.s20.r,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(FluentIcons.chevron_left_48_regular, color: ColorManager.iconPrimary),
-          )
-        ],
-      ),
+      // ... existing appBar code ...
       body: BlocBuilder<AdhkarCubit, AdhkarState>(
         builder: (context, state) {
           AdhkarCubit cubit = AdhkarCubit.get(context);
@@ -52,8 +30,9 @@ class AllAdhkarScreen extends StatelessWidget {
               condition: adhkarList.isNotEmpty,
               builder: (BuildContext context) {
                 final categories = adhkarList.fold<Map<String, IconData>>({}, (map, adhkar) {
-                  if (!map.containsKey(adhkar.category)) {
-                    map[adhkar.category] = adhkar.icon;
+                  final categoryKey = adhkar.category[currentLocale.languageCode] ?? adhkar.category['ar']!;
+                  if (!map.containsKey(categoryKey)) {
+                    map[categoryKey] = adhkar.icon;
                   }
                   return map;
                 }).entries.toList();
@@ -72,14 +51,16 @@ class AllAdhkarScreen extends StatelessWidget {
                       adhkarCategory: category.key,
                       adhkarList: cubit.getAdhkarFromCategory(
                         adhkarList: adhkarList,
-                        category: category.key,
+                        categoryAr: adhkarList
+                            .firstWhere((a) => a.category[currentLocale.languageCode] == category.key)
+                            .category['ar']!,
                       ),
                       context: context,
                       icon: category.value,
                       index: index,
                     );
                   },
-                  itemCount: cubit.getAdhkarCategories(adhkarList: adhkarList).length,
+                  itemCount: categories.length,
                 );
               },
               fallback: (BuildContext context) {
@@ -94,15 +75,14 @@ class AllAdhkarScreen extends StatelessWidget {
     );
   }
 
-
-  Widget _adhkarIndexItem(
-      {required String adhkarId,
-        required IconData icon,
-        required String adhkarCategory,
-        required List<AdhkarModel> adhkarList,
-        required int index,
-        // required String pageNo,
-        required BuildContext context}) {
+  Widget _adhkarIndexItem({
+    required String adhkarId,
+    required IconData icon,
+    required String adhkarCategory,
+    required List<AdhkarModel> adhkarList,
+    required int index,
+    required BuildContext context,
+  }) {
     return Padding(
       padding: EdgeInsets.only(bottom: AppPadding.p5.h),
       child: GestureDetector(
@@ -117,25 +97,9 @@ class AllAdhkarScreen extends StatelessWidget {
           );
         },
         child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: ColorManager.iconPrimary,
-              width: 0.1,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: ColorManager.accentGrey,
-                spreadRadius: 2,
-                blurRadius: 4,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(

@@ -3,15 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../../app/utils/constants.dart';
 import '../../../di/di.dart';
 import '../../../app/utils/functions.dart';
 import '../../../domain/models/adhkar/adhkar_model.dart';
 import '../../components/separator.dart';
 import '../../bottom_bar/screens/adhkar/cubit/adhkar_cubit.dart';
 import '../../../app/resources/resources.dart';
-
 
 class DhikrBuilderView extends StatelessWidget {
   final List<AdhkarModel> adhkarList;
@@ -30,21 +27,34 @@ class DhikrBuilderView extends StatelessWidget {
       },
       child: BlocBuilder<AdhkarCubit, AdhkarState>(
         builder: (context, state) {
-          AdhkarCubit cubit = AdhkarCubit.get(context);
-
-          final List<AdhkarModel> adhkarFromCategory =
-              cubit.getAdhkarFromCategory(
-                  adhkarList: adhkarList, category: category);
-          //Get Current App Locale
+          final cubit = AdhkarCubit.get(context);
           final currentLocale = context.locale;
+          final isEnglish = currentLocale.languageCode == LanguageType.english.getValue();
 
-          //Check if current app language is English
-          bool isEnglish =
-              currentLocale.languageCode == LanguageType.english.getValue();
+          // Get filtered adhkar
+          final List<AdhkarModel> adhkarFromCategory = cubit.getAdhkarFromCategory(
+            adhkarList: adhkarList,
+            categoryAr: category,
+          );
+
+          // Handle empty state
+          if (adhkarFromCategory.isEmpty) {
+            return Scaffold(
+              appBar: AppBar(),
+              body: Center(
+                child: Text(
+                  AppStrings.noAdhkarFound.tr(),
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+            );
+          }
+
           return Scaffold(
             appBar: AppBar(
               title: Text(
-                adhkarFromCategory[0].category,
+                adhkarFromCategory[0].category[currentLocale.languageCode] ??
+                    adhkarFromCategory[0].category['ar']!,
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge
@@ -58,59 +68,48 @@ class DhikrBuilderView extends StatelessWidget {
                 controller: _pageController,
                 itemCount: adhkarFromCategory.length,
                 itemBuilder: (BuildContext context, int index) {
+                  final dhikrText = adhkarFromCategory[index]
+                      .dhikr[currentLocale.languageCode] ??
+                      adhkarFromCategory[index].dhikr['ar']!;
+
+                  final cleanedDhikr = dhikrText
+                      .replaceAll("(", "")
+                      .replaceAll(")", "")
+                      .replaceAll(".", "")
+                      .replaceAll("﴿", "")
+                      .replaceAll("﴾", "");
+
                   int count = cubit.count;
                   return Column(
                     children: [
                       Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: AppPadding.p8.h),
+                        padding: EdgeInsets.symmetric(vertical: AppPadding.p8.h),
                         child: Text(
                           "${(index + 1).toString().tr()} / ${adhkarFromCategory.length.toString().tr()}",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
                               ?.copyWith(
-                                  fontFamily: FontConstants.uthmanTNFontFamily,
-                                  height: AppSize.s1.h,
-                                  color:
-                                      Theme.of(context).unselectedWidgetColor),
+                              fontFamily: FontConstants.uthmanTNFontFamily,
+                              height: AppSize.s1.h,
+                              color: Theme.of(context).unselectedWidgetColor),
                         ),
                       ),
                       Expanded(
                         child: Column(
                           children: [
                             Text(
-                              adhkarFromCategory[index]
-                                  .dhikr
-                                  .replaceAll("(", "")
-                                  .replaceAll(")", "")
-                                  .replaceAll(".", "")
-                                  .replaceAll("﴿", "")
-                                  .replaceAll("﴾", ""),
+                              cleanedDhikr,
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
                                   ?.copyWith(
-                                    height: calculateFontLineHeight(
-                                        adhkarFromCategory[index]
-                                            .dhikr
-                                            .replaceAll("(", "")
-                                            .replaceAll(")", "")
-                                            .replaceAll(".", "")
-                                            .length),
-                                    fontSize: calculateFontSize(
-                                        adhkarFromCategory[index]
-                                            .dhikr
-                                            .replaceAll("(", "")
-                                            .replaceAll(")", "")
-                                            .replaceAll(".", "")
-                                            .length),
-                                  ),
+                                height: calculateFontLineHeight(cleanedDhikr.length),
+                                fontSize: calculateFontSize(cleanedDhikr.length),
+                              ),
                             ),
-                            SizedBox(
-                              height: AppSize.s8.h,
-                            ),
+                            SizedBox(height: AppSize.s8.h),
                           ],
                         ),
                       ),
@@ -130,28 +129,24 @@ class DhikrBuilderView extends StatelessWidget {
                                     .textTheme
                                     .bodyLarge
                                     ?.copyWith(
-                                      height: AppSize.s1.h,
-                                      fontFamily:
-                                          FontConstants.uthmanTNFontFamily,
-                                    ),
+                                  height: AppSize.s1.h,
+                                  fontFamily: FontConstants.uthmanTNFontFamily,
+                                ),
                               ),
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).secondaryHeaderColor,
+                                backgroundColor: Theme.of(context).secondaryHeaderColor,
                                 enableFeedback: true,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(AppSize.s8.r),
+                                  borderRadius: BorderRadius.circular(AppSize.s8.r),
                                 ),
                               ),
                               onPressed: () {
                                 cubit.dhikrCounter(
-                                  int.parse(
-                                      adhkarFromCategory[index].count.isEmpty
-                                          ? "1"
-                                          : adhkarFromCategory[index].count),
+                                  int.parse(adhkarFromCategory[index].count.isEmpty
+                                      ? "1"
+                                      : adhkarFromCategory[index].count),
                                   _pageController,
                                 );
                               },
