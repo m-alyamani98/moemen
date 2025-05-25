@@ -11,9 +11,9 @@ class WeekdayModel extends Equatable {
 
   @override
   List<Object> get props => [
-        en,
-        ar,
-      ];
+    en,
+    ar,
+  ];
 }
 
 class MonthModel extends Equatable {
@@ -29,10 +29,10 @@ class MonthModel extends Equatable {
 
   @override
   List<Object> get props => [
-        number,
-        en,
-        ar,
-      ];
+    number,
+    en,
+    ar,
+  ];
 }
 
 class HijriModel extends Equatable {
@@ -54,13 +54,13 @@ class HijriModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        date,
-        format,
-        day,
-        weekday,
-        month,
-        year,
-      ];
+    date,
+    format,
+    day,
+    weekday,
+    month,
+    year,
+  ];
 }
 
 class GregorianModel extends Equatable {
@@ -82,13 +82,13 @@ class GregorianModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        date,
-        format,
-        day,
-        weekday,
-        month,
-        year,
-      ];
+    date,
+    format,
+    day,
+    weekday,
+    month,
+    year,
+  ];
 }
 
 class TimingsModel extends Equatable {
@@ -110,13 +110,13 @@ class TimingsModel extends Equatable {
 
   @override
   List<Object> get props => [
-        fajr,
-        sunrise,
-        dhuhr,
-        asr,
-        maghrib,
-        isha,
-      ];
+    fajr,
+    sunrise,
+    dhuhr,
+    asr,
+    maghrib,
+    isha,
+  ];
 }
 
 class DateModel extends Equatable {
@@ -134,11 +134,11 @@ class DateModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        readable,
-        timestamp,
-        hijri,
-        gregorian,
-      ];
+    readable,
+    timestamp,
+    hijri,
+    gregorian,
+  ];
 }
 
 class PrayerTimingsDataModel extends Equatable {
@@ -152,9 +152,9 @@ class PrayerTimingsDataModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        timings,
-        date,
-      ];
+    timings,
+    date,
+  ];
 }
 
 class PrayerTimingsModel extends Equatable {
@@ -170,10 +170,10 @@ class PrayerTimingsModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        code,
-        status,
-        data,
-      ];
+    code,
+    status,
+    data,
+  ];
 }
 class LocationModel extends Equatable {
   final String en;

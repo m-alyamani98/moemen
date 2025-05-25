@@ -59,6 +59,7 @@ class PrayerTimingsScreen extends StatelessWidget {
           // Get the current and next prayer
           Map<String, String> prayers = cubit.getCurrentAndNextPrayer(isEnglish);
           final currentPrayer = prayers["currentPrayer"];
+          final currentPrayerTime = cubit.getCurrentPrayerTime();
           final nextPrayer = prayers["nextPrayer"];
           final nextPrayerTime = prayers["nextPrayerTime"];
           return SingleChildScrollView(
@@ -137,28 +138,24 @@ class PrayerTimingsScreen extends StatelessWidget {
                                       : "$currentPrayer",
                                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                           color: ColorManager.white)),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: AppSize.s5.h),
-                                    child: Text(
-                                      isEnglish
-                                          ? prayerTimingsModel.data!.date!.gregorian!.weekday!.en
-                                          : prayerTimingsModel.data!.date!.hijri!.weekday!.ar,
-                                      style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                          color: ColorManager.white
-                                      ),
-                                    ),
+                                  SizedBox(height: 5,),
+                                  Text(
+                                    currentPrayerTime,
+                                    style: TextStyle(fontSize: 20, color: Colors.white),
                                   ),
+                                  SizedBox(height: 5,),
                                   Text(isEnglish
                                       ? "Next Prayer: $nextPrayer"
                                       : "الصلاة التالية: $nextPrayer",
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: ColorManager.white)),
-                                  Text(
-                                    isEnglish
-                                        ? "Time Left: ${cubit.getTimeUntilNextPrayer()}"
-                                        : "الوقت المتبقي: ${cubit.getTimeUntilNextPrayer()}",
-                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    style: TextStyle(
+                                        fontSize: 20,
                                         color: ColorManager.white
+                                    ),),
+                                  SizedBox(height: 5,),
+                                  Text("$nextPrayerTime",
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      color: ColorManager.white
                                     ),
                                   ),
                                 ],

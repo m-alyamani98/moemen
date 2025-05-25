@@ -6,15 +6,15 @@ import '../../responses/prayer_timings/prayer_timings_response.dart';
 
 abstract class RemoteDataSource {
   Future<PrayerTimingsResponse> getPrayerTimings(
-    String date,
-    String city,
-    String country,
-  );
+      String date,
+      String city,
+      String country,
+      );
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
   final PrayerTimingsServiceClient _prayerTimingsServiceClient =
-      instance<PrayerTimingsServiceClient>();
+  instance<PrayerTimingsServiceClient>();
 
   @override
   Future<PrayerTimingsResponse> getPrayerTimings(

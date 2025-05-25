@@ -19,37 +19,37 @@ class GetPrayerTimingsUseCase
   Future<Either<Failure, PrayerTimingsModel>> call(
       GetPrayerTimingsUseCaseUseCaseInput input) async {
     return await _repository.getPrayerTimings(
-        input.date, input.city, input.country);
+        input.date, input.latitude, input.longitude);
   }
 }
 
 class GetPrayerTimingsUseCaseUseCaseInput extends Equatable {
-  final String date;
-  final String city;
-  final String country;
+  final DateTime date;
+  final double latitude;
+  final double longitude;
 
   const GetPrayerTimingsUseCaseUseCaseInput({
     required this.date,
-    required this.city,
-    required this.country,
+    required this.latitude,
+    required this.longitude,
   });
 
   @override
   List<Object> get props => [
     date,
-    city,
-    country,
+    latitude,
+    longitude,
   ];
 
   GetPrayerTimingsUseCaseUseCaseInput copyWith({
-    String? date,
-    String? city,
-    String? country,
+    DateTime? date,
+    double? latitude,
+    double? longitude,
   }) {
     return GetPrayerTimingsUseCaseUseCaseInput(
       date: date ?? this.date,
-      city: city ?? this.city,
-      country: country ?? this.country,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 }

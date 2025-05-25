@@ -15,9 +15,9 @@ abstract class Repository {
   Future<Either<Failure, List<AdhkarModel>>> getAdhkarData();
 
   Future<Either<Failure, PrayerTimingsModel>> getPrayerTimings(
-      String date,
-      String city,
-      String country,
+      DateTime date,
+      double latitude,
+      double longitude,
       );
 
 }
