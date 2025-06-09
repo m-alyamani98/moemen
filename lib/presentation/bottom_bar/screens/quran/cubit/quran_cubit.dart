@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moemen/data/database/database_helper.dart';
@@ -98,39 +99,9 @@ class QuranCubit extends Cubit<QuranState> {
     return pageSurahsNames.toSet().toList();
   }
   List<String> getJuzNames() {
-    return [
-      "الجزء الأول",
-      "الجزء الثاني",
-      "الجزء الثالث",
-      "الجزء الرابع",
-      "الجزء الخامس",
-      "الجزء السادس",
-      "الجزء السابع",
-      "الجزء الثامن",
-      "الجزء التاسع",
-      "الجزء العاشر",
-      "الجزء الحادي عشر",
-      "الجزء الثاني عشر",
-      "الجزء الثالث عشر",
-      "الجزء الرابع عشر",
-      "الجزء الخامس عشر",
-      "الجزء السادس عشر",
-      "الجزء السابع عشر",
-      "الجزء الثامن عشر",
-      "الجزء التاسع عشر",
-      "الجزء العشرون",
-      "الجزء الحادي والعشرون",
-      "الجزء الثاني والعشرون",
-      "الجزء الثالث والعشرون",
-      "الجزء الرابع والعشرون",
-      "الجزء الخامس والعشرون",
-      "الجزء السادس والعشرون",
-      "الجزء السابع والعشرون",
-      "الجزء الثامن والعشرون",
-      "الجزء التاسع والعشرون",
-      "الجزء الثلاثون"
-    ];
+    return List.generate(30, (index) => 'juz_name_${index + 1}'.tr());
   }
+
 
 
   List<AyahModel> getJuzAyahs(int juzIndex, List<QuranModel> quranList) {

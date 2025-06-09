@@ -22,6 +22,7 @@ class Routes {
   static const String qiblaRoute = "/qibla";
   static const String khetmaRoute = "/khetma";
   static const String dailyWerdRoute = "/dailyWerd";
+  static const String paymentRoute = '/payment';
 }
 
 class RoutesGenerator {

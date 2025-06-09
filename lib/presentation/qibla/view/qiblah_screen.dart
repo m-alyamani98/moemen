@@ -1,11 +1,13 @@
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moemen/app/resources/color_manager.dart';
+import 'package:moemen/app/resources/resources.dart';
 import 'package:moemen/app/resources/routes_manager.dart';
 import 'package:moemen/app/resources/values.dart';
 
@@ -35,7 +37,7 @@ class _QiblahScreenState extends State<QiblahScreen> with SingleTickerProviderSt
         appBar: AppBar(
             backgroundColor: Theme.of(context).primaryColor,
             title: Text(
-              "تحديد اتجاه القبلة",
+              AppStrings.qiblaDirection.tr(),
               style: Theme.of(context)
                   .textTheme
                   .titleLarge

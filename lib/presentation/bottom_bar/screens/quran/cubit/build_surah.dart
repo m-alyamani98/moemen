@@ -83,7 +83,7 @@ class BuildSurah extends StatelessWidget {
           ),
         ),
         trailing: Text(
-          "   صفحة ${pageNo.toString().tr()}",
+          "   ${AppStrings.page.tr()} ${pageNo.toString().tr()}",
           style: Theme.of(context)
               .textTheme
               .titleSmall

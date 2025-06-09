@@ -13,6 +13,7 @@ import '../presentation/bottom_bar/cubit/bottom_bar_cubit.dart';
 import '../presentation/bottom_bar/screens/adhkar/cubit/adhkar_cubit.dart';
 import '../presentation/bottom_bar/screens/prayer_times/cubit/prayer_timings_cubit.dart';
 import '../presentation/bottom_bar/screens/quran/cubit/quran_cubit.dart';
+import '../presentation/pay_builder/payment.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp._internal();
@@ -43,9 +44,20 @@ class _MyAppState extends State<MyApp> {
 
     if (isFirstLaunch) {
       await prefs.setBool('isFirstLaunch', false);
-      setState(() {
-        initialRoute = Routes.splashRoute;
-      });
+      await prefs.setString('lastPaymentShown', DateTime.now().toIso8601String());
+    }
+
+    // Always check payment on app start
+    final lastShown = prefs.getString('lastPaymentShown');
+    if (lastShown == null) {
+      initialRoute = Routes.paymentRoute;
+    } else {
+      final lastDate = DateTime.parse(lastShown);
+      if (DateTime.now().difference(lastDate).inDays >= 3) {
+        initialRoute = Routes.paymentRoute;
+      } else {
+        initialRoute = Routes.homeRoute;
+      }
     }
   }
 
@@ -76,9 +88,11 @@ class _MyAppState extends State<MyApp> {
                   onGenerateRoute: (settings) {
                     if (settings.name == Routes.dailyWerdRoute) {
                       final args = settings.arguments as Khetma;
-                      return MaterialPageRoute(
-                        builder: (_) => WerdScreen(initialKhetma: args),
-                      );
+                      return MaterialPageRoute(builder: (_) => WerdScreen(initialKhetma: args));
+                    }
+                    // Add payment route
+                    else if (settings.name == Routes.paymentRoute) {
+                      return MaterialPageRoute(builder: (_) => SupportAppPage());
                     }
                     return RoutesGenerator.getRoute(settings);
                   },

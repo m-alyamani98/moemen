@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:collection/collection.dart'; // Import for firstWhereOrNull
+import 'package:moemen/app/resources/resources.dart';
 
 import '../../app/resources/color_manager.dart';
 import '../../app/resources/routes_manager.dart';
@@ -154,7 +156,7 @@ class _SupportAppPageState extends State<SupportAppPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "دعم التطبيق ",
+          AppStrings.supportApp.tr(),
           style: Theme.of(context)
               .textTheme
               .titleLarge
@@ -170,7 +172,7 @@ class _SupportAppPageState extends State<SupportAppPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pushNamed(context, Routes.homeRoute),
             icon: Icon(FluentIcons.chevron_left_48_regular, color: ColorManager.iconPrimary),
           )
         ],
@@ -189,20 +191,19 @@ class _SupportAppPageState extends State<SupportAppPage> {
             ),
             SizedBox(height: AppSize.s20.r),
             Text(
-              'قم بدعم تطبيق مؤمن الآن',
+                AppStrings.supportNow.tr(),
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: AppSize.s12.r),
             Text(
-              'ساهم بعطائك في دعم التطبيق لنشر كتاب الله وليكن لك\nبكل حرف يأتي أجر وثواب.',
+              AppStrings.supDesc.tr(),
               style: TextStyle(fontSize: 14, color: Colors.grey[700]),
               textAlign: TextAlign.center,
             ),
             // Add this after the description text in build()
             SizedBox(height: 20),
-            Text(
-              'اختر المبلغ الذي تريده',
+            Text(AppStrings.donate.tr(),
               style: TextStyle(fontSize: 16, color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
@@ -258,7 +259,7 @@ class _SupportAppPageState extends State<SupportAppPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildRadioButton('مرة واحدة', onChanged: () {
+                _buildRadioButton(AppStrings.oneTime.tr(), onChanged: () {
                   setState(() {
                     selectedPaymentType = 'مرة واحدة';
                     selectedProductId = _products
@@ -266,7 +267,7 @@ class _SupportAppPageState extends State<SupportAppPage> {
                         .id;
                   });
                 }),
-                _buildRadioButton('اشتراك شهري', onChanged: () {
+                _buildRadioButton(AppStrings.monthlySubscription.tr(), onChanged: () {
                   setState(() {
                     selectedPaymentType = 'اشتراك شهري';
                     selectedProductId = _products
@@ -291,7 +292,7 @@ class _SupportAppPageState extends State<SupportAppPage> {
                     textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
-                  child: Text("دعم التطبيق "),
+                  child: Text(AppStrings.supportApp.tr(),),
                 ),
               ),
             ),

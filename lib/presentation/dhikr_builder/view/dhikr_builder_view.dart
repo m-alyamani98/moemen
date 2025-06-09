@@ -31,10 +31,10 @@ class DhikrBuilderView extends StatelessWidget {
           final currentLocale = context.locale;
           final isEnglish = currentLocale.languageCode == LanguageType.english.getValue();
 
-          // Get filtered adhkar
+          // Get filtered adhkar - FIXED
           final List<AdhkarModel> adhkarFromCategory = cubit.getAdhkarFromCategory(
             adhkarList: adhkarList,
-            categoryAr: category,
+            categoryName: category,
           );
 
           // Handle empty state
@@ -67,6 +67,9 @@ class DhikrBuilderView extends StatelessWidget {
                 reverse: isEnglish,
                 controller: _pageController,
                 itemCount: adhkarFromCategory.length,
+                onPageChanged: (index) {
+                  AdhkarCubit.get(context).resetCounter();
+                },
                 itemBuilder: (BuildContext context, int index) {
                   final dhikrText = adhkarFromCategory[index]
                       .dhikr[currentLocale.languageCode] ??
@@ -134,6 +137,7 @@ class DhikrBuilderView extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            // In dhikr_builder_view.dart
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Theme.of(context).secondaryHeaderColor,
@@ -143,12 +147,18 @@ class DhikrBuilderView extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                cubit.dhikrCounter(
+                                bool shouldNavigateBack = cubit.dhikrCounter(
                                   int.parse(adhkarFromCategory[index].count.isEmpty
                                       ? "1"
                                       : adhkarFromCategory[index].count),
                                   _pageController,
+                                  index, // Current index
+                                  adhkarFromCategory.length, // Total items
                                 );
+
+                                if (shouldNavigateBack) {
+                                  Navigator.pop(context);
+                                }
                               },
                               child: SvgPicture.asset(
                                 ImageAsset.adhkarIcon,

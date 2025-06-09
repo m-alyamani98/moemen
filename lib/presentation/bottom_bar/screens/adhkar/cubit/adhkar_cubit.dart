@@ -30,10 +30,14 @@ class AdhkarCubit extends Cubit<AdhkarState> {
 
   List<AdhkarModel> getAdhkarFromCategory({
     required List<AdhkarModel> adhkarList,
-    required String categoryAr
+    required String categoryName, // Changed from categoryAr
   }) {
-    final filtered = adhkarList.where((e) => e.category['ar'] == categoryAr).toList();
-    print('Filtering adhkar: ${filtered.length} items found for category $categoryAr');
+    final filtered = adhkarList.where((e) {
+      return e.category['ar'] == categoryName ||
+          e.category['en'] == categoryName;
+    }).toList();
+
+    print('Filtering adhkar: ${filtered.length} items found for category $categoryName');
     return filtered;
   }
 
@@ -62,20 +66,27 @@ List<String> getAdhkarCategories(
 
   int count = 0;
 
-  void dhikrCounter(int maxCounts, PageController controller) {
+  // In adhkar_cubit.dart
+  bool dhikrCounter(int maxCounts, PageController controller, int currentIndex, int totalLength) {
     if (count < maxCounts) {
       count++;
+      emit(AdhkarCounterState());
+      return false; // Don't navigate back
     }
-    if (count == maxCounts) {
-      controller.nextPage(
-          curve: Curves.ease,
-          duration: const Duration(milliseconds: Constants.nextPageDuration));
-    }
-    controller.addListener(() {
-      count = 0;
-    });
 
-    emit(AdhkarCounterState());
+    count = 0; // Reset counter for next dhikr
+
+    if (currentIndex < totalLength - 1) {
+      // More dhikrs to show
+      controller.nextPage(
+        curve: Curves.ease,
+        duration: const Duration(milliseconds: Constants.nextPageDuration),
+      );
+      return false; // Don't navigate back
+    } else {
+      // Last dhikr completed
+      return true; // Navigate back
+    }
   }
 
   void customDhikrCounter(int maxCounts) {
@@ -98,3 +109,5 @@ class AdhkarCategory {
 
   AdhkarCategory({required this.name, required this.icon});
 }
+
+

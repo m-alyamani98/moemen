@@ -16,7 +16,7 @@ class NewKhetmaPage extends StatefulWidget {
 }
 
 class _NewKhetmaPageState extends State<NewKhetmaPage> {
-  int duration = 1;
+  int duration = 30;
   String startingPoint = "";
   List<String> juzNames = [];
   String dailyPortion = "";

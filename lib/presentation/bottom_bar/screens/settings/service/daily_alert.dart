@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moemen/app/resources/color_manager.dart';
+import 'package:moemen/app/resources/resources.dart';
 import 'package:moemen/app/resources/routes_manager.dart';
 import 'package:moemen/app/resources/values.dart';
 import 'package:moemen/presentation/components/widget.dart';
@@ -27,7 +29,7 @@ class _DailyAlertState extends State<DailyAlert> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "المنبه اليومي ",
+          AppStrings.dailyAlarm.tr(),
           style: Theme.of(context)
               .textTheme
               .titleLarge
@@ -52,7 +54,7 @@ class _DailyAlertState extends State<DailyAlert> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            getTitle(settingName: "يمكنك تحديد وقت المنيه لتذكيرك بالورد اليومي", context: context),
+            getTitle(settingName: AppStrings.dailyAlarmDesc.tr(), context: context),
             SizedBox(height: 20),
             Alarm1(),
             Alarm2(),

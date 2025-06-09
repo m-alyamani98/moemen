@@ -93,7 +93,7 @@ class AdhkarScreen extends StatelessWidget {
                           adhkarCategory: category.key,
                           adhkarList: cubit.getAdhkarFromCategory(
                             adhkarList: adhkarList,
-                            categoryAr: adhkarList
+                            categoryName: adhkarList
                                 .firstWhere((a) => a.category[currentLocale.languageCode] == category.key)
                                 .category['ar'] ?? '',
                           ),

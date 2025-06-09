@@ -7,19 +7,67 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:moemen/core/service_locator.dart';
 import 'package:moemen/presentation/qibla/view/qiblah_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/app.dart';
 import '../../../di/di.dart';
 import '../../../../../app/resources/resources.dart';
 import '../cubit/bottom_bar_cubit.dart';
 import '../viewmodel/home_viewmodel.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
+  const HomeView({Key? key}) : super(key: key);
+
+  @override
+  _HomeViewState createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   final HomeViewModel _viewModel = instance<HomeViewModel>();
   final homeViewModel = sl<HomeViewModel>();
   final HomeViewModel viewModel = Get.find<HomeViewModel>();
-
-  HomeView({Key? key}) : super(key: key);
-
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _checkAndShowPaymentPage();
+    }
+  }
+
+  Future<void> _checkAndShowPaymentPage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lastShown = prefs.getString('lastPaymentShown');
+    final now = DateTime.now();
+
+    if (lastShown == null) {
+      _showPaymentPage(prefs, now);
+    } else {
+      final lastDate = DateTime.parse(lastShown);
+      if (now.difference(lastDate).inDays >= 3) {
+        _showPaymentPage(prefs, now);
+      }
+    }
+  }
+
+  void _showPaymentPage(SharedPreferences prefs, DateTime now) {
+    prefs.setString('lastPaymentShown', now.toIso8601String());
+    Future.delayed(Duration.zero, () {
+      MyApp.navigatorKey.currentState?.pushNamed(Routes.paymentRoute);
+    });
+  }
+  //final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {

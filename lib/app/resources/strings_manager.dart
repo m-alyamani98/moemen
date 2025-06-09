@@ -23,10 +23,17 @@ class AppStrings {
   static const String from = "from";
   static const String to = "to";
   static const String retry = "retry";
+  static const String supportApp = "support_app";
+  static const String donate = "donate";
+  static const String supDesc = "sup_desc";
+  static const String supportNow = "support_now";
+  static const String monthlySubscription = "monthly_subscription";
+  static const String oneTime = "one_time";
   static const String somethingWentWrong = "somethingWentWrong";
   static const String noAdhkarFound = "noAdhkarFound";
   static const String setupPrayerTimes = "setupPrayerTimes";
   static const String noPrayerDataAvailable = "noPrayerDataAvailable";
+  static const String dailyAlarmDesc = "daily_alarm_desc";
 
   //New Khetma
   static const String juzS = "juz_s";

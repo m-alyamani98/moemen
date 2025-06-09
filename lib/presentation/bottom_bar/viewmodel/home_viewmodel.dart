@@ -3,6 +3,7 @@ import '../../../../../app/resources/resources.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
+import '../../pay_builder/payment.dart';
 import '../screens/Home/view/home_screen.dart';
 import '../screens/quran/view/quran_screen.dart';
 import '../screens/settings/view/settings_screen.dart';
@@ -57,6 +58,7 @@ class HomeViewModel extends GetxController {
     WerdScreen(),
     const QuranScreen(),
     SettingsScreen(),
+    SupportAppPage(),
   ];
 }
 
