@@ -185,11 +185,13 @@ class SettingsScreen extends StatelessWidget {
                   final cubit = HomeCubit.get(context);
                   final bookMarkedPage = cubit.getBookMarkPage();
                   if (bookMarkedPage != null) {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => SurahBuilderView(quranList: quranList, pageNo: bookMarkedPage),
-                      ),
+                      Routes.quranRoute,
+                      arguments: {
+                        "quranList": quranList,
+                        "pageNo": bookMarkedPage, // SINGLE page number
+                      },
                     );
                   }
                 },
@@ -436,23 +438,6 @@ class SettingsScreen extends StatelessWidget {
                 color: ColorManager.iconPrimary,
                 angel: 0,
               ),
-              /*settingIndexItem(
-                svgPath: null,
-                icon: FluentIcons.call_48_filled,
-                settingName: AppStrings.callUs.tr(),
-                trailing: const SizedBox(),
-                onTap: () async {
-                  final Uri phoneUri = Uri(scheme: 'tel', path: '+962 7 9665 4530');
-                  if (await canLaunchUrl(phoneUri)) {
-                    await launchUrl(phoneUri);
-                  } else {
-                    throw 'Could not launch $phoneUri';
-                  }
-                },
-                context: context,
-                color: ColorManager.iconPrimary,
-                angel: 0,
-              ),*/
               settingIndexItem(
                 svgPath: 'assets/images/threads.svg',
                 icon: null,

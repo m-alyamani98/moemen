@@ -57,11 +57,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> bookMarkPage(int quranPageNumber) async {
-    if (!isPageBookMarked(quranPageNumber)) {
-      _preferences.bookMarkPage(quranPageNumber);
-    } else {
-      _preferences.removeBookMarkPage();
-    }
+    // Always set the new page bookmark (remove old if exists)
+    _preferences.bookMarkPage(quranPageNumber);
     await isThereABookMarked();
     emit(QuranBookMarkPageState());
   }

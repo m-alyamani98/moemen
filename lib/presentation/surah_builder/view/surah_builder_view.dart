@@ -27,16 +27,18 @@ class SurahBuilderView extends StatefulWidget {
 }
 
 class _SurahBuilderViewState extends State<SurahBuilderView> {
-  bool isTitleVisible = true; // Initialize directly
+  bool isTitleVisible = true;
   late PageController pageController;
   Color _backgroundColor = ColorManager.backgroundQuran;
   Color _imageColor = Colors.black;
-
+  int? currentBookmarkedPage; // Track currently bookmarked page
 
   @override
   void initState() {
     super.initState();
     pageController = PageController(initialPage: widget.pageNo - 1);
+    // Initialize with current bookmark
+    currentBookmarkedPage = HomeCubit.get(context).getBookMarkPage();
   }
 
   @override
@@ -110,10 +112,19 @@ class _SurahBuilderViewState extends State<SurahBuilderView> {
                                     children: [
                                       IconButton(
                                         onPressed: () {
-                                          homeCubit.bookMarkPage(currentPage.toInt());
+                                          setState(() {
+                                            // Toggle bookmark for this page
+                                            if (currentBookmarkedPage == quranPageNumber) {
+                                              currentBookmarkedPage = null;
+                                            } else {
+                                              currentBookmarkedPage = quranPageNumber;
+                                            }
+                                          });
+                                          // Save to preferences
+                                          homeCubit.bookMarkPage(quranPageNumber);
                                         },
                                         icon: Icon(
-                                          homeCubit.isPageBookMarked(currentPage.toInt())
+                                          currentBookmarkedPage == quranPageNumber
                                               ? Icons.bookmark
                                               : Icons.bookmark_add_outlined,
                                           color: ColorManager.white,

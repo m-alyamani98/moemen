@@ -34,11 +34,14 @@ class QuranCubit extends Cubit<QuranState> {
   Future getQuranData() async {
     emit(QuranGetDataLoadingState());
     final result = await _quranUseCase(const NoParameters());
-    result.fold((l) => emit(QuranGetDataErrorState(l.message)), (r) {
-      quranData = r;
-      precomputePageToJuz(); // <-- أضف هذه السطر
-      emit(QuranGetDataSuccessState(r));
-    });
+    result.fold(
+          (l) => emit(QuranGetDataErrorState(l.message)),
+          (r) {
+        quranData = r;
+        precomputePageToJuz(); // Initialize page-juz mapping
+        emit(QuranGetDataSuccessState(r));
+      },
+    );
   }
 
   Future getQuranSearchData() async {
@@ -82,6 +85,7 @@ class QuranCubit extends Cubit<QuranState> {
     };
   }
 
+
   List<QuranModel> getPageSurahs({
     required List<QuranModel> quran,
     required int pageNo,
@@ -100,6 +104,13 @@ class QuranCubit extends Cubit<QuranState> {
   }
   List<String> getJuzNames() {
     return List.generate(30, (index) => 'juz_name_${index + 1}'.tr());
+  }
+
+
+  // Add this in QuranCubit
+  int getSurahNumberForPage(int pageNo) {
+    final surahs = getPageSurahs(quran: quranData, pageNo: pageNo);
+    return surahs.isNotEmpty ? surahs.first.number : 1;
   }
 
 

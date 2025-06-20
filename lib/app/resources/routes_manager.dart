@@ -29,7 +29,7 @@ class RoutesGenerator {
   static Route<dynamic>? getRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.homeRoute:
-        initQuranModule();
+        initQuranModule(); // Make sure this initializes QuranCubit
         initAdhkarModule();
         initPrayerTimingsModule();
         return MaterialPageRoute(builder: (_) => HomeView());
