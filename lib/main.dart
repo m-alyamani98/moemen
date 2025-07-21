@@ -11,6 +11,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:moemen/data/notification/firebase_notifications/api/firebase_api.dart';
+import 'package:moemen/data/notification/firebase_notifications/firebase_options.dart';
 import 'package:moemen/data/notification/local_notifications/notification_service.dart';
 import 'app/resources/resources.dart';
 import 'core/app.dart';
@@ -23,7 +24,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-    await Firebase.initializeApp();
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      print("🔥 Firebase initialized!");
+    } catch (e, st) {
+      print("❌ Firebase init failed: $e\n$st");
+    }
   }
 
   FirebaseApi firebaseApi = FirebaseApi();
