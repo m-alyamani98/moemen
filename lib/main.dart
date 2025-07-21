@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,6 @@ import 'package:moemen/data/notification/local_notifications/notification_servic
 import 'app/resources/resources.dart';
 import 'core/app.dart';
 import 'core/bloc_observer.dart';
-import 'data/notification/firebase_notifications/firebase_options.dart';
 import 'di/di.dart';
 import 'presentation/bottom_bar/viewmodel/home_viewmodel.dart';
 
@@ -21,13 +22,10 @@ final GetIt sl = GetIt.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp(
-      name : 'quran',
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    await Firebase.initializeApp();
   }
+
   FirebaseApi firebaseApi = FirebaseApi();
   await firebaseApi.initNotifications();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -40,26 +38,13 @@ void main() async {
     print("Error fetching FCM token: $e");
   }
 
-  /*initializeNotifications();
-
-  await NotiService().initNotification();
-
-  await LocalNotifications.init();
-*/
-
   await NotificationController.initializeLocalNotifications();
   await NotificationController.initializeIsolateReceivePort();
 
-
-
-
-
-  // Initialize other dependencies AFTER Firebase
   await EasyLocalization.ensureInitialized();
   await initAppModule();
   await setupServiceLocator();
 
-  // Wakelock.enable();
   Bloc.observer = MyBlocObserver();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
@@ -78,9 +63,8 @@ void main() async {
 }
 
 Future<void> setupServiceLocator() async {
-
   sl.registerLazySingleton<InternetConnectionChecker>(
-        () => InternetConnectionChecker.createInstance(),
+    () => InternetConnectionChecker.createInstance(),
   );
 
   // HomeViewModel is safe here as a lazy singleton (only created when first used)
@@ -91,4 +75,3 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print("Handling background notification: ${message.notification?.title}");
 }
-

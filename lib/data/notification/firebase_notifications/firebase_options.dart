@@ -1,16 +1,16 @@
+import 'dart:io' show Platform;
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
-import 'package:flutter/foundation.dart'
-    show defaultTargetPlatform, TargetPlatform;
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        return android;
-      default:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions are not supported for this platform.',
-        );
+    if (Platform.isIOS) {
+      return ios;
+    } else if (Platform.isAndroid) {
+      return android;
+    } else {
+      throw UnsupportedError(
+        'DefaultFirebaseOptions are not supported for this platform.',
+      );
     }
   }
 
@@ -30,8 +30,10 @@ class DefaultFirebaseOptions {
     projectId: 'moemen-87f62',
     databaseURL: 'https://moemen-87f62-default-rtdb.firebaseio.com',
     storageBucket: 'moemen-87f62.firebasestorage.app',
-    androidClientId: '872313168403-taufkrvrp01u0ld7j4mp88570vg868lb.apps.googleusercontent.com',
-    iosClientId: '872313168403-dk0h7bg7bj4vg7hbppe65k1gcbv21pal.apps.googleusercontent.com',
+    androidClientId:
+        '872313168403-taufkrvrp01u0ld7j4mp88570vg868lb.apps.googleusercontent.com',
+    iosClientId:
+        '872313168403-dk0h7bg7bj4vg7hbppe65k1gcbv21pal.apps.googleusercontent.com',
     iosBundleId: 'com.moemen.moemen',
   );
 }
