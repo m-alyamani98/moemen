@@ -7,12 +7,12 @@ part of 'quran_response.dart';
 // **************************************************************************
 
 AyahResponse _$AyahResponseFromJson(Map<String, dynamic> json) => AyahResponse(
-      json['number'] as int,
+      (json['number'] as num).toInt(),
       json['text'] as String,
-      json['numberInSurah'] as int,
-      json['juz'] as int,
-      json['page'] as int,
-      json['hizbQuarter'] as int,
+      (json['numberInSurah'] as num).toInt(),
+      (json['juz'] as num).toInt(),
+      (json['page'] as num).toInt(),
+      (json['hizbQuarter'] as num).toInt(),
     );
 
 Map<String, dynamic> _$AyahResponseToJson(AyahResponse instance) =>
@@ -27,7 +27,7 @@ Map<String, dynamic> _$AyahResponseToJson(AyahResponse instance) =>
 
 QuranResponse _$QuranResponseFromJson(Map<String, dynamic> json) =>
     QuranResponse(
-      json['number'] as int,
+      (json['number'] as num).toInt(),
       json['name'] as String,
       json['englishName'] as String,
       json['englishNameTranslation'] as String,

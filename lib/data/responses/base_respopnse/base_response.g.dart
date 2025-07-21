@@ -7,7 +7,7 @@ part of 'base_response.dart';
 // **************************************************************************
 
 BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) => BaseResponse()
-  ..code = json['code'] as int?
+  ..code = (json['code'] as num?)?.toInt()
   ..status = json['status'] as String?;
 
 Map<String, dynamic> _$BaseResponseToJson(BaseResponse instance) =>

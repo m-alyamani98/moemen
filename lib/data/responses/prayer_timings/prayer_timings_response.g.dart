@@ -20,7 +20,7 @@ Map<String, dynamic> _$WeekdayResponseToJson(WeekdayResponse instance) =>
 
 MonthResponse _$MonthResponseFromJson(Map<String, dynamic> json) =>
     MonthResponse(
-      json['number'] as int?,
+      (json['number'] as num?)?.toInt(),
       json['en'] as String?,
       json['ar'] as String?,
     );
@@ -146,7 +146,7 @@ PrayerTimingsResponse _$PrayerTimingsResponseFromJson(
           : PrayerTimingsDataResponse.fromJson(
               json['data'] as Map<String, dynamic>),
     )
-      ..code = json['code'] as int?
+      ..code = (json['code'] as num?)?.toInt()
       ..status = json['status'] as String?;
 
 Map<String, dynamic> _$PrayerTimingsResponseToJson(

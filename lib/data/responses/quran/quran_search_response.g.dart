@@ -8,7 +8,7 @@ part of 'quran_search_response.dart';
 
 QuranSearchResponse _$QuranSearchResponseFromJson(Map<String, dynamic> json) =>
     QuranSearchResponse(
-      json['id'] as int,
+      (json['id'] as num).toInt(),
       json['text_imlaei_simple'] as String,
       json['verse_key'] as String,
     );
